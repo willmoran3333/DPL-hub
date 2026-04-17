@@ -37,7 +37,7 @@ HERE             = Path(__file__).resolve().parent
 OUTPUT_FULL      = HERE / "email_digest.html"
 OUTPUT_BODY      = HERE / "email_body.html"
 SUBSCRIBERS_PATH = HERE / "subscribers.json"
-SITE_URL         = "https://dpl.example.com"   # update once you deploy
+SITE_URL         = "https://dallaspremierleague.org"
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 

@@ -40,6 +40,9 @@ jobs:
       - name: Add a .nojekyll so GitHub Pages serves all files raw
         run: touch dist/.nojekyll
 
+      - name: Write CNAME for custom domain
+        run: echo "dallaspremierleague.org" > dist/CNAME
+
       - name: Upload Pages artefact
         uses: actions/upload-pages-artifact@v3
         with:
