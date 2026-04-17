@@ -15,7 +15,7 @@
   {% set ft = featured %}
   <div class="featured-card">
     <div class="featured-card__eyebrow">Featured Manager · GW{{ ft.gw }}</div>
-    <h2 class="featured-card__headline">{{ ft.display_name or ft.team_name }} — {{ ft.headline }}</h2>
+    <h2 class="featured-card__headline">{{ ft.headline }}</h2>
     <p class="featured-card__sub">{{ ft.subheadline }}</p>
     <p class="featured-card__body">{{ ft.body }}</p>
     {% if ft.highlight_stats %}
@@ -42,12 +42,12 @@
     <div class="stat-cell">
       <div class="stat-cell__value">{{ leader.wins }}–{{ leader.losses }}</div>
       <div class="stat-cell__label">Leader Record</div>
-      <div class="stat-cell__sub">{{ leader.team_name }}</div>
+      <div class="stat-cell__sub">{{ leader.display_name }}</div>
     </div>
     <div class="stat-cell">
       <div class="stat-cell__value">{{ "%.1f"|format(season_high.points) }}</div>
       <div class="stat-cell__label">Season High</div>
-      <div class="stat-cell__sub">{{ season_high.team_name }} · GW{{ season_high.week }}</div>
+      <div class="stat-cell__sub">{{ season_high.display_name }} · GW{{ season_high.week }}</div>
     </div>
     <div class="stat-cell">
       <div class="stat-cell__value">12</div>

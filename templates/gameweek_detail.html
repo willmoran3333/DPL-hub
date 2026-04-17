@@ -106,7 +106,7 @@
       <div class="award-card__value">{{ "%.1f"|format(p.pts) }}</div>
       <div class="award-card__meta">
         <strong><a href="{{ url_player(p.player_id) }}" style="color:var(--c-ink);">{{ p.full_name }}</a></strong> · {{ p.team_abbr }}<br>
-        <span style="color:var(--c-ink-light); font-size:0.75rem;">started by {{ p.team_name }}</span>
+        <span style="color:var(--c-ink-light); font-size:0.75rem;">started by {{ p.display_name }}</span>
       </div>
       {% else %}
       <div class="award-card__meta" style="color:var(--c-ink-light);">—</div>

@@ -465,9 +465,10 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
     std_map = {t["roster_id"]: t for t in standings}
 
     def team_label(rid):
-        tm = team_map.get(rid, {})
+        """Return (display_name, display_name) — team names no longer used publicly."""
         std = std_map.get(rid, {})
-        return tm.get("team_name", f"Team {rid}"), std.get("display_name", "")
+        dn  = std.get("display_name", f"roster {rid}")
+        return dn, dn
 
     # Season high
     high = q1(conn, """
@@ -535,11 +536,11 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
         loser_name,  _ = team_label(pyr["roster_id"])
         winner_name, _ = team_label(pyr["opp_roster"])
         pyrrhic = {
-            "team_name":  loser_name,
-            "opp_name":   winner_name,
-            "week":       pyr["week"],
-            "points":     pyr["points"],
-            "opp_points": pyr["opp_points"],
+            "display_name": loser_name,
+            "opp_name":     winner_name,
+            "week":         pyr["week"],
+            "points":       pyr["points"],
+            "opp_points":   pyr["opp_points"],
         }
 
     # The Gift — lowest-scoring team that WON the week.
@@ -561,11 +562,11 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
         winner_name, _ = team_label(gift["roster_id"])
         loser_name,  _ = team_label(gift["opp_roster"])
         the_gift = {
-            "team_name":  winner_name,
-            "opp_name":   loser_name,
-            "week":       gift["week"],
-            "points":     gift["points"],
-            "opp_points": gift["opp_points"],
+            "display_name": winner_name,
+            "opp_name":     loser_name,
+            "week":         gift["week"],
+            "points":       gift["points"],
+            "opp_points":   gift["opp_points"],
         }
 
     # Streaks from record string
@@ -607,7 +608,7 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
             ORDER BY pts DESC LIMIT 1
         """, (LEAGUE_ID, SEASON, pos))
         if row:
-            row["team_name"], _ = team_label(row["roster_id"])
+            row["display_name"], _ = team_label(row["roster_id"])
         return row
 
     best_fwd = best_at_pos("F")
@@ -682,9 +683,10 @@ def compute_weekly_awards(conn, week: int, team_map: dict, standings: list[dict]
     std_map = {t["roster_id"]: t for t in standings}
 
     def team_label(rid):
-        tm  = team_map.get(rid, {})
+        """Return (display_name, display_name) — team names no longer used publicly."""
         std = std_map.get(rid, {})
-        return tm.get("team_name", f"Team {rid}"), std.get("display_name", "")
+        dn  = std.get("display_name", f"roster {rid}")
+        return dn, dn
 
     # Weekly team high / low
     rows = q(conn, """
@@ -750,7 +752,7 @@ def compute_weekly_awards(conn, week: int, team_map: dict, standings: list[dict]
             ORDER BY pts DESC LIMIT 1
         """, (LEAGUE_ID, SEASON, week, pos))
         if row:
-            row["team_name"], _ = team_label(row["roster_id"])
+            row["display_name"], _ = team_label(row["roster_id"])
         return row
 
     return {

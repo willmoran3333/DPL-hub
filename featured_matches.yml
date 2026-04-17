@@ -2,8 +2,7 @@
 # FEATURED MATCHES  — two actual GW pairings to spotlight
 # ─────────────────────────────────────────────────────────────────────────────
 # Two featured matchups per upcoming gameweek, each with a short write-up.
-# IMPORTANT: the home/away roster_id pair must be an actual matchup in the
-# given GW — check with:   sqlite3 dpl.db ".read featured_lookup.sql"
+# The home/away roster_id pair must be an actual matchup in the given GW.
 # Use team_mapping.yml for the roster_id numbers.
 
 gw: 33
@@ -16,11 +15,10 @@ matches:
     body: >
       erozier comes in at 21–11 with a 380-point lead on the field's points-for
       column — the regular-season title is his to lose, and a win here all but
-      clinches the #1 seed with only four weeks left to play. But bjennings'
-      side has been steady all year and is fresh off a string of mid-ceiling
-      games. If Smith-Rowe v Wade hit a 95-plus week, Haalandcaust's
-      wire-to-wire coronation stalls and Noahvillasana17 — sitting 20–12 and
-      one back — suddenly has life.
+      clinches the #1 seed with only four weeks left to play. bjennings28 has
+      been steady all year and is fresh off a string of mid-ceiling games. If
+      he hits a 95-plus week, erozier's wire-to-wire coronation stalls and
+      Noahvillasana17 — sitting 20–12 and one back — suddenly has life.
 
   # Matchup 3 of GW33 — biggest offensive mismatch of the season
   - home_roster_id: 5           # brendog2814  · 18–14 · 4th · 2,902 PF
@@ -28,9 +26,9 @@ matches:
     headline: "Highest Offense Meets Lowest"
     body: >
       brendog2814 has scored 2,902 points this season — second only to
-      erozier and 820 clear of LPLLC, who occupy the cellar with the
-      league's lowest offense by nearly 400 points. It is, almost literally,
-      a full season's worth of scoring difference. On paper a blowout, but
-      brendog can't afford to sleepwalk: a win jumps his team into the
-      #3-seed conversation with JordiCarb (19–13), a loss drops him closer
-      to the playoff bubble than the top four.
+      erozier and 820 clear of jacklynch213, who occupies the cellar with
+      the league's lowest offense by nearly 400 points. It is, almost
+      literally, a full season's worth of scoring difference. On paper a
+      blowout, but brendog2814 can't afford to sleepwalk: a win jumps him
+      into the #3-seed conversation with JordiCarb (19–13); a loss drops
+      him closer to the playoff bubble than the top four.

@@ -254,7 +254,7 @@ def render_email_body(data: dict) -> str:
           <div class="award__title">{label}</div>
           <div class="award__val">{fmt(p['pts'], 1)}</div>
           <div class="award__meta"><strong>{p['full_name']}</strong><br>
-            <span style="color:#8E7E99; font-size:11px;">{p['team_abbr']} · started by {p['team_name']}</span>
+            <span style="color:#8E7E99; font-size:11px;">{p['team_abbr']} · started by {p['display_name']}</span>
           </div>
         </div>
 """)

@@ -26,7 +26,7 @@
           <select name="manager" style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); border-radius:4px; font-family:inherit; font-size:0.9375rem; outline:none; background:var(--c-bg-card);">
             <option value="">— Select —</option>
             {% for m in managers %}
-            <option value="{{ m.display_name }}">{{ m.display_name }} · {{ m.team_name }}</option>
+            <option value="{{ m.display_name }}">{{ m.display_name }}</option>
             {% endfor %}
             <option value="other">Friend of the league</option>
           </select>

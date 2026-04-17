@@ -1,6 +1,6 @@
 {% extends "_base.html" %}
 {% set tm = club.team_map %}
-{% block title %}{{ club.owner.team_name or tm.team_name }}{% endblock %}
+{% block title %}{{ club.owner.display_name }}{% endblock %}
 
 {% block body %}
 <div class="page-narrow">

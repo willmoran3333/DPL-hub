@@ -15,12 +15,12 @@
     <div class="award-card">
       <div class="award-card__title">Highest Score</div>
       <div class="award-card__value">{{ "%.2f"|format(stats.season_high.points) }}</div>
-      <div class="award-card__meta"><strong>{{ stats.season_high.team_name }}</strong> · GW{{ stats.season_high.week }}</div>
+      <div class="award-card__meta"><strong>{{ stats.season_high.display_name }}</strong> · GW{{ stats.season_high.week }}</div>
     </div>
     <div class="award-card">
       <div class="award-card__title">Lowest Score</div>
       <div class="award-card__value">{{ "%.2f"|format(stats.season_low.points) }}</div>
-      <div class="award-card__meta"><strong>{{ stats.season_low.team_name }}</strong> · GW{{ stats.season_low.week }}</div>
+      <div class="award-card__meta"><strong>{{ stats.season_low.display_name }}</strong> · GW{{ stats.season_low.week }}</div>
     </div>
     <div class="award-card">
       <div class="award-card__title">Biggest Blowout</div>
@@ -35,19 +35,19 @@
     <div class="award-card">
       <div class="award-card__title">Longest Win Streak</div>
       <div class="award-card__value">{{ stats.longest_win_streak.length }}</div>
-      <div class="award-card__meta"><strong>{{ stats.longest_win_streak.team_name }}</strong> · {{ stats.longest_win_streak.display_name }}</div>
+      <div class="award-card__meta"><strong>{{ stats.longest_win_streak.display_name }}</strong></div>
     </div>
     <div class="award-card">
       <div class="award-card__title">Longest Losing Streak</div>
       <div class="award-card__value">{{ stats.longest_loss_streak.length }}</div>
-      <div class="award-card__meta"><strong>{{ stats.longest_loss_streak.team_name }}</strong> · {{ stats.longest_loss_streak.display_name }}</div>
+      <div class="award-card__meta"><strong>{{ stats.longest_loss_streak.display_name }}</strong></div>
     </div>
     {% if stats.pyrrhic_victory %}
     <div class="award-card">
       <div class="award-card__title">The Pyrrhic Victory</div>
       <div class="award-card__value">{{ "%.2f"|format(stats.pyrrhic_victory.points) }}</div>
       <div class="award-card__meta">
-        <strong>{{ stats.pyrrhic_victory.team_name }}</strong> put up this score and <em>still lost</em><br>
+        <strong>{{ stats.pyrrhic_victory.display_name }}</strong> put up this score and <em>still lost</em><br>
         <span style="color:var(--c-ink-light); font-size:0.75rem;">to {{ stats.pyrrhic_victory.opp_name }} ({{ "%.1f"|format(stats.pyrrhic_victory.opp_points) }}) · GW{{ stats.pyrrhic_victory.week }}</span>
       </div>
     </div>
@@ -57,7 +57,7 @@
       <div class="award-card__title">The Gift</div>
       <div class="award-card__value">{{ "%.2f"|format(stats.the_gift.points) }}</div>
       <div class="award-card__meta">
-        <strong>{{ stats.the_gift.team_name }}</strong> somehow <em>won</em> with only this<br>
+        <strong>{{ stats.the_gift.display_name }}</strong> somehow <em>won</em> with only this<br>
         <span style="color:var(--c-ink-light); font-size:0.75rem;">over {{ stats.the_gift.opp_name }} ({{ "%.1f"|format(stats.the_gift.opp_points) }}) · GW{{ stats.the_gift.week }}</span>
       </div>
     </div>
@@ -73,7 +73,7 @@
       <div class="award-card__value">{{ "%.2f"|format(pos_data.pts) }}</div>
       <div class="award-card__meta">
         <strong>{{ pos_data.full_name }}</strong> · {{ pos_data.team_abbr }} · GW{{ pos_data.week }}
-        <br><span style="color:var(--c-ink-light); font-size:0.75rem;">Started by {{ pos_data.team_name }}</span>
+        <br><span style="color:var(--c-ink-light); font-size:0.75rem;">Started by {{ pos_data.display_name }}</span>
       </div>
     </div>
     {% endfor %}
