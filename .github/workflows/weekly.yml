@@ -1,0 +1,45 @@
+name: DPL refresh + deploy
+
+# Manual-only: run this whenever EPL gameweeks actually finish.
+# Sometimes there are 2 in a week, sometimes 0 — no fixed cron makes sense.
+# Trigger from the Actions tab → "Run workflow".
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Ingest latest Sleeper data
+        run: python3 ingest.py
+
+      - name: Build site
+        run: python3 build_site.py
+
+      - name: Commit updated DB + dist
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dpl.db dist/
+          git diff --cached --quiet || git commit -m "chore: weekly data refresh $(date -u '+%Y-%m-%d')"
+          git push
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy dist/ --project-name=dpl

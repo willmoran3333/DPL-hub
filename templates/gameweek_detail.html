@@ -1,0 +1,129 @@
+{% extends "_base.html" %}
+{% block title %}GW{{ gw.week }}{% endblock %}
+
+{% block body %}
+<div class="page-narrow">
+  <header class="page-header">
+    <div class="page-header__eyebrow">2025/26 Season</div>
+    <h1 class="page-header__title">Gameweek {{ gw.week }}</h1>
+    <p class="page-header__subtitle">
+      High <strong>{{ "%.1f"|format(gw.high_score) }}</strong> ·
+      Low <strong>{{ "%.1f"|format(gw.low_score) }}</strong> ·
+      Avg <strong>{{ "%.1f"|format(gw.avg_score) }}</strong>
+    </p>
+  </header>
+
+  {% if gw.top_scorer %}
+  <div style="background:var(--c-primary); border-radius:6px; padding:18px 24px; margin-bottom:32px; display:flex; align-items:center; gap:20px;">
+    <div>
+      <div style="font-size:0.6875rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--c-gold); margin-bottom:6px;">Top Performer GW{{ gw.week }}</div>
+      <div style="font-size:1.25rem; font-weight:800; color:#fff; letter-spacing:-0.02em;">{{ gw.top_scorer.full_name }}</div>
+      <div style="font-size:0.75rem; color:rgba(255,255,255,0.6); margin-top:2px;">{{ gw.top_scorer.team_abbr }} · {{ gw.top_scorer.position_primary }}</div>
+    </div>
+    <div style="margin-left:auto; text-align:right;">
+      <div style="font-size:2rem; font-weight:800; color:var(--c-gold); letter-spacing:-0.04em; line-height:1;">{{ "%.1f"|format(gw.top_scorer.pts) }}</div>
+      <div style="font-size:0.6875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.45);">pts</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="section-label">Results</div>
+  <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:32px;">
+    {% for m in gw.matchups %}
+    {% set won_a = m.team_a.roster_id == m.winner_roster_id %}
+    <div class="match-card">
+      <div class="match-card__header">
+        <span>GW{{ gw.week }} · Matchup {{ m.matchup_id }}</span>
+        <span>H2H</span>
+      </div>
+      <div class="match-card__body">
+        <div class="match-team">
+          <div class="match-team__fantasy" style="{{ 'color:var(--c-primary); font-weight:800;' if won_a else '' }}">
+            {{ m.team_a.owner }}
+          </div>
+        </div>
+        <div class="match-score">
+          {% if m.team_a.points is not none and m.team_b.points is not none %}
+          <div class="match-score__pts">
+            {{ "%.1f"|format(m.team_a.points) }}<span>–</span>{{ "%.1f"|format(m.team_b.points) }}
+          </div>
+          <div class="match-score__label">PTS</div>
+          {% else %}
+          <div class="match-score__pts" style="font-size:1rem; color:var(--c-ink-light); font-weight:600; letter-spacing:0.1em;">vs</div>
+          <div class="match-score__label">Upcoming</div>
+          {% endif %}
+        </div>
+        <div class="match-team match-team--away">
+          <div class="match-team__fantasy" style="{{ 'color:var(--c-primary); font-weight:800;' if not won_a else '' }}">
+            {{ m.team_b.owner }}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# ── Weekly Awards (same content shown in the email) ── #}
+  {% if weekly %}
+  <div class="section-label">GW{{ gw.week }} Awards</div>
+  <div class="awards-grid" style="margin-bottom:28px;">
+    {% if weekly.high_score %}
+    <div class="award-card">
+      <div class="award-card__title">Highest Score</div>
+      <div class="award-card__value">{{ "%.2f"|format(weekly.high_score.points) }}</div>
+      <div class="award-card__meta"><strong>{{ weekly.high_score.display_name }}</strong></div>
+    </div>
+    {% endif %}
+    {% if weekly.low_score %}
+    <div class="award-card">
+      <div class="award-card__title">Lowest Score</div>
+      <div class="award-card__value">{{ "%.2f"|format(weekly.low_score.points) }}</div>
+      <div class="award-card__meta"><strong>{{ weekly.low_score.display_name }}</strong></div>
+    </div>
+    {% endif %}
+    {% if weekly.biggest_blowout %}
+    <div class="award-card">
+      <div class="award-card__title">Biggest Blowout</div>
+      <div class="award-card__value">{{ "%.2f"|format(weekly.biggest_blowout.diff) }}</div>
+      <div class="award-card__meta"><strong>{{ weekly.biggest_blowout.winner_name }}</strong> def. {{ weekly.biggest_blowout.loser_name }}</div>
+    </div>
+    {% endif %}
+    {% if weekly.closest_game %}
+    <div class="award-card">
+      <div class="award-card__title">Closest Game</div>
+      <div class="award-card__value">{{ "%.2f"|format(weekly.closest_game.diff) }}</div>
+      <div class="award-card__meta"><strong>{{ weekly.closest_game.winner_name }}</strong> over {{ weekly.closest_game.loser_name }}</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="section-label">Best By Position · GW{{ gw.week }}</div>
+  <div class="awards-grid" style="margin-bottom:40px;">
+    {% for label, p in [('Best FWD', weekly.best_fwd), ('Best MID', weekly.best_mid), ('Best DEF', weekly.best_def), ('Best GK', weekly.best_gk)] %}
+    <div class="award-card">
+      <div class="award-card__title">{{ label }}</div>
+      {% if p %}
+      <div class="award-card__value">{{ "%.1f"|format(p.pts) }}</div>
+      <div class="award-card__meta">
+        <strong><a href="{{ url_player(p.player_id) }}" style="color:var(--c-ink);">{{ p.full_name }}</a></strong> · {{ p.team_abbr }}<br>
+        <span style="color:var(--c-ink-light); font-size:0.75rem;">started by {{ p.team_name }}</span>
+      </div>
+      {% else %}
+      <div class="award-card__meta" style="color:var(--c-ink-light);">—</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div style="display:flex; justify-content:space-between; margin-top:32px;">
+    {% if gw.week > 1 %}
+    <a href="{{ url_gw(gw.week - 1) }}" class="badge badge--gw">← GW{{ gw.week - 1 }}</a>
+    {% else %}<span></span>{% endif %}
+    <a href="{{ url_for('page', 'gameweeks') }}" style="font-size:0.75rem; color:var(--c-ink-light);">All Gameweeks</a>
+    {% if gw.week < current_week %}
+    <a href="{{ url_gw(gw.week + 1) }}" class="badge badge--gw">GW{{ gw.week + 1 }} →</a>
+    {% else %}<span></span>{% endif %}
+  </div>
+</div>
+{% endblock %}

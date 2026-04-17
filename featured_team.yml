@@ -1,0 +1,27 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# FEATURED TEAM  — update this each week before running `python3 build_site.py`
+# ─────────────────────────────────────────────────────────────────────────────
+# roster_id matches the number in team_mapping.yml and the DB rosters table.
+# The "gw" field is just for the "as of" label shown in the header.
+
+roster_id: 10
+gw: 32
+headline: "Haalandcaust FC tops the table at 21–11"
+subheadline: "erozier's squad has been the class of the 2025/26 DPL"
+body: >
+  Haalandcaust FC sits atop the Dallas Premier League at 21 wins and 11 losses,
+  with 3,017 points for — comfortably the highest in the league. The engine is a
+  stacked Aston Villa core backed by elite forward depth that has consistently
+  posted 90+ point weeks. Defensively, they concede the fewest points against
+  in the league. With a handful of gameweeks left, they enter the run-in as
+  the heavy favourite to clinch the DPL title.
+
+highlight_stats:
+  - label: "Record"
+    value: "21–11"
+  - label: "Points For"
+    value: "3,017"
+  - label: "Pts Against"
+    value: "2,424"
+  - label: "League Pos"
+    value: "1st"

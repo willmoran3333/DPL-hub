@@ -1,0 +1,161 @@
+{% extends "_base.html" %}
+{% block title %}Table{% endblock %}
+
+{% block extra_head %}
+<style>
+  .placement-chart-wrap {
+    background: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+  }
+  .placement-chart { display: block; width: 100%; min-width: 720px; }
+  .placement-chart .grid { stroke: var(--c-border); stroke-width: 1; }
+  .placement-chart .axis-label { font-size: 11px; font-weight: 600; fill: var(--c-ink-light); font-family: var(--font-body); }
+  .placement-chart .line {
+    fill: none;
+    stroke-width: 2;
+    transition: stroke-width 0.12s, opacity 0.12s;
+  }
+  .placement-chart .line-group:hover .line { stroke-width: 3.5; }
+  .placement-chart .line-group:hover .line-label { font-weight: 800; }
+  .placement-chart .line-dot { transition: r 0.12s; }
+  .placement-chart .line-group:hover .line-dot { r: 5; }
+  .placement-chart .line-label { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
+  .placement-chart .hover-fade { opacity: 1; transition: opacity 0.12s; }
+  .placement-chart:hover .hover-fade { opacity: 0.15; }
+  .placement-chart:hover .hover-fade:hover { opacity: 1; }
+  .placement-chart:hover .line-group:hover .hover-fade { opacity: 1; }
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-top: 16px; font-size: 0.8125rem; }
+  .chart-legend__item { display: flex; align-items: center; gap: 6px; }
+  .chart-legend__swatch { width: 16px; height: 3px; display: inline-block; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">2025/26 Season · GW{{ current_week }}</div>
+    <h1 class="page-header__title">League Table</h1>
+  </header>
+
+  {# ── Placement line chart ── #}
+  {% if placements and placements.max_played > 0 %}
+  {% set total_weeks = placements.total_weeks %}
+  {% set max_played = placements.max_played %}
+  {# Chart geometry #}
+  {% set pad_l = 40 %}{% set pad_r = 16 %}{% set pad_t = 16 %}{% set pad_b = 36 %}
+  {% set width = 960 %}{% set height = 320 %}
+  {% set plot_w = width - pad_l - pad_r %}{% set plot_h = height - pad_t - pad_b %}
+  {% set step_x = plot_w / (total_weeks - 1) %}
+  {% set step_y = plot_h / 11 %}
+  {# Curated distinct colors for 12 teams #}
+  {% set palette = ['#3D1452','#B8860B','#2F7547','#9C2A3D','#1F4068','#C28A2A','#6B3D1A','#7A2828','#2A6FB2','#5A2D70','#8B4513','#2D5A2D'] %}
+
+  <div class="section-label">Table Placement Over the Season</div>
+  <div class="placement-chart-wrap">
+    <svg class="placement-chart" viewBox="0 0 {{ width }} {{ height }}" preserveAspectRatio="xMidYMid meet" aria-label="Weekly table placement for all 12 managers">
+      {# Y gridlines — one per position 1..12 #}
+      {% for p in range(1, 13) %}
+      {% set y = pad_t + (p - 1) * step_y %}
+      <line class="grid" x1="{{ pad_l }}" y1="{{ y }}" x2="{{ pad_l + plot_w }}" y2="{{ y }}"/>
+      <text class="axis-label" x="{{ pad_l - 8 }}" y="{{ y + 3 }}" text-anchor="end">{{ p }}</text>
+      {% endfor %}
+      {# X axis ticks at intervals of 5 #}
+      {% for w in range(1, total_weeks + 1) %}
+      {% if w == 1 or w % 5 == 0 or w == total_weeks %}
+      {% set x = pad_l + (w - 1) * step_x %}
+      <text class="axis-label" x="{{ x }}" y="{{ height - 8 }}" text-anchor="middle">GW{{ w }}</text>
+      {% endif %}
+      {% endfor %}
+
+      {# One polyline per team #}
+      {% for t in standings %}
+      {% set color = palette[loop.index0 % 12] %}
+      {% set rid = t.roster_id %}
+      {% set pts = placements.placements.get(rid, []) %}
+      <g class="line-group">
+        {# Build polyline points string #}
+        {% set pstr = [] %}
+        {% for p in pts %}
+          {% set x = pad_l + (p.week - 1) * step_x %}
+          {% set y = pad_t + (p.pos - 1) * step_y %}
+          {% set _ = pstr.append(x|string ~ "," ~ y|string) %}
+        {% endfor %}
+        <polyline class="line hover-fade" stroke="{{ color }}" points="{{ pstr|join(' ') }}"/>
+        {# End-of-line label #}
+        {% if pts %}
+          {% set last = pts[-1] %}
+          {% set lx = pad_l + (last.week - 1) * step_x %}
+          {% set ly = pad_t + (last.pos - 1) * step_y %}
+          <circle class="line-dot hover-fade" cx="{{ lx }}" cy="{{ ly }}" r="3" fill="{{ color }}"/>
+          <text class="line-label hover-fade" x="{{ lx + 6 }}" y="{{ ly + 3 }}" fill="{{ color }}">{{ t.display_name }}</text>
+        {% endif %}
+      </g>
+      {% endfor %}
+    </svg>
+    <div class="chart-legend">
+      {% for t in standings %}
+      {% set color = palette[loop.index0 % 12] %}
+      <div class="chart-legend__item">
+        <span class="chart-legend__swatch" style="background:{{ color }}"></span>
+        <span>{{ t.display_name }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {# ── Standings table ── #}
+  <div class="section-label">Standings Through GW{{ current_week }}</div>
+  <div class="standings-table-wrap">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th class="col-pos">#</th>
+          <th class="col-team">Manager</th>
+          <th>W</th>
+          <th>L</th>
+          <th>T</th>
+          <th>PF</th>
+          <th>PA</th>
+          <th>+/−</th>
+          <th>Form</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in standings %}
+        {% set diff = t.pts_for - t.pts_against %}
+        <tr>
+          <td class="col-pos">{{ t.position }}</td>
+          <td class="col-team">
+            <a href="{{ url_club(t.roster_id) }}" class="team-cell">
+              <div class="team-cell__fantasy">{{ t.display_name }}</div>
+            </a>
+          </td>
+          <td class="col-pts">{{ t.wins }}</td>
+          <td>{{ t.losses }}</td>
+          <td>{{ t.ties }}</td>
+          <td class="col-pts">{{ "%.1f"|format(t.pts_for) }}</td>
+          <td>{{ "%.1f"|format(t.pts_against) }}</td>
+          <td class="{{ 'color-success' if diff >= 0 else 'color-loss' }}" style="font-weight:700;">
+            {{ "%+.1f"|format(diff) }}
+          </td>
+          <td>
+            <div class="form-guide">
+              {% for r in t.form %}<span class="form-pip {{ r|lower }}">{{ r }}</span>{% endfor %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="mt-4" style="font-size:0.75rem; color:var(--c-ink-light);">
+    Form guide shows last 5 gameweeks (most recent right-most).
+  </p>
+</div>
+{% endblock %}

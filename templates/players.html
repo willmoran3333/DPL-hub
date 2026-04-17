@@ -1,0 +1,433 @@
+{% extends "_base.html" %}
+{% block title %}Players{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ── Presets ── */
+  .presets {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+  }
+  .preset-chip {
+    padding: 7px 14px;
+    border: 1px solid var(--c-border-mid);
+    border-radius: 16px;
+    background: var(--c-bg-card);
+    color: var(--c-ink-mid);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .preset-chip:hover { border-color: var(--c-gold); color: var(--c-primary); }
+  .preset-chip.active {
+    background: var(--c-primary);
+    color: #FFFFFF;
+    border-color: var(--c-primary);
+  }
+
+  /* ── Filter row ── */
+  .filter-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .filter-row input, .filter-row select {
+    font-family: inherit;
+    font-size: 0.875rem;
+    padding: 8px 12px;
+    border: 1px solid var(--c-border-mid);
+    border-radius: 4px;
+    background: var(--c-bg-card);
+    color: var(--c-ink);
+    outline: none;
+  }
+  .filter-row input:focus, .filter-row select:focus { border-color: var(--c-gold); }
+  .filter-row-b {
+    display: grid;
+    grid-template-columns: auto auto auto 1fr auto;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 0.8125rem;
+    color: var(--c-ink-mid);
+  }
+  .filter-row-b label {
+    display: flex; gap: 6px; align-items: center; cursor: pointer;
+    padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 4px;
+  }
+  .filter-row-b input[type=checkbox] { accent-color: var(--c-primary); }
+  .filter-row-b .slider {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 12px; border: 1px solid var(--c-border); border-radius: 4px;
+  }
+  .filter-row-b .slider input {
+    flex: 1; min-width: 120px;
+    accent-color: var(--c-primary);
+  }
+  .filter-row-b .slider output {
+    font-variant-numeric: tabular-nums; font-weight: 700; color: var(--c-ink);
+    min-width: 40px; text-align: right;
+  }
+  .filter-reset {
+    padding: 6px 14px; background: transparent; border: 1px solid var(--c-border-mid);
+    border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    color: var(--c-ink-mid); letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .filter-reset:hover { border-color: var(--c-accent-red); color: var(--c-accent-red); }
+
+  /* ── Counter ── */
+  .result-count {
+    font-size: 0.75rem; color: var(--c-ink-light);
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .result-count strong { color: var(--c-primary); font-weight: 800; font-size: 0.9375rem; }
+
+  /* ── Sortable table ── */
+  table.p-table {
+    width: 100%; border-collapse: collapse; font-size: 0.875rem;
+    background: var(--c-bg-card);
+    font-variant-numeric: tabular-nums;
+  }
+  table.p-table thead { background: var(--c-primary); color: rgba(255,255,255,0.75); }
+  table.p-table thead th {
+    padding: 9px 8px; font-size: 0.6875rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+    text-align: right; border-bottom: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer; user-select: none; position: relative; padding-right: 22px;
+  }
+  table.p-table thead th:first-child { text-align: left; }
+  table.p-table thead th::after {
+    content: ''; position: absolute; right: 8px; top: 50%;
+    transform: translateY(-50%);
+    border-left: 4px solid transparent; border-right: 4px solid transparent;
+    opacity: 0.3;
+  }
+  table.p-table thead th.sort-asc::after  { border-bottom: 5px solid currentColor; opacity: 1; }
+  table.p-table thead th.sort-desc::after { border-top:    5px solid currentColor; opacity: 1; }
+  table.p-table thead th:hover { color: #FFFFFF; }
+  table.p-table tbody tr { border-bottom: 1px solid var(--c-border); }
+  table.p-table tbody tr:last-child { border-bottom: none; }
+  table.p-table tbody tr:hover { background: var(--c-bg-soft); }
+  table.p-table td { padding: 7px 8px; text-align: right; white-space: nowrap; }
+  table.p-table td:first-child { text-align: left; }
+  .p-name { font-weight: 700; }
+  .p-name a { color: var(--c-ink); }
+  .p-name a:hover { color: var(--c-primary); }
+  .p-owner-chip {
+    display: inline-block; padding: 2px 7px; border-radius: 10px;
+    background: var(--c-bg-soft); color: var(--c-ink-mid);
+    font-size: 0.6875rem; font-weight: 600;
+  }
+  .p-owner-chip.free { background: rgba(47, 117, 71, 0.14); color: var(--c-success); }
+  .p-pts { font-weight: 700; color: var(--c-ink); }
+  .p-injury { display: inline-block; margin-left: 6px; padding: 1px 5px; font-size: 0.5625rem;
+              font-weight: 700; border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase;
+              background: var(--c-accent-red); color: #FFFFFF; }
+
+  /* ── Sparkline ── */
+  .spark {
+    display: inline-flex; gap: 2px; align-items: flex-end;
+    height: 18px; width: 60px;
+  }
+  .spark__bar {
+    flex: 1; background: var(--c-primary);
+    border-radius: 1px; min-height: 1px;
+  }
+  .spark__bar.miss { background: var(--c-border); height: 2px; }
+
+  .player-row--hidden { display: none; }
+
+  @media (max-width: 900px) {
+    .filter-row { grid-template-columns: 1fr 1fr; }
+    .filter-row-b { grid-template-columns: 1fr; }
+    .p-hide-sm { display: none; }
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">2025/26 Season · Research Desk</div>
+    <h1 class="page-header__title">Players</h1>
+    <p class="page-header__subtitle">Every active EPL player, rostered or free. Sort any column, stack filters, tap a name for weekly stats.</p>
+  </header>
+
+  {# ── Preset chips ── #}
+  <div class="presets" id="presets">
+    <button class="preset-chip active" data-preset="all">All Players</button>
+    <button class="preset-chip" data-preset="free">Free Agents Only</button>
+    <button class="preset-chip" data-preset="form">In Form (Last 5)</button>
+    <button class="preset-chip" data-preset="gk">Goalkeepers</button>
+    <button class="preset-chip" data-preset="def">Defenders</button>
+    <button class="preset-chip" data-preset="mid">Midfielders</button>
+    <button class="preset-chip" data-preset="fwd">Forwards</button>
+    <button class="preset-chip" data-preset="starters">Regular Starters</button>
+    <button class="preset-chip" data-preset="contrib">Top Goal Contributors</button>
+  </div>
+
+  {# ── Filters ── #}
+  <div class="filter-row">
+    <input type="search"  id="p-search" placeholder="Search by name…" autocomplete="off">
+    <select id="p-pos">
+      <option value="">All positions</option>
+      <option value="GK">Goalkeeper</option>
+      <option value="D">Defender</option>
+      <option value="M">Midfielder</option>
+      <option value="F">Forward</option>
+    </select>
+    <select id="p-club">
+      <option value="">All EPL clubs</option>
+      {% set clubs = [] %}
+      {% for p in players %}
+        {% if p.team_abbr and p.team_abbr not in clubs %}{% set _ = clubs.append(p.team_abbr) %}{% endif %}
+      {% endfor %}
+      {% for c in clubs|sort %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+    </select>
+    <select id="p-owner">
+      <option value="">All owners</option>
+      <option value="__free">(free agent)</option>
+      {% set owners = [] %}
+      {% for p in players %}
+        {% if p.owner and p.owner not in owners %}{% set _ = owners.append(p.owner) %}{% endif %}
+      {% endfor %}
+      {% for o in owners|sort %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
+    </select>
+  </div>
+
+  <div class="filter-row-b">
+    <label><input type="checkbox" id="p-noinjury"> Exclude injured</label>
+    <div class="slider">
+      <span>Min minutes:</span>
+      <input type="range" id="p-minutes" min="0" max="3000" step="90" value="0">
+      <output id="p-minutes-out">0</output>
+    </div>
+    <div class="slider">
+      <span>Min games:</span>
+      <input type="range" id="p-games" min="0" max="32" step="1" value="0">
+      <output id="p-games-out">0</output>
+    </div>
+    <div></div>
+    <button class="filter-reset" id="p-reset">Reset</button>
+  </div>
+
+  <div class="result-count">
+    Showing <strong id="p-count">{{ players|length }}</strong> of {{ players|length }} players
+  </div>
+
+  <div class="standings-table-wrap">
+    <table class="p-table" id="p-table">
+      <thead>
+        <tr>
+          <th data-sort="str">Player</th>
+          <th data-sort="str">Pos</th>
+          <th data-sort="str">Club</th>
+          <th data-sort="str">Owner</th>
+          <th data-sort="num">MIN</th>
+          <th data-sort="num" class="p-hide-sm">GP</th>
+          <th data-sort="num">G</th>
+          <th data-sort="num">A</th>
+          <th data-sort="num" class="p-hide-sm">G+A</th>
+          <th data-sort="num" class="p-hide-sm">CS</th>
+          <th data-sort="num">PPG</th>
+          <th data-sort="num" class="p-hide-sm">Per 90</th>
+          <th data-sort="num">Last 5</th>
+          <th data-sort="num">Pts</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in players %}
+        {# Compute max last5 value for bar scaling on client-side via data attribute #}
+        <tr class="player-row"
+            data-name="{{ (p.full_name or '')|lower }}"
+            data-pos="{{ p.position_primary or '' }}"
+            data-club="{{ p.team_abbr or '' }}"
+            data-owner="{{ p.owner or '' }}"
+            data-free="{{ 1 if p.is_free else 0 }}"
+            data-injury="{{ 1 if p.injury_status else 0 }}"
+            data-mins="{{ p.mins }}"
+            data-games="{{ p.games }}"
+            data-last5="{{ p.last5_sum }}"
+            data-contrib="{{ p.goal_contrib }}">
+          <td class="p-name">
+            <a href="{{ url_player(p.player_id) }}" data-val="{{ (p.full_name or '')|lower }}">{{ p.full_name or p.player_id }}</a>
+            {% if p.injury_status %}<span class="p-injury" title="{{ p.injury_status }}">INJ</span>{% endif %}
+          </td>
+          <td data-val="{{ p.position_primary }}">
+            <span class="badge pos-{{ p.position_primary or 'unknown' }}">{{ p.position_primary or '—' }}</span>
+          </td>
+          <td data-val="{{ p.team_abbr }}">{{ p.team_abbr or '—' }}</td>
+          <td data-val="{{ p.owner_label|lower }}">
+            {% if p.is_free %}
+            <span class="p-owner-chip free">free</span>
+            {% else %}
+            <span class="p-owner-chip">{{ p.owner }}</span>
+            {% endif %}
+          </td>
+          <td data-val="{{ p.mins }}">{{ "%.0f"|format(p.mins) }}</td>
+          <td class="p-hide-sm" data-val="{{ p.games }}">{{ p.games }}</td>
+          <td data-val="{{ p.goals }}">{{ "%.0f"|format(p.goals) }}</td>
+          <td data-val="{{ p.assists }}">{{ "%.0f"|format(p.assists) }}</td>
+          <td class="p-hide-sm" data-val="{{ p.goal_contrib }}">{{ "%.0f"|format(p.goal_contrib) }}</td>
+          <td class="p-hide-sm" data-val="{{ p.clean_sheets }}">{{ "%.0f"|format(p.clean_sheets) }}</td>
+          <td data-val="{{ p.ppg }}">{{ "%.1f"|format(p.ppg) }}</td>
+          <td class="p-hide-sm" data-val="{{ p.per_90 }}">{{ "%.1f"|format(p.per_90) }}</td>
+          <td data-val="{{ p.last5_sum }}">
+            <span class="spark">
+              {% for v in p.last5 %}
+              {% if v is none %}
+              <span class="spark__bar miss"></span>
+              {% else %}
+              <span class="spark__bar" style="height: {{ ((v / 30.0) * 100)|round(0) if v > 0 else 4 }}%;" title="{{ "%.1f"|format(v) }} pts"></span>
+              {% endif %}
+              {% endfor %}
+            </span>
+          </td>
+          <td class="p-pts" data-val="{{ p.pts }}">{{ "%.1f"|format(p.pts) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  const table   = document.getElementById('p-table');
+  const tbody   = table.querySelector('tbody');
+  const rows    = Array.from(tbody.querySelectorAll('.player-row'));
+  const count   = document.getElementById('p-count');
+  const allLen  = rows.length;
+
+  // ── Filter controls ─────────────────────────────────
+  const f = {
+    search:  document.getElementById('p-search'),
+    pos:     document.getElementById('p-pos'),
+    club:    document.getElementById('p-club'),
+    owner:   document.getElementById('p-owner'),
+    noinj:   document.getElementById('p-noinjury'),
+    mins:    document.getElementById('p-minutes'),
+    games:   document.getElementById('p-games'),
+    reset:   document.getElementById('p-reset'),
+  };
+  const minsOut  = document.getElementById('p-minutes-out');
+  const gamesOut = document.getElementById('p-games-out');
+
+  function applyFilters() {
+    const s       = f.search.value.toLowerCase().trim();
+    const pos     = f.pos.value;
+    const club    = f.club.value;
+    const owner   = f.owner.value;
+    const noinj   = f.noinj.checked;
+    const minMins = parseInt(f.mins.value,  10) || 0;
+    const minGms  = parseInt(f.games.value, 10) || 0;
+
+    minsOut.value  = minMins;
+    gamesOut.value = minGms;
+
+    let shown = 0;
+    rows.forEach(r => {
+      const d = r.dataset;
+      let ok = true;
+      if (s && !d.name.includes(s)) ok = false;
+      if (ok && pos  && d.pos  !== pos) ok = false;
+      if (ok && club && d.club !== club) ok = false;
+      if (ok && owner) {
+        if (owner === '__free') { if (d.free !== '1') ok = false; }
+        else if (d.owner !== owner) ok = false;
+      }
+      if (ok && noinj && d.injury === '1') ok = false;
+      if (ok && parseFloat(d.mins)  < minMins) ok = false;
+      if (ok && parseInt(d.games, 10) < minGms) ok = false;
+
+      r.classList.toggle('player-row--hidden', !ok);
+      if (ok) shown++;
+    });
+    count.textContent = shown;
+  }
+
+  [f.search, f.pos, f.club, f.owner, f.noinj, f.mins, f.games]
+    .forEach(el => el.addEventListener('input',  applyFilters));
+  [f.search, f.pos, f.club, f.owner, f.noinj, f.mins, f.games]
+    .forEach(el => el.addEventListener('change', applyFilters));
+
+  f.reset.addEventListener('click', () => {
+    f.search.value = '';
+    f.pos.value    = '';
+    f.club.value   = '';
+    f.owner.value  = '';
+    f.noinj.checked = false;
+    f.mins.value   = 0;
+    f.games.value  = 0;
+    setPreset('all');
+    applyFilters();
+  });
+
+  // ── Presets ─────────────────────────────────────────
+  const presets = document.getElementById('presets');
+  function setPreset(name) {
+    presets.querySelectorAll('.preset-chip').forEach(c =>
+      c.classList.toggle('active', c.dataset.preset === name));
+  }
+  function applyPreset(name) {
+    // Reset baseline
+    f.pos.value = ''; f.owner.value = ''; f.noinj.checked = false;
+    f.mins.value = 0; f.games.value = 0;
+    setPreset(name);
+
+    if (name === 'free')     { f.owner.value = '__free'; }
+    if (name === 'gk')       { f.pos.value = 'GK'; }
+    if (name === 'def')      { f.pos.value = 'D'; }
+    if (name === 'mid')      { f.pos.value = 'M'; }
+    if (name === 'fwd')      { f.pos.value = 'F'; }
+    if (name === 'starters') { f.mins.value = 1500; f.games.value = 18; }
+    applyFilters();
+
+    // Sort-based presets
+    if (name === 'form')    sortByColumn(12, -1); // Last 5 column index (0-indexed)
+    if (name === 'contrib') sortByColumn(8, -1);  // G+A column
+    if (name === 'all')     sortByColumn(13, -1); // Pts column
+  }
+
+  presets.querySelectorAll('.preset-chip').forEach(chip => {
+    chip.addEventListener('click', () => applyPreset(chip.dataset.preset));
+  });
+
+  // ── Sortable columns ────────────────────────────────
+  const ths = table.querySelectorAll('thead th');
+  let curCol = 13, curDir = -1; // default: Pts desc
+
+  function sortByColumn(colIdx, dir) {
+    curCol = colIdx; curDir = dir;
+    ths.forEach(th => th.classList.remove('sort-asc', 'sort-desc'));
+    ths[colIdx].classList.add(dir > 0 ? 'sort-asc' : 'sort-desc');
+
+    const kind = ths[colIdx].dataset.sort || 'str';
+    const sorted = rows.slice().sort((a, b) => {
+      const av = a.children[colIdx].dataset.val ?? a.children[colIdx].innerText.trim();
+      const bv = b.children[colIdx].dataset.val ?? b.children[colIdx].innerText.trim();
+      if (kind === 'num') return (parseFloat(av) - parseFloat(bv)) * dir;
+      return av.localeCompare(bv) * dir;
+    });
+    sorted.forEach(r => tbody.appendChild(r));
+  }
+
+  ths.forEach((th, idx) => {
+    th.addEventListener('click', () => {
+      const dir = (curCol === idx) ? curDir * -1 : (th.dataset.sort === 'num' ? -1 : 1);
+      sortByColumn(idx, dir);
+    });
+  });
+
+  // Initial sort + filter
+  sortByColumn(13, -1);
+  applyFilters();
+})();
+</script>
+{% endblock %}

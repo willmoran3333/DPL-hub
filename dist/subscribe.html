@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscribe — Dallas Premier League</title>
+  <meta name="description" content="Dallas Premier League — 12-team Sleeper EPL dynasty fantasy">
+  <meta property="og:title" content="Subscribe — Dallas Premier League">
+  <meta property="og:description" content="Dallas Premier League — 12-team Sleeper EPL dynasty fantasy">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="static/img/dpl_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/main.css">
+  
+</head>
+<body>
+
+<nav class="site-nav" role="navigation" aria-label="Main">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <img src="static/img/dpl_logo.png" alt="DPL crest">
+      <div class="nav-brand__text">
+        <strong>DPL</strong>
+        <span>Dallas Premier League</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="table.html">Table</a></li>
+      <li><a href="gameweeks.html">Gameweek</a></li>
+      <li><a href="fixtures.html">Fixtures</a></li>
+      <li><a href="clubs.html">Clubs</a></li>
+      <li><a href="players.html">Players</a></li>
+      <li><a href="stats.html">Stats</a></li>
+      <li><a href="draft.html">Draft</a></li>
+      <li><a href="history.html">History</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="page-narrow">
+  <header class="page-header">
+    <div class="page-header__eyebrow">Weekly Digest</div>
+    <h1 class="page-header__title">Subscribe</h1>
+    <p class="page-header__subtitle">Get a recap of last week and a look-ahead at the next, every Tuesday morning.</p>
+  </header>
+
+  <div style="background:var(--c-bg-card); border:1px solid var(--c-border); border-radius:6px; padding:32px;">
+    <form id="subscribe-form" action="https://formspree.io/f/your-form-id" method="POST">
+      <input type="hidden" name="form-name" value="dpl-subscribe">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <label style="display:block; font-size:0.6875rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--c-ink-mid); margin-bottom:6px;">Your Name</label>
+          <input type="text" name="name" required style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); border-radius:4px; font-family:inherit; font-size:0.9375rem; outline:none;">
+        </div>
+        <div>
+          <label style="display:block; font-size:0.6875rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--c-ink-mid); margin-bottom:6px;">Email Address</label>
+          <input type="email" name="email" required value="" style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); border-radius:4px; font-family:inherit; font-size:0.9375rem; outline:none;">
+        </div>
+        <div>
+          <label style="display:block; font-size:0.6875rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--c-ink-mid); margin-bottom:6px;">Which DPL Manager Are You? (optional)</label>
+          <select name="manager" style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); border-radius:4px; font-family:inherit; font-size:0.9375rem; outline:none; background:var(--c-bg-card);">
+            <option value="">— Select —</option>
+            
+            <option value="erozier">erozier · Haalandcaust FC</option>
+            
+            <option value="Noahvillasana17">Noahvillasana17 · Welcome to the show</option>
+            
+            <option value="JordiCarb">JordiCarb · Goo Goo Kaka FC</option>
+            
+            <option value="brendog2814">brendog2814 · team brendog</option>
+            
+            <option value="bjennings28">bjennings28 · Smith-Rowe v Wade</option>
+            
+            <option value="willmoran">willmoran · Derby County</option>
+            
+            <option value="rmeernst">rmeernst · Xhaka Xhaka</option>
+            
+            <option value="Flabiano9">Flabiano9 · Aura FC</option>
+            
+            <option value="benditlikebergvall">benditlikebergvall · Return of the djedi</option>
+            
+            <option value="cstoney20">cstoney20 · Next stop: The Londoner </option>
+            
+            <option value="skoeiboy">skoeiboy · Fantasy Soccer is Dumb FC</option>
+            
+            <option value="jacklynch213">jacklynch213 · LPLLC</option>
+            
+            <option value="other">Friend of the league</option>
+          </select>
+        </div>
+        <button type="submit" style="margin-top:8px; padding:12px 24px; background:var(--c-primary); color:#fff; border:none; border-radius:4px; font-family:inherit; font-size:0.8125rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer;">
+          Subscribe to Weekly Digest
+        </button>
+      </div>
+    </form>
+    <p style="margin-top:20px; font-size:0.75rem; color:var(--c-ink-light); line-height:1.6;">
+      The digest is sent every Tuesday morning UK time, after the gameweek's matches finish. It includes the full slate of results, your team's performance, the top performers leaguewide, and a look-ahead at next week's matchups. Unsubscribe any time.
+    </p>
+  </div>
+
+  <div style="margin-top:32px; padding:24px; background:var(--c-bg-soft); border-radius:6px; border:1px solid var(--c-border);">
+    <div style="font-size:0.6875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--c-gold-deep); margin-bottom:8px;">What You'll Get</div>
+    <ul style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55;">
+      <li style="display:flex; gap:10px;"><span style="color:var(--c-gold); font-weight:800; flex-shrink:0;">›</span><span><strong style="color:var(--c-ink);">Past Week Recap</strong> — every H2H result, the top performer of the week, biggest blowout, closest game.</span></li>
+      <li style="display:flex; gap:10px;"><span style="color:var(--c-gold); font-weight:800; flex-shrink:0;">›</span><span><strong style="color:var(--c-ink);">Updated Standings</strong> — full table with form guide and points-for/against.</span></li>
+      <li style="display:flex; gap:10px;"><span style="color:var(--c-gold); font-weight:800; flex-shrink:0;">›</span><span><strong style="color:var(--c-ink);">Look-Ahead</strong> — next week's matchups with form context.</span></li>
+      <li style="display:flex; gap:10px;"><span style="color:var(--c-gold); font-weight:800; flex-shrink:0;">›</span><span><strong style="color:var(--c-ink);">Awards Watch</strong> — season trackers, current leaders.</span></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Pre-fill email from URL query string
+  const params = new URLSearchParams(window.location.search);
+  const email = params.get('email');
+  if (email) {
+    const f = document.querySelector('input[name="email"]');
+    if (f && !f.value) f.value = email;
+  }
+})();
+</script>
+
+
+
+
+<footer class="site-footer">
+  Dallas Premier League · 2025/26 · Powered by <a href="https://sleeper.com" target="_blank" rel="noopener">Sleeper</a> · <a href="subscribe.html">Subscribe to weekly digest</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,293 @@
+{% extends "_base.html" %}
+{% set p = detail.player %}
+{% block title %}{{ p.full_name }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ── Layout: scrollable region with sticky edges ── */
+  .pivot-wrap {
+    border: 1px solid var(--c-border);
+    border-radius: 4px;
+    background: var(--c-bg-card);
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  /* Top scrollbar — empty div whose width mirrors the table inside */
+  .pivot-top-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-bottom: 1px solid var(--c-border);
+    background: var(--c-bg-soft);
+  }
+  .pivot-top-scroll__rail { height: 1px; }
+
+  /* Main scroll container — both axes; sticky cells live inside */
+  .pivot-scroll {
+    overflow: auto;
+    max-height: 620px;
+    position: relative;
+  }
+
+  .stat-table {
+    border-collapse: separate;          /* required so sticky cells render their own bg */
+    border-spacing: 0;
+    font-size: 0.8125rem;
+    background: var(--c-bg-card);
+    font-variant-numeric: tabular-nums;
+    width: max-content;                 /* let it overflow the container */
+    min-width: 100%;
+  }
+
+  /* ── Header ── */
+  .stat-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    padding: 10px 10px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: right;
+    white-space: nowrap;
+    background: var(--c-primary);
+    color: rgba(255,255,255,0.78);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+  }
+  .stat-table thead th:last-child { border-right: none; }
+
+  /* Sticky GW corner (top-left) */
+  .stat-table thead th.col-gw {
+    left: 0;
+    z-index: 5;
+    text-align: left;
+    min-width: 64px;
+  }
+
+  /* Sticky Total corner (top-right) */
+  .stat-table thead th.col-total {
+    right: 0;
+    z-index: 5;
+    background: var(--c-primary-dark);
+    color: var(--c-gold);
+  }
+
+  /* ── Body cells ── */
+  .stat-table td {
+    padding: 8px 10px;
+    text-align: right;
+    white-space: nowrap;
+    background: var(--c-bg-card);
+    border-right: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .stat-table td:last-child { border-right: none; }
+
+  /* Sticky GW column (left) */
+  .stat-table td.col-gw {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    text-align: left;
+    font-weight: 700;
+    color: var(--c-primary);
+    background: #FAF7F0;
+    border-right: 2px solid var(--c-border-mid);
+  }
+
+  /* Sticky Total column (right) */
+  .stat-table td.col-total {
+    position: sticky;
+    right: 0;
+    z-index: 2;
+    font-weight: 800;
+    color: var(--c-ink);
+    background: #F5EDD9;
+    border-left: 2px solid var(--c-gold);
+  }
+
+  /* Zero / missing cells */
+  .stat-table td.zero { color: var(--c-ink-light); }
+
+  /* ── Footer (always sticky at bottom) ── */
+  /* Three rows: raw totals, points contributed, % of total */
+  .stat-table tfoot tr.totals  td { position: sticky; bottom: calc(2 * 34px); z-index: 3; background: var(--c-primary); color: #FFFFFF; font-weight: 700; }
+  .stat-table tfoot tr.contrib td { position: sticky; bottom: 34px;           z-index: 3; background: #432160;          color: var(--c-gold); }
+  .stat-table tfoot tr.pct     td { position: sticky; bottom: 0;              z-index: 3; background: var(--c-primary-dark); color: rgba(255,255,255,0.85); }
+
+  .stat-table tfoot td {
+    border-bottom: none;
+    padding: 9px 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.8125rem;
+  }
+  .stat-table tfoot tr.totals td  { border-top: 2px solid var(--c-gold); }
+
+  .stat-table tfoot td.col-gw {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    text-align: left;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .stat-table tfoot tr.totals  td.col-gw { background: var(--c-primary);      color: var(--c-gold); }
+  .stat-table tfoot tr.contrib td.col-gw { background: #432160;               color: var(--c-gold); }
+  .stat-table tfoot tr.pct     td.col-gw { background: var(--c-primary-dark); color: rgba(255,255,255,0.6); }
+
+  .stat-table tfoot td.col-total {
+    position: sticky;
+    right: 0;
+    z-index: 5;
+    font-weight: 800;
+    border-left: 2px solid var(--c-gold);
+  }
+  .stat-table tfoot tr.totals  td.col-total { background: var(--c-primary);      color: var(--c-gold); }
+  .stat-table tfoot tr.contrib td.col-total { background: #432160;               color: var(--c-gold); }
+  .stat-table tfoot tr.pct     td.col-total { background: var(--c-primary-dark); color: var(--c-gold); }
+
+  /* "Dash" cells */
+  .stat-table tfoot td.empty { color: rgba(255,255,255,0.25); font-weight: 500; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+
+  <div style="background:var(--c-primary); margin: calc(-1 * var(--sp-10)) calc(-1 * var(--sp-5)) var(--sp-8); padding: var(--sp-8) var(--sp-5); border-bottom: 3px solid var(--c-gold);">
+    <div style="font-size:0.6875rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--c-gold); margin-bottom:8px;">
+      {{ p.team_abbr or '—' }} · {{ p.position_primary or '—' }}{% if detail.owner %} · Rostered by {{ detail.owner.display_name }}{% else %} · Free Agent{% endif %}
+    </div>
+    <h1 style="font-size:clamp(1.75rem, 5vw, 2.75rem); font-weight:800; letter-spacing:-0.03em; color:#fff; line-height:1.05;">{{ p.full_name }}</h1>
+    {% if p.injury_status %}
+    <div style="margin-top:10px; display:inline-block; padding:4px 10px; background:var(--c-accent-red); color:#fff; font-size:0.6875rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border-radius:3px;">
+      {{ p.injury_status }}{% if p.injury_notes %} · {{ p.injury_notes }}{% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="stat-bar">
+    <div class="stat-cell">
+      <div class="stat-cell__value">{{ "%.1f"|format(detail.pts_total) }}</div>
+      <div class="stat-cell__label">Season Pts</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-cell__value">{{ detail.weeks }}</div>
+      <div class="stat-cell__label">Weeks Scored</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-cell__value">{{ "%.1f"|format(detail.pts_total / detail.weeks if detail.weeks else 0) }}</div>
+      <div class="stat-cell__label">Avg Per Week</div>
+    </div>
+    <div class="stat-cell">
+      {% set high = detail.rows|map(attribute='pts')|select|list %}
+      <div class="stat-cell__value">{{ "%.1f"|format(high|max if high else 0) }}</div>
+      <div class="stat-cell__label">Career High</div>
+    </div>
+  </div>
+
+  <div class="section-label">Gameweek Breakdown</div>
+
+  <div class="pivot-wrap">
+    {# Top scrollbar — its width mirrors the table; JS keeps both scrollbars in sync #}
+    <div class="pivot-top-scroll" id="pivotTopScroll">
+      <div class="pivot-top-scroll__rail" id="pivotTopRail"></div>
+    </div>
+
+    <div class="pivot-scroll" id="pivotScroll">
+      <table class="stat-table" id="pivotTable">
+        <thead>
+          <tr>
+            <th class="col-gw">GW</th>
+            {% for h in detail.headers %}
+            <th title="{{ h.key }}">{{ h.label }}</th>
+            {% endfor %}
+            <th class="col-total">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in detail.rows %}
+          <tr>
+            <td class="col-gw"><a href="{{ url_gw(row.week) }}" style="color:var(--c-primary);">GW{{ row.week }}</a></td>
+            {% for val in row.cells %}
+            {% if val is none or val == 0 %}
+            <td class="zero">—</td>
+            {% else %}
+            <td>{{ "%g"|format(val) }}</td>
+            {% endif %}
+            {% endfor %}
+            <td class="col-total">{{ "%.1f"|format(row.pts or 0) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          {# Raw totals row #}
+          <tr class="totals">
+            <td class="col-gw">Total</td>
+            {% for val in detail.totals_cells %}
+            <td>{% if val %}{{ "%g"|format(val) }}{% else %}<span class="empty">—</span>{% endif %}</td>
+            {% endfor %}
+            <td class="col-total">{{ "%.1f"|format(detail.pts_total) }}</td>
+          </tr>
+          {# Pts contributed row #}
+          <tr class="contrib">
+            <td class="col-gw">Pts</td>
+            {% for val in detail.contrib_cells %}
+            <td>{% if val is not none and val != 0 %}{{ "%+.1f"|format(val) }}{% else %}<span class="empty">—</span>{% endif %}</td>
+            {% endfor %}
+            <td class="col-total">{{ "%.1f"|format(detail.pts_total) }}</td>
+          </tr>
+          {# % of total row #}
+          <tr class="pct">
+            <td class="col-gw">% of Total</td>
+            {% for val in detail.pct_cells %}
+            <td>{% if val is not none %}{{ "%.0f"|format(val) }}%{% else %}<span class="empty">—</span>{% endif %}</td>
+            {% endfor %}
+            <td class="col-total">100%</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <p class="mb-6" style="font-size:0.75rem; color:var(--c-ink-light); line-height:1.55;">
+    <strong>Total</strong> = season counts of each stat. <strong>Pts</strong> = fantasy points contributed by that stat (uses the league's position-specific scoring). <strong>% of Total</strong> = share of the player's total points that came from that stat. Hover a column header for the raw stat code.
+  </p>
+
+  <a href="{{ url_for('page', 'players') }}" style="font-size:0.875rem; color:var(--c-ink-light);">← All Players</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  // ── Sync top + bottom horizontal scrollbars ──
+  const top    = document.getElementById('pivotTopScroll');
+  const topRail= document.getElementById('pivotTopRail');
+  const bot    = document.getElementById('pivotScroll');
+  const tbl    = document.getElementById('pivotTable');
+  if (!top || !bot || !tbl) return;
+
+  function sizeRail() {
+    // Make the top scroll rail match the actual table width inside bot
+    topRail.style.width = tbl.scrollWidth + 'px';
+  }
+  sizeRail();
+  window.addEventListener('resize', sizeRail);
+
+  let lock = false;
+  top.addEventListener('scroll', () => {
+    if (lock) return;
+    lock = true; bot.scrollLeft = top.scrollLeft; lock = false;
+  });
+  bot.addEventListener('scroll', () => {
+    if (lock) return;
+    lock = true; top.scrollLeft = bot.scrollLeft; lock = false;
+  });
+})();
+</script>
+{% endblock %}

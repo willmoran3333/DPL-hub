@@ -1,0 +1,36 @@
+# DPL Project — what to keep out of the repo
+
+# ── Python ────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# ── SQLite working files ──────────────────────────────
+# (commit dpl.db itself so the GitHub Action can build without re-ingesting,
+#  but keep the WAL/SHM scratch files out)
+dpl.db-shm
+dpl.db-wal
+
+# ── Email artefacts (generated locally, not for the public site) ──────
+email_digest.html
+email_body.html
+email_preview.html
+email_preview_v2.html
+subscribers.json
+
+# ── Backups ───────────────────────────────────────────
+static/img/dpl_logo_original.png
+
+# ── macOS junk ────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── Editor scratch ────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo

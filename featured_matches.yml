@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# FEATURED MATCHES  — update this each week before running build_site.py
+# ─────────────────────────────────────────────────────────────────────────────
+# Two featured matchups per upcoming gameweek, each with a short write-up.
+# Use the roster_ids to identify teams (matches team_mapping.yml numbering).
+# The build script auto-pairs them with the actual matchup from matchup_legs.
+
+gw: 33
+
+matches:
+  - home_roster_id: 10          # erozier · league leader
+    away_roster_id: 5           # brendog2814
+    headline: "A Title Run on the Line"
+    body: >
+      The league's top seed draws the middle of the table in what should be a
+      routine hold — but brendog's side has been a trap game all season. If
+      erozier's engine stutters even once, the path to a wire-to-wire regular
+      season title gets a lot shakier with only five weeks to play. Expect a
+      comfortable win, but a 90-point ceiling for brendog would be the upset
+      that defines the week.
+
+  - home_roster_id: 11          # jacklynch213 · last place
+    away_roster_id: 1           # willmoran · mid-table
+    headline: "Survival and Pride"
+    body: >
+      jacklynch213 sits at the bottom of the table, and willmoran's defending
+      champion side has been inconsistent all year. Neither team is playing for
+      seeding — this is about pride. A jacklynch win would end a brutal
+      three-week slide; a willmoran loss would drop him below .500 for the
+      first time since February. Watch the midfield matchup: whoever wins
+      there wins the week.

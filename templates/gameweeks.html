@@ -1,0 +1,25 @@
+{% extends "_base.html" %}
+{% block title %}Gameweeks{% endblock %}
+
+{% block body %}
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">2025/26 Season</div>
+    <h1 class="page-header__title">Gameweeks</h1>
+    <p class="page-header__subtitle">Browse every gameweek of the season</p>
+  </header>
+
+  <div class="section-label">All Gameweeks</div>
+  <div class="gw-grid">
+    {% for w in weeks %}
+    <a href="{{ url_gw(w.week) }}" class="gw-tile">
+      <div class="gw-label">GW</div>
+      <div class="gw-num">{{ w.week }}</div>
+      <div style="font-size:0.6875rem; color:var(--c-ink-light); margin-top:4px; font-weight:600;">
+        {{ "%.0f"|format(w.avg_pts or 0) }} avg
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

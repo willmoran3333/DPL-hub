@@ -1,0 +1,28 @@
+{
+  "season": "2024",
+  "league_id": "1121835436143435776",
+  "standings": [
+    {"roster_id": 1,  "display_name": "willmoran",       "team_name": "The Prophet M. Salah", "wins": 31, "losses": 7,  "pts_for": 4089.0,  "pts_against": 3261.75},
+    {"roster_id": 12, "display_name": "Noahvillasana17", "team_name": "Welcome to the Show",  "wins": 24, "losses": 14, "pts_for": 3261.0,  "pts_against": 2972.5},
+    {"roster_id": 4,  "display_name": "benditlikebergvall","team_name": "Bend it like Bergvall","wins": 21, "losses": 16, "pts_for": 3433.0,  "pts_against": 3090.5},
+    {"roster_id": 8,  "display_name": "bhernst",         "team_name": "bhernst FC",           "wins": 21, "losses": 17, "pts_for": 3180.0,  "pts_against": 3100.0},
+    {"roster_id": 6,  "display_name": "bjennings28",     "team_name": "Smith-Rowe v Wade",    "wins": 21, "losses": 17, "pts_for": 3220.0,  "pts_against": 3195.0},
+    {"roster_id": 7,  "display_name": "rmeernst",        "team_name": "Boomsakalaka",         "wins": 20, "losses": 18, "pts_for": 3254.0,  "pts_against": 3210.0},
+    {"roster_id": 3,  "display_name": "Flabiano9",       "team_name": "Aura FC",              "wins": 17, "losses": 21, "pts_for": 3218.0,  "pts_against": 3300.0},
+    {"roster_id": 5,  "display_name": "brendog2814",     "team_name": "team brendog",         "wins": 17, "losses": 21, "pts_for": 2999.0,  "pts_against": 3175.0},
+    {"roster_id": 9,  "display_name": "JordiCarb",       "team_name": "Jelqmaxxers FC",       "wins": 16, "losses": 21, "pts_for": 2789.0,  "pts_against": 3100.0},
+    {"roster_id": 10, "display_name": "erozier",         "team_name": "The Right Folk",       "wins": 14, "losses": 23, "pts_for": 2992.0,  "pts_against": 3250.0},
+    {"roster_id": 11, "display_name": "jacklynch213",    "team_name": "OnwardFulham",         "wins": 12, "losses": 25, "pts_for": 2738.0,  "pts_against": 3225.0},
+    {"roster_id": 2,  "display_name": "skoeiboy",        "team_name": "Not last place",       "wins": 12, "losses": 26, "pts_for": 2537.0,  "pts_against": 3450.0}
+  ],
+  "awards": {
+    "champion":      {"display_name": "willmoran",    "team_name": "The Prophet M. Salah", "record": "31–7",  "pts": 4089.0},
+    "runner_up":     {"display_name": "Noahvillasana17", "team_name": "Welcome to the Show", "record": "24–14", "pts": 3261.0},
+    "high_score":    {"pts": 161.25, "display_name": "willmoran", "week": 5},
+    "low_score":     {"pts": 20.25,  "display_name": "brendog2814", "week": 6},
+    "most_wins":     {"display_name": "willmoran",    "wins": 31},
+    "highest_pf":    {"display_name": "willmoran",    "pts": 4089.0}
+  },
+  "weeks_played": 38,
+  "notes": "willmoran dominated wire-to-wire en route to the inaugural DPL title."
+}

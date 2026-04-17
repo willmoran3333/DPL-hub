@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draft — Dallas Premier League</title>
+  <meta name="description" content="Dallas Premier League — 12-team Sleeper EPL dynasty fantasy">
+  <meta property="og:title" content="Draft — Dallas Premier League">
+  <meta property="og:description" content="Dallas Premier League — 12-team Sleeper EPL dynasty fantasy">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="static/img/dpl_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/main.css">
+  
+<style>
+  table.sortable thead th { cursor: pointer; user-select: none; position: relative; padding-right: 18px; }
+  table.sortable thead th:hover { color: #FFFFFF; }
+  table.sortable thead th::after {
+    content: '';
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    opacity: 0.35;
+  }
+  table.sortable thead th.sort-asc::after {
+    border-bottom: 5px solid currentColor;
+    opacity: 1;
+  }
+  table.sortable thead th.sort-desc::after {
+    border-top: 5px solid currentColor;
+    opacity: 1;
+  }
+</style>
+
+</head>
+<body>
+
+<nav class="site-nav" role="navigation" aria-label="Main">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <img src="static/img/dpl_logo.png" alt="DPL crest">
+      <div class="nav-brand__text">
+        <strong>DPL</strong>
+        <span>Dallas Premier League</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="table.html">Table</a></li>
+      <li><a href="gameweeks.html">Gameweek</a></li>
+      <li><a href="fixtures.html">Fixtures</a></li>
+      <li><a href="clubs.html">Clubs</a></li>
+      <li><a href="players.html">Players</a></li>
+      <li><a href="stats.html">Stats</a></li>
+      <li><a href="draft.html" class="active">Draft</a></li>
+      <li><a href="history.html">History</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">2025/26 · Pre-Season Power Rankings</div>
+    <h1 class="page-header__title">Draft</h1>
+    <p class="page-header__subtitle">Click column headers to sort. Arrow shows current sort.</p>
+  </header>
+
+  <div class="section-label">Pre-Season Power Rankings</div>
+  <div class="standings-table-wrap mb-8">
+    <table class="standings-table sortable" id="draft-table">
+      <thead>
+        <tr>
+          <th class="col-pos" data-sort="num">Rank</th>
+          <th class="col-team" data-sort="str">Manager</th>
+          <th data-sort="num">Draft Strength</th>
+          <th data-sort="str">Concentration</th>
+          <th data-sort="str">Best Pos</th>
+          <th data-sort="num">Current Pos</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="1">1</td>
+          <td class="col-team" data-val="erozier">
+            <a href="clubs/10.html" class="team-cell">
+              <div class="team-cell__fantasy">erozier</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.61">0.6100</td>
+          <td data-val="AVL-3">AVL-3</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="1">
+            <span style="font-weight:700;">1</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="2">2</td>
+          <td class="col-team" data-val="benditlikebergvall">
+            <a href="clubs/4.html" class="team-cell">
+              <div class="team-cell__fantasy">benditlikebergvall</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.6324">0.6324</td>
+          <td data-val="NEW-3">NEW-3</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="9">
+            <span style="font-weight:700;">9</span>
+            
+            <span class="color-loss" style="font-size:0.75rem; margin-left:6px;">↓7</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="3">3</td>
+          <td class="col-team" data-val="noahvillasana17">
+            <a href="clubs/12.html" class="team-cell">
+              <div class="team-cell__fantasy">Noahvillasana17</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.6547">0.6547</td>
+          <td data-val="MUN-3">MUN-3</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="2">
+            <span style="font-weight:700;">2</span>
+            
+            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑1</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="4">4</td>
+          <td class="col-team" data-val="jordicarb">
+            <a href="clubs/9.html" class="team-cell">
+              <div class="team-cell__fantasy">JordiCarb</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.6259">0.6259</td>
+          <td data-val="ARS-5">ARS-5</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="3">
+            <span style="font-weight:700;">3</span>
+            
+            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑1</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="5">5</td>
+          <td class="col-team" data-val="flabiano9">
+            <a href="clubs/3.html" class="team-cell">
+              <div class="team-cell__fantasy">Flabiano9</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.626">0.6260</td>
+          <td data-val="MCI-3">MCI-3</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="8">
+            <span style="font-weight:700;">8</span>
+            
+            <span class="color-loss" style="font-size:0.75rem; margin-left:6px;">↓3</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="6">6</td>
+          <td class="col-team" data-val="willmoran">
+            <a href="clubs/1.html" class="team-cell">
+              <div class="team-cell__fantasy">willmoran</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.5874">0.5874</td>
+          <td data-val="TOT-4">TOT-4</td>
+          <td data-val="Midfield">Midfield</td>
+          <td data-val="6">
+            <span style="font-weight:700;">6</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="7">7</td>
+          <td class="col-team" data-val="rmeernst">
+            <a href="clubs/7.html" class="team-cell">
+              <div class="team-cell__fantasy">rmeernst</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.6138">0.6138</td>
+          <td data-val="BRE-2">BRE-2</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="7">
+            <span style="font-weight:700;">7</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="8">8</td>
+          <td class="col-team" data-val="brendog2814">
+            <a href="clubs/5.html" class="team-cell">
+              <div class="team-cell__fantasy">brendog2814</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.6526">0.6526</td>
+          <td data-val="CHE-2">CHE-2</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="4">
+            <span style="font-weight:700;">4</span>
+            
+            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑4</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="9">9</td>
+          <td class="col-team" data-val="bjennings28">
+            <a href="clubs/6.html" class="team-cell">
+              <div class="team-cell__fantasy">bjennings28</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.6106">0.6106</td>
+          <td data-val="BHA-2">BHA-2</td>
+          <td data-val="Midfield">Midfield</td>
+          <td data-val="5">
+            <span style="font-weight:700;">5</span>
+            
+            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑4</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="10">10</td>
+          <td class="col-team" data-val="cstoney20">
+            <a href="clubs/8.html" class="team-cell">
+              <div class="team-cell__fantasy">cstoney20</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.5975">0.5975</td>
+          <td data-val="SUN-3">SUN-3</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="10">
+            <span style="font-weight:700;">10</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="11">11</td>
+          <td class="col-team" data-val="skoeiboy">
+            <a href="clubs/2.html" class="team-cell">
+              <div class="team-cell__fantasy">skoeiboy</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.5609">0.5609</td>
+          <td data-val="EVE-2">EVE-2</td>
+          <td data-val="Forward">Forward</td>
+          <td data-val="11">
+            <span style="font-weight:700;">11</span>
+            
+          </td>
+        </tr>
+        
+        
+        <tr>
+          <td class="col-pos" data-val="12">12</td>
+          <td class="col-team" data-val="jacklynch213">
+            <a href="clubs/11.html" class="team-cell">
+              <div class="team-cell__fantasy">jacklynch213</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.5698">0.5698</td>
+          <td data-val="CRY-6">CRY-6</td>
+          <td data-val="Midfield">Midfield</td>
+          <td data-val="12">
+            <span style="font-weight:700;">12</span>
+            
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Pre-Season Scouting Notes</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(360px, 1fr)); gap:16px; margin-bottom:48px;">
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#1 · erozier</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Deep across all lines; Haaland anchors the attack</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.610</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">AVL-3</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#2 · benditlikebergvall</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Strong Newcastle/Crystal Palace core</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.632</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">NEW-3</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#3 · Noahvillasana17</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Highest draft strength; Man Utd/Fulham heavy</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.655</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">MUN-3</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#4 · JordiCarb</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Arsenal-heavy roster; highest single-club concentration</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.626</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">ARS-5</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#5 · Flabiano9</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Man City core with strong midfield depth</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.626</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">MCI-3</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#6 · willmoran</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Spurs-heavy; solid floor but limited ceiling</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.587</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">TOT-4</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#7 · rmeernst</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Balanced build; strong Brentford/Liverpool pieces</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.614</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">BRE-2</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#8 · brendog2814</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Chelsea and Bournemouth core</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.653</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">CHE-2</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#9 · bjennings28</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Brighton/Liverpool midfield-focused build</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.611</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">BHA-2</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#10 · cstoney20</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Sunderland heavy; boom-or-bust potential</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.598</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">SUN-3</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#11 · skoeiboy</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Everton-based; lowest projected ceiling</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.561</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">EVE-2</strong> concentration</span>
+      </div>
+    </div>
+    
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#12 · jacklynch213</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Crystal Palace overloaded; high-risk build</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">0.570</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">CRY-6</strong> concentration</span>
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="section-label">Draft Metrics</div>
+  <div class="awards-grid">
+    <div class="award-card">
+      <div class="award-card__title">Strongest Draft</div>
+      <div class="award-card__value">Noahvillasana17</div>
+      <div class="award-card__meta">0.6547 strength</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Weakest Draft</div>
+      <div class="award-card__value">skoeiboy</div>
+      <div class="award-card__meta">0.5609 strength</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Most Concentrated</div>
+      <div class="award-card__value">CRY-6</div>
+      <div class="award-card__meta"><strong>jacklynch213</strong></div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Avg Draft Strength</div>
+      <div class="award-card__value">0.6118</div>
+      <div class="award-card__meta">League-wide mean</div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<script>
+(function() {
+  const table = document.getElementById('draft-table');
+  if (!table) return;
+  const ths = table.querySelectorAll('thead th');
+  const tbody = table.querySelector('tbody');
+  let currentCol = -1, dir = 1;
+
+  ths.forEach((th, idx) => {
+    th.addEventListener('click', () => {
+      const kind = th.dataset.sort || 'str';
+      if (currentCol === idx) dir *= -1; else { currentCol = idx; dir = 1; }
+      ths.forEach(x => x.classList.remove('sort-asc', 'sort-desc'));
+      th.classList.add(dir > 0 ? 'sort-asc' : 'sort-desc');
+
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort((a, b) => {
+        const av = a.children[idx].dataset.val ?? a.children[idx].innerText.trim();
+        const bv = b.children[idx].dataset.val ?? b.children[idx].innerText.trim();
+        let cmp;
+        if (kind === 'num') cmp = parseFloat(av) - parseFloat(bv);
+        else cmp = av.localeCompare(bv);
+        return cmp * dir;
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+})();
+</script>
+
+
+<footer class="site-footer">
+  Dallas Premier League · 2025/26 · Powered by <a href="https://sleeper.com" target="_blank" rel="noopener">Sleeper</a> · <a href="subscribe.html">Subscribe to weekly digest</a>
+</footer>
+
+</body>
+</html>

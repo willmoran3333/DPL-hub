@@ -1,0 +1,79 @@
+{% extends "_base.html" %}
+{% block title %}Clubs{% endblock %}
+
+{% block extra_head %}
+<style>
+  .clubs-grid-uniform {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .club-card-uniform {
+    background: var(--c-bg-card);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all 0.12s;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    text-decoration: none;
+  }
+  .club-card-uniform:hover {
+    border-color: var(--c-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(61, 20, 82, 0.08);
+  }
+  .club-card-uniform__pos {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--c-gold-deep);
+    text-transform: uppercase;
+    margin-bottom: auto;
+  }
+  .club-card-uniform__owner {
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--c-ink);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-top: 12px;
+  }
+  .club-card-uniform__record {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--c-border);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--c-ink-mid);
+    display: flex;
+    justify-content: space-between;
+  }
+  .club-card-uniform__record b { color: var(--c-ink); font-weight: 800; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">2025/26 Season</div>
+    <h1 class="page-header__title">Clubs</h1>
+    <p class="page-header__subtitle">All 12 Dallas Premier League managers</p>
+  </header>
+
+  <div class="clubs-grid-uniform">
+    {% for t in standings %}
+    <a href="{{ url_club(t.roster_id) }}" class="club-card-uniform">
+      <div class="club-card-uniform__pos">Position {{ t.position }}</div>
+      <div class="club-card-uniform__owner">{{ t.display_name }}</div>
+      <div class="club-card-uniform__record">
+        <span><b>{{ t.wins }}</b>W – <b>{{ t.losses }}</b>L</span>
+        <span><b>{{ "%.0f"|format(t.pts_for) }}</b> pts</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

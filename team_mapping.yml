@@ -1,0 +1,120 @@
+# DPL team → real PL club mapping
+# Provisional assignments based on most-rostered real-club players.
+# Edit before first deploy — ask each league member which club they want.
+#
+# Fields:
+#   owner:        Sleeper display_name
+#   team_name:    Fantasy team nickname (shown on site)
+#   pl_club:      Real PL club name (display)
+#   pl_abbr:      Real PL club abbreviation (matches teams.abbr in DB)
+#   color_primary:   Main club colour (hex)
+#   color_secondary: Accent / trim colour (hex)
+#   color_text:      Text colour on primary background
+
+1:
+  owner: willmoran
+  team_name: Derby County
+  pl_club: Tottenham Hotspur
+  pl_abbr: TOT
+  color_primary: "#132257"
+  color_secondary: "#FFFFFF"
+  color_text: "#FFFFFF"
+
+2:
+  owner: skoeiboy
+  team_name: Fantasy Soccer is Dumb FC
+  pl_club: Everton
+  pl_abbr: EVE
+  color_primary: "#003399"
+  color_secondary: "#FFFFFF"
+  color_text: "#FFFFFF"
+
+3:
+  owner: Flabiano9
+  team_name: Aura FC
+  pl_club: Manchester City
+  pl_abbr: MCI
+  color_primary: "#6CABDD"
+  color_secondary: "#FFFFFF"
+  color_text: "#1C2C5B"
+
+4:
+  owner: benditlikebergvall
+  team_name: Return of the Djedi
+  pl_club: Newcastle United
+  pl_abbr: NEW
+  color_primary: "#241F20"
+  color_secondary: "#FFFFFF"
+  color_text: "#FFFFFF"
+
+5:
+  owner: brendog2814
+  team_name: team brendog
+  pl_club: Chelsea
+  pl_abbr: CHE
+  color_primary: "#034694"
+  color_secondary: "#DBA111"
+  color_text: "#FFFFFF"
+
+6:
+  owner: bjennings28
+  team_name: Smith-Rowe v Wade
+  pl_club: Arsenal
+  pl_abbr: ARS
+  color_primary: "#EF0107"
+  color_secondary: "#FFFFFF"
+  color_text: "#FFFFFF"
+
+7:
+  owner: rmeernst
+  team_name: Xhaka Xhaka
+  pl_club: Brentford
+  pl_abbr: BRE
+  color_primary: "#E30613"
+  color_secondary: "#231F20"
+  color_text: "#FFFFFF"
+
+8:
+  owner: cstoney20
+  team_name: "Next Stop: The Londoner"
+  pl_club: West Ham United
+  pl_abbr: WHU
+  color_primary: "#7A263A"
+  color_secondary: "#1BB1E7"
+  color_text: "#FFFFFF"
+
+9:
+  owner: JordiCarb
+  team_name: Goo Goo Kaka FC
+  pl_club: Liverpool
+  pl_abbr: LIV
+  color_primary: "#C8102E"
+  color_secondary: "#F6EB61"
+  color_text: "#FFFFFF"
+
+10:
+  owner: erozier
+  team_name: Haalandcaust FC
+  pl_club: Aston Villa
+  pl_abbr: AVL
+  color_primary: "#670E36"
+  color_secondary: "#95BFE5"
+  color_text: "#FFFFFF"
+
+11:
+  owner: jacklynch213
+  team_name: LPLLC
+  pl_club: Crystal Palace
+  pl_abbr: CRY
+  color_primary: "#1B458F"
+  color_secondary: "#C4122E"
+  color_text: "#FFFFFF"
+
+12:
+  owner: Noahvillasana17
+  team_name: Welcome to the Show
+  pl_club: Manchester United
+  pl_abbr: MUN
+  color_primary: "#DA291C"
+  color_secondary: "#FFE500"
+  color_text: "#FFFFFF"

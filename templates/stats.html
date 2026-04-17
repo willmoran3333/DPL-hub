@@ -1,0 +1,147 @@
+{% extends "_base.html" %}
+{% block title %}Stats{% endblock %}
+
+{% block body %}
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">2025/26 Season · Through GW{{ current_week }}</div>
+    <h1 class="page-header__title">Stats & Awards</h1>
+    <p class="page-header__subtitle">Season trackers, weekly milestones, and positional leaders</p>
+  </header>
+
+  {# Season trackers #}
+  <div class="section-label">Season Trackers</div>
+  <div class="awards-grid">
+    <div class="award-card">
+      <div class="award-card__title">Highest Score</div>
+      <div class="award-card__value">{{ "%.2f"|format(stats.season_high.points) }}</div>
+      <div class="award-card__meta"><strong>{{ stats.season_high.team_name }}</strong> · GW{{ stats.season_high.week }}</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Lowest Score</div>
+      <div class="award-card__value">{{ "%.2f"|format(stats.season_low.points) }}</div>
+      <div class="award-card__meta"><strong>{{ stats.season_low.team_name }}</strong> · GW{{ stats.season_low.week }}</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Biggest Blowout</div>
+      <div class="award-card__value">{{ "%.2f"|format(stats.biggest_blowout.diff) }}</div>
+      <div class="award-card__meta"><strong>{{ stats.biggest_blowout.winner_name }}</strong> def. {{ stats.biggest_blowout.loser_name }} · GW{{ stats.biggest_blowout.week }}</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Closest Game</div>
+      <div class="award-card__value">{{ "%.2f"|format(stats.closest_game.diff) }}</div>
+      <div class="award-card__meta"><strong>{{ stats.closest_game.winner_name }}</strong> over {{ stats.closest_game.loser_name }} · GW{{ stats.closest_game.week }}</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Longest Win Streak</div>
+      <div class="award-card__value">{{ stats.longest_win_streak.length }}</div>
+      <div class="award-card__meta"><strong>{{ stats.longest_win_streak.team_name }}</strong> · {{ stats.longest_win_streak.display_name }}</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Longest Losing Streak</div>
+      <div class="award-card__value">{{ stats.longest_loss_streak.length }}</div>
+      <div class="award-card__meta"><strong>{{ stats.longest_loss_streak.team_name }}</strong> · {{ stats.longest_loss_streak.display_name }}</div>
+    </div>
+    {% if stats.pyrrhic_victory %}
+    <div class="award-card">
+      <div class="award-card__title">The Pyrrhic Victory</div>
+      <div class="award-card__value">{{ "%.2f"|format(stats.pyrrhic_victory.points) }}</div>
+      <div class="award-card__meta">
+        <strong>{{ stats.pyrrhic_victory.team_name }}</strong> put up this score and <em>still lost</em><br>
+        <span style="color:var(--c-ink-light); font-size:0.75rem;">to {{ stats.pyrrhic_victory.opp_name }} ({{ "%.1f"|format(stats.pyrrhic_victory.opp_points) }}) · GW{{ stats.pyrrhic_victory.week }}</span>
+      </div>
+    </div>
+    {% endif %}
+    {% if stats.the_gift %}
+    <div class="award-card">
+      <div class="award-card__title">The Gift</div>
+      <div class="award-card__value">{{ "%.2f"|format(stats.the_gift.points) }}</div>
+      <div class="award-card__meta">
+        <strong>{{ stats.the_gift.team_name }}</strong> somehow <em>won</em> with only this<br>
+        <span style="color:var(--c-ink-light); font-size:0.75rem;">over {{ stats.the_gift.opp_name }} ({{ "%.1f"|format(stats.the_gift.opp_points) }}) · GW{{ stats.the_gift.week }}</span>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {# Best at each position (single starter performances) #}
+  <div class="section-label">Best Single-Week Position Performances</div>
+  <div class="awards-grid">
+    {% for pos_label, pos_data in [('Best FWD', stats.best_fwd), ('Best MID', stats.best_mid), ('Best DEF', stats.best_def), ('Best GK', stats.best_gk)] if pos_data %}
+    <div class="award-card">
+      <div class="award-card__title">{{ pos_label }}</div>
+      <div class="award-card__value">{{ "%.2f"|format(pos_data.pts) }}</div>
+      <div class="award-card__meta">
+        <strong>{{ pos_data.full_name }}</strong> · {{ pos_data.team_abbr }} · GW{{ pos_data.week }}
+        <br><span style="color:var(--c-ink-light); font-size:0.75rem;">Started by {{ pos_data.team_name }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# Manager leaderboards #}
+  <div class="section-label">Points For — Season Leaderboard</div>
+  <div class="standings-table-wrap mb-8">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th class="col-pos">#</th>
+          <th class="col-team">Manager</th>
+          <th>Total PF</th>
+          <th>Per GW</th>
+          <th>High Wk</th>
+          <th>Low Wk</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in stats.pf_leaderboard %}
+        <tr>
+          <td class="col-pos">{{ loop.index }}</td>
+          <td class="col-team">
+            <a href="{{ url_club(r.roster_id) }}" class="team-cell">
+              <div class="team-cell__fantasy">{{ r.display_name }}</div>
+            </a>
+          </td>
+          <td class="col-pts">{{ "%.1f"|format(r.total) }}</td>
+          <td>{{ "%.1f"|format(r.per_gw) }}</td>
+          <td class="color-success" style="font-weight:700;">{{ "%.1f"|format(r.high) }}</td>
+          <td class="color-loss" style="font-weight:700;">{{ "%.1f"|format(r.low) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# Top 10 player performances of season #}
+  <div class="section-label">Top 10 Single-Week Player Performances</div>
+  <div class="standings-table-wrap">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th class="col-team">Player</th>
+          <th>Pos</th>
+          <th>Club</th>
+          <th>Started By</th>
+          <th>GW</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in stats.top_perfs %}
+        <tr>
+          <td class="col-team" style="font-weight:600;"><a href="{{ url_player(p.player_id) }}" style="color:var(--c-primary);">{{ p.full_name }}</a></td>
+          <td>
+            <span class="badge pos-{{ p.position_primary }}">{{ p.position_primary }}</span>
+          </td>
+          <td>{{ p.team_abbr }}</td>
+          <td style="color:var(--c-ink-mid);">{{ p.fantasy_team }}</td>
+          <td>GW{{ p.week }}</td>
+          <td class="col-pts">{{ "%.1f"|format(p.pts) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

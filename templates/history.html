@@ -1,0 +1,69 @@
+{% extends "_base.html" %}
+{% block title %}History{% endblock %}
+
+{% block body %}
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">Past Season</div>
+    <h1 class="page-header__title">2024/25 Season</h1>
+    <p class="page-header__subtitle">{{ hist.weeks_played }}-week regular season · 12 teams</p>
+  </header>
+
+  {% set a = hist.awards %}
+  <div class="awards-grid">
+    <div class="award-card">
+      <div class="award-card__title">Champion</div>
+      <div class="award-card__value">{{ a.champion.display_name }}</div>
+      <div class="award-card__meta">{{ a.champion.record }} · {{ "%.0f"|format(a.champion.pts) }} pts</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Runner-up</div>
+      <div class="award-card__value">{{ a.runner_up.display_name }}</div>
+      <div class="award-card__meta">{{ a.runner_up.record }}</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Season High Score</div>
+      <div class="award-card__value">{{ a.high_score.pts }}</div>
+      <div class="award-card__meta"><strong>{{ a.high_score.display_name }}</strong> · GW{{ a.high_score.week }}</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Most Wins</div>
+      <div class="award-card__value">{{ a.most_wins.wins }}</div>
+      <div class="award-card__meta"><strong>{{ a.most_wins.display_name }}</strong></div>
+    </div>
+  </div>
+
+  <div class="section-label">Final Standings</div>
+  <div class="standings-table-wrap">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th class="col-pos">#</th>
+          <th class="col-team">Team</th>
+          <th>W</th>
+          <th>L</th>
+          <th>PF</th>
+          <th class="col-hide-sm">PA</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in hist.standings %}
+        <tr>
+          <td class="col-pos">{{ loop.index }}</td>
+          <td class="col-team">
+            <div class="team-cell">
+              <div class="team-cell__fantasy">{{ t.display_name }}</div>
+            </div>
+          </td>
+          <td class="col-pts">{{ t.wins }}</td>
+          <td>{{ t.losses }}</td>
+          <td class="col-pts">{{ "%.1f"|format(t.pts_for) }}</td>
+          <td class="col-hide-sm">{{ "%.1f"|format(t.pts_against) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

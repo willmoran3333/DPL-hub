@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}DPL{% endblock %} — Dallas Premier League</title>
+  <meta name="description" content="{% block description %}Dallas Premier League — 12-team Sleeper EPL dynasty fantasy{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ self.title() }} — Dallas Premier League{% endblock %}">
+  <meta property="og:description" content="{{ self.description() }}">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="{{ url_for('static', 'img/dpl_logo.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', 'css/main.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav class="site-nav" role="navigation" aria-label="Main">
+  <div class="nav-inner">
+    <a href="{{ url_for('page', 'index') }}" class="nav-brand">
+      <img src="{{ url_for('static', 'img/dpl_logo.png') }}" alt="DPL crest">
+      <div class="nav-brand__text">
+        <strong>DPL</strong>
+        <span>Dallas Premier League</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('page', 'index') }}"{% if active_nav == 'home' %} class="active"{% endif %}>Home</a></li>
+      <li><a href="{{ url_for('page', 'table') }}"{% if active_nav == 'table' %} class="active"{% endif %}>Table</a></li>
+      <li><a href="{{ url_for('page', 'gameweeks') }}"{% if active_nav == 'gameweeks' %} class="active"{% endif %}>Gameweek</a></li>
+      <li><a href="{{ url_for('page', 'fixtures') }}"{% if active_nav == 'fixtures' %} class="active"{% endif %}>Fixtures</a></li>
+      <li><a href="{{ url_for('page', 'clubs') }}"{% if active_nav == 'clubs' %} class="active"{% endif %}>Clubs</a></li>
+      <li><a href="{{ url_for('page', 'players') }}"{% if active_nav == 'players' %} class="active"{% endif %}>Players</a></li>
+      <li><a href="{{ url_for('page', 'stats') }}"{% if active_nav == 'stats' %} class="active"{% endif %}>Stats</a></li>
+      <li><a href="{{ url_for('page', 'draft') }}"{% if active_nav == 'draft' %} class="active"{% endif %}>Draft</a></li>
+      <li><a href="{{ url_for('page', 'history') }}"{% if active_nav == 'history' %} class="active"{% endif %}>History</a></li>
+    </ul>
+  </div>
+</nav>
+
+{% block body %}{% endblock %}
+
+{% block scripts %}{% endblock %}
+
+<footer class="site-footer">
+  Dallas Premier League · 2025/26 · Powered by <a href="https://sleeper.com" target="_blank" rel="noopener">Sleeper</a> · <a href="{{ url_for('page', 'subscribe') }}">Subscribe to weekly digest</a>
+</footer>
+
+</body>
+</html>

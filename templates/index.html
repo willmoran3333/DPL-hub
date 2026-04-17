@@ -1,0 +1,146 @@
+{% extends "_base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<div class="page">
+
+  <header class="page-header">
+    <div class="page-header__eyebrow">2025/26 Season · Gameweek {{ current_week }}</div>
+    <h1 class="page-header__title">Dallas Premier League</h1>
+    <p class="page-header__subtitle">12-team Sleeper EPL dynasty fantasy</p>
+  </header>
+
+  {# ── Featured Team ── #}
+  {% if featured %}
+  {% set ft = featured %}
+  <div class="featured-card">
+    <div class="featured-card__eyebrow">Featured Manager · GW{{ ft.gw }}</div>
+    <h2 class="featured-card__headline">{{ ft.display_name or ft.team_name }} — {{ ft.headline }}</h2>
+    <p class="featured-card__sub">{{ ft.subheadline }}</p>
+    <p class="featured-card__body">{{ ft.body }}</p>
+    {% if ft.highlight_stats %}
+    <div class="featured-card__stats">
+      {% for s in ft.highlight_stats %}
+      <div>
+        <div class="featured-card__stat-val">{{ s.value }}</div>
+        <div class="featured-card__stat-lab">{{ s.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <a href="{{ url_club(ft.roster_id) }}" class="featured-card__cta">View Club →</a>
+  </div>
+  {% endif %}
+
+  {# ── League Snapshot ── #}
+  {% set leader = standings[0] %}
+  <div class="stat-bar">
+    <div class="stat-cell">
+      <div class="stat-cell__value">GW{{ current_week }}</div>
+      <div class="stat-cell__label">Current Gameweek</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-cell__value">{{ leader.wins }}–{{ leader.losses }}</div>
+      <div class="stat-cell__label">Leader Record</div>
+      <div class="stat-cell__sub">{{ leader.team_name }}</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-cell__value">{{ "%.1f"|format(season_high.points) }}</div>
+      <div class="stat-cell__label">Season High</div>
+      <div class="stat-cell__sub">{{ season_high.team_name }} · GW{{ season_high.week }}</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-cell__value">12</div>
+      <div class="stat-cell__label">Clubs</div>
+    </div>
+  </div>
+
+  {# ── Last gameweek results ── #}
+  {% if last_gw %}
+  <div class="mb-8">
+    <div class="section-label">GW{{ last_gw.week }} Results</div>
+    <div class="gw-results-grid">
+      {% for m in last_gw.matchups %}
+      {% set won_a = m.team_a.roster_id == m.winner_roster_id %}
+      <a href="{{ url_gw(last_gw.week) }}" style="display:block;">
+        <div class="match-card {{ 'winner-a' if won_a else 'winner-b' }}">
+          <div class="match-card__header">
+            <span>GW{{ last_gw.week }}</span>
+            <span>H2H</span>
+          </div>
+          <div class="match-card__body">
+            <div class="match-team">
+              <div class="match-team__fantasy">{{ m.team_a.owner }}</div>
+            </div>
+            <div class="match-score">
+              <div class="match-score__pts">
+                {{ "%.1f"|format(m.team_a.points or 0) }}<span>–</span>{{ "%.1f"|format(m.team_b.points or 0) }}
+              </div>
+              <div class="match-score__label">PTS</div>
+            </div>
+            <div class="match-team match-team--away">
+              <div class="match-team__fantasy">{{ m.team_b.owner }}</div>
+            </div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {# ── Standings ── #}
+  <div class="section-label">League Table</div>
+  <div class="standings-table-wrap">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th class="col-pos">#</th>
+          <th class="col-team">Club</th>
+          <th>W</th>
+          <th>L</th>
+          <th>PF</th>
+          <th class="col-hide-sm">PA</th>
+          <th class="col-hide-sm">Form</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in standings %}
+        <tr>
+          <td class="col-pos">{{ t.position }}</td>
+          <td class="col-team">
+            <a href="{{ url_club(t.roster_id) }}" class="team-cell">
+              <div class="team-cell__fantasy">{{ t.display_name }}</div>
+            </a>
+          </td>
+          <td class="col-pts">{{ t.wins }}</td>
+          <td>{{ t.losses }}</td>
+          <td class="col-pts">{{ "%.1f"|format(t.pts_for) }}</td>
+          <td class="col-hide-sm">{{ "%.1f"|format(t.pts_against) }}</td>
+          <td class="col-hide-sm">
+            <div class="form-guide">
+              {% for r in t.form %}
+              <span class="form-pip {{ r|lower }}">{{ r }}</span>
+              {% endfor %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# ── Subscribe ── #}
+  <div class="subscribe-block">
+    <div>
+      <div class="subscribe-block__title">Get the weekly DPL digest</div>
+      <div class="subscribe-block__sub">Past-week recap + upcoming matchups, delivered every Tuesday morning.</div>
+    </div>
+    <form class="subscribe-block__form" action="{{ url_for('page', 'subscribe') }}" method="get">
+      <input type="email" name="email" placeholder="you@example.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

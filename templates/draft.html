@@ -1,0 +1,148 @@
+{% extends "_base.html" %}
+{% block title %}Draft{% endblock %}
+
+{% block extra_head %}
+<style>
+  table.sortable thead th { cursor: pointer; user-select: none; position: relative; padding-right: 18px; }
+  table.sortable thead th:hover { color: #FFFFFF; }
+  table.sortable thead th::after {
+    content: '';
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    opacity: 0.35;
+  }
+  table.sortable thead th.sort-asc::after {
+    border-bottom: 5px solid currentColor;
+    opacity: 1;
+  }
+  table.sortable thead th.sort-desc::after {
+    border-top: 5px solid currentColor;
+    opacity: 1;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">{{ draft.season }} · Pre-Season Power Rankings</div>
+    <h1 class="page-header__title">Draft</h1>
+    <p class="page-header__subtitle">Click column headers to sort. Arrow shows current sort.</p>
+  </header>
+
+  <div class="section-label">Pre-Season Power Rankings</div>
+  <div class="standings-table-wrap mb-8">
+    <table class="standings-table sortable" id="draft-table">
+      <thead>
+        <tr>
+          <th class="col-pos" data-sort="num">Rank</th>
+          <th class="col-team" data-sort="str">Manager</th>
+          <th data-sort="num">Draft Strength</th>
+          <th data-sort="str">Concentration</th>
+          <th data-sort="str">Best Pos</th>
+          <th data-sort="num">Current Pos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in draft.managers %}
+        {% set delta = m.preseason_rank - (m.current_pos or m.preseason_rank) %}
+        <tr>
+          <td class="col-pos" data-val="{{ m.preseason_rank }}">{{ m.preseason_rank }}</td>
+          <td class="col-team" data-val="{{ m.display_name|lower }}">
+            <a href="{{ url_club(m.roster_id) }}" class="team-cell">
+              <div class="team-cell__fantasy">{{ m.display_name }}</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="{{ m.draft_strength }}">{{ "%.4f"|format(m.draft_strength) }}</td>
+          <td data-val="{{ m.concentration }}">{{ m.concentration }}</td>
+          <td data-val="{{ m.best_position }}">{{ m.best_position }}</td>
+          <td data-val="{{ m.current_pos or 99 }}">
+            <span style="font-weight:700;">{{ m.current_pos or '—' }}</span>
+            {% if delta > 0 %}
+            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑{{ delta }}</span>
+            {% elif delta < 0 %}
+            <span class="color-loss" style="font-size:0.75rem; margin-left:6px;">↓{{ -delta }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Pre-Season Scouting Notes</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(360px, 1fr)); gap:16px; margin-bottom:48px;">
+    {% for m in draft.managers %}
+    <div class="award-card" style="padding:20px;">
+      <div class="award-card__title">#{{ m.preseason_rank }} · {{ m.display_name }}</div>
+      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">{{ m.notes }}</div>
+      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
+        <span><strong style="color:var(--c-ink); font-weight:700;">{{ "%.3f"|format(m.draft_strength) }}</strong> strength</span>
+        <span><strong style="color:var(--c-ink); font-weight:700;">{{ m.concentration }}</strong> concentration</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="section-label">Draft Metrics</div>
+  <div class="awards-grid">
+    <div class="award-card">
+      <div class="award-card__title">Strongest Draft</div>
+      <div class="award-card__value">{{ draft.metrics.strongest.display_name }}</div>
+      <div class="award-card__meta">{{ "%.4f"|format(draft.metrics.strongest.draft_strength) }} strength</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Weakest Draft</div>
+      <div class="award-card__value">{{ draft.metrics.weakest.display_name }}</div>
+      <div class="award-card__meta">{{ "%.4f"|format(draft.metrics.weakest.draft_strength) }} strength</div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Most Concentrated</div>
+      <div class="award-card__value">{{ draft.metrics.most_concentrated.concentration }}</div>
+      <div class="award-card__meta"><strong>{{ draft.metrics.most_concentrated.display_name }}</strong></div>
+    </div>
+    <div class="award-card">
+      <div class="award-card__title">Avg Draft Strength</div>
+      <div class="award-card__value">{{ "%.4f"|format(draft.metrics.avg_strength) }}</div>
+      <div class="award-card__meta">League-wide mean</div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  const table = document.getElementById('draft-table');
+  if (!table) return;
+  const ths = table.querySelectorAll('thead th');
+  const tbody = table.querySelector('tbody');
+  let currentCol = -1, dir = 1;
+
+  ths.forEach((th, idx) => {
+    th.addEventListener('click', () => {
+      const kind = th.dataset.sort || 'str';
+      if (currentCol === idx) dir *= -1; else { currentCol = idx; dir = 1; }
+      ths.forEach(x => x.classList.remove('sort-asc', 'sort-desc'));
+      th.classList.add(dir > 0 ? 'sort-asc' : 'sort-desc');
+
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort((a, b) => {
+        const av = a.children[idx].dataset.val ?? a.children[idx].innerText.trim();
+        const bv = b.children[idx].dataset.val ?? b.children[idx].innerText.trim();
+        let cmp;
+        if (kind === 'num') cmp = parseFloat(av) - parseFloat(bv);
+        else cmp = av.localeCompare(bv);
+        return cmp * dir;
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+})();
+</script>
+{% endblock %}
