@@ -1,31 +1,36 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# FEATURED MATCHES  — update this each week before running build_site.py
+# FEATURED MATCHES  — two actual GW pairings to spotlight
 # ─────────────────────────────────────────────────────────────────────────────
 # Two featured matchups per upcoming gameweek, each with a short write-up.
-# Use the roster_ids to identify teams (matches team_mapping.yml numbering).
-# The build script auto-pairs them with the actual matchup from matchup_legs.
+# IMPORTANT: the home/away roster_id pair must be an actual matchup in the
+# given GW — check with:   sqlite3 dpl.db ".read featured_lookup.sql"
+# Use team_mapping.yml for the roster_id numbers.
 
 gw: 33
 
 matches:
-  - home_roster_id: 10          # erozier · league leader
-    away_roster_id: 5           # brendog2814
-    headline: "A Title Run on the Line"
+  # Matchup 5 of GW33 — title implications
+  - home_roster_id: 6           # bjennings28  · 17–15 · 5th
+    away_roster_id: 10          # erozier      · 21–11 · 1st
+    headline: "Title Lock or Door Cracks Open"
     body: >
-      The league's top seed draws the middle of the table in what should be a
-      routine hold — but brendog's side has been a trap game all season. If
-      erozier's engine stutters even once, the path to a wire-to-wire regular
-      season title gets a lot shakier with only five weeks to play. Expect a
-      comfortable win, but a 90-point ceiling for brendog would be the upset
-      that defines the week.
+      erozier comes in at 21–11 with a 380-point lead on the field's points-for
+      column — the regular-season title is his to lose, and a win here all but
+      clinches the #1 seed with only four weeks left to play. But bjennings'
+      side has been steady all year and is fresh off a string of mid-ceiling
+      games. If Smith-Rowe v Wade hit a 95-plus week, Haalandcaust's
+      wire-to-wire coronation stalls and Noahvillasana17 — sitting 20–12 and
+      one back — suddenly has life.
 
-  - home_roster_id: 11          # jacklynch213 · last place
-    away_roster_id: 1           # willmoran · mid-table
-    headline: "Survival and Pride"
+  # Matchup 3 of GW33 — biggest offensive mismatch of the season
+  - home_roster_id: 5           # brendog2814  · 18–14 · 4th · 2,902 PF
+    away_roster_id: 11          # jacklynch213 · 13–19 · 12th · 2,082 PF
+    headline: "Highest Offense Meets Lowest"
     body: >
-      jacklynch213 sits at the bottom of the table, and willmoran's defending
-      champion side has been inconsistent all year. Neither team is playing for
-      seeding — this is about pride. A jacklynch win would end a brutal
-      three-week slide; a willmoran loss would drop him below .500 for the
-      first time since February. Watch the midfield matchup: whoever wins
-      there wins the week.
+      brendog2814 has scored 2,902 points this season — second only to
+      erozier and 820 clear of LPLLC, who occupy the cellar with the
+      league's lowest offense by nearly 400 points. It is, almost literally,
+      a full season's worth of scoring difference. On paper a blowout, but
+      brendog can't afford to sleepwalk: a win jumps his team into the
+      #3-seed conversation with JordiCarb (19–13), a loss drops him closer
+      to the playoff bubble than the top four.

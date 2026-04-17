@@ -104,7 +104,7 @@ EMAIL_CSS = """
   .header { background:#3D1452; color:#FFFFFF; padding:28px 32px; border-bottom:4px solid #B89968; }
   .header__brand { font-size:14px; font-weight:800; letter-spacing:0.08em; color:#FFFFFF; margin-bottom:4px; }
   .header__sub { font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#B89968; }
-  .header__title { font-size:26px; font-weight:800; margin-top:14px; letter-spacing:-0.02em; line-height:1.15; }
+  .header__title { font-size:18px; font-weight:700; margin-top:10px; letter-spacing:0.02em; line-height:1.2; color:rgba(255,255,255,0.92); }
   .section { padding:28px 32px; border-top:1px solid #E8E0D5; }
   .section h2 { font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#5A4A65; margin:0 0 16px 0; }
 
@@ -297,23 +297,23 @@ def render_email_body(data: dict) -> str:
         if featured_matches and featured_matches.get("matches"):
             for fm in featured_matches["matches"]:
                 parts.append(f"""
-    <div style="background:#F1ECE2; padding:18px 22px; margin-bottom:14px; border-left:4px solid #B89968;">
-      <div style="font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#8B6E3F; margin-bottom:6px;">Match to Watch</div>
-      <div style="font-size:16px; font-weight:800; color:#1F0F2A; letter-spacing:-0.015em; margin-bottom:10px;">{fm['headline']}</div>
-      <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%; margin-bottom:12px;">
+    <div style="border-left:4px solid #B89968; padding-left:14px; margin-bottom:18px;">
+      <div style="font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#8B6E3F; margin-bottom:4px;">Match to Watch</div>
+      <div style="font-size:15px; font-weight:800; color:#1F0F2A; letter-spacing:-0.01em; margin-bottom:4px;">{fm['headline']}</div>
+      <table class="match" role="presentation" cellpadding="0" cellspacing="0" style="border-bottom:none;">
         <tr>
-          <td style="width:40%; text-align:left;">
-            <div style="font-weight:700; color:#1F0F2A; font-size:14px;">{fm['home']['display_name']}</div>
-            <div style="font-size:11px; color:#8E7E99;">{fm['home']['record']}</div>
+          <td class="team-a">
+            <div class="name">{fm['home']['display_name']}</div>
+            <div class="sub">{fm['home']['record']}</div>
           </td>
-          <td style="width:20%; text-align:center; font-size:12px; font-weight:600; color:#8E7E99; letter-spacing:0.14em;">VS</td>
-          <td style="width:40%; text-align:right;">
-            <div style="font-weight:700; color:#1F0F2A; font-size:14px;">{fm['away']['display_name']}</div>
-            <div style="font-size:11px; color:#8E7E99;">{fm['away']['record']}</div>
+          <td class="score" style="font-size:12px; font-weight:600; color:#8E7E99; letter-spacing:0.14em;">VS</td>
+          <td class="team-b">
+            <div class="name">{fm['away']['display_name']}</div>
+            <div class="sub">{fm['away']['record']}</div>
           </td>
         </tr>
       </table>
-      <p style="margin:0; font-size:13px; line-height:1.55; color:#5A4A65;">{fm['body']}</p>
+      <p style="margin:6px 0 0 0; font-size:13px; line-height:1.55; color:#5A4A65;">{fm['body']}</p>
     </div>
 """)
 
@@ -327,8 +327,8 @@ def render_email_body(data: dict) -> str:
                      if frozenset([m["team_a"]["roster_id"], m["team_b"]["roster_id"]]) not in featured_pairs]
         if remaining:
             parts.append("""
-    <div style="margin-top:18px; padding-top:14px; border-top:1px solid #E8E0D5;">
-      <div style="font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#8E7E99; margin-bottom:8px;">Rest of the Week</div>
+    <div style="margin-top:22px; padding-top:14px; border-top:1px solid #E8E0D5;">
+      <h3 style="font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#5A4A65; margin:0 0 10px 0;">Rest of the Week</h3>
 """)
             for m in remaining:
                 ta, tb = m["team_a"], m["team_b"]
