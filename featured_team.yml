@@ -1,27 +1,27 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # FEATURED MANAGER  — update this each week before running `python3 build_site.py`
 # ─────────────────────────────────────────────────────────────────────────────
-# roster_id matches the number in team_mapping.yml and the DB rosters table.
-# The "gw" field is just for the "as of" label shown in the header.
 
 roster_id: 10
-gw: 32
-headline: "erozier tops the table at 21–11"
-subheadline: "The class of the 2025/26 DPL heading into the run-in"
+gw: 33
+headline: "erozier stumbles — the title race is on"
+subheadline: "A loss to bjennings28 shrinks the #1-seed buffer with three weeks to play"
 body: >
-  erozier sits atop the Dallas Premier League at 21 wins and 11 losses,
-  with 3,017 points for — comfortably the highest in the league. The engine
-  is a stacked attacking core backed by elite forward depth that has
-  consistently posted 90+ point weeks. Defensively, he concedes the fewest
-  points against in the league. With a handful of gameweeks left, he enters
-  the run-in as the heavy favourite to clinch the DPL title.
+  erozier hit his first real bump of the season in GW33, falling to bjennings28
+  and watching Noahvillasana17 stay one game back despite also dropping a
+  week. The cushion is still real — 21–12 is the league's best record and
+  3,166 points for remains the highest-scoring offense by a comfortable
+  margin — but the wire-to-wire coronation story is dead. He now faces
+  Noahvillasana17 in a head-to-head next week that will all but decide the
+  #1 seed. Win it, and the run-in is academic. Lose it, and the race is
+  tied with three weeks to play.
 
 highlight_stats:
   - label: "Record"
-    value: "21–11"
+    value: "21–12"
   - label: "Points For"
-    value: "3,017"
-  - label: "Pts Against"
-    value: "2,424"
+    value: "3,166"
+  - label: "Seed Lead"
+    value: "1 game"
   - label: "League Pos"
     value: "1st"

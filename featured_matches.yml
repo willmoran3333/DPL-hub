@@ -1,34 +1,34 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # FEATURED MATCHES  — two actual GW pairings to spotlight
 # ─────────────────────────────────────────────────────────────────────────────
-# Two featured matchups per upcoming gameweek, each with a short write-up.
-# The home/away roster_id pair must be an actual matchup in the given GW.
-# Use team_mapping.yml for the roster_id numbers.
 
-gw: 33
+gw: 34
 
 matches:
-  # Matchup 5 of GW33 — title implications
-  - home_roster_id: 6           # bjennings28  · 17–15 · 5th
-    away_roster_id: 10          # erozier      · 21–11 · 1st
-    headline: "Title Lock or Door Cracks Open"
+  # Matchup 5 of GW34 — the title showdown
+  - home_roster_id: 10          # erozier           · 21–12 · 1st
+    away_roster_id: 12          # Noahvillasana17   · 20–13 · 2nd
+    headline: "#1 vs #2 — The Title Showdown"
     body: >
-      erozier comes in at 21–11 with a 380-point lead on the field's points-for
-      column — the regular-season title is his to lose, and a win here all but
-      clinches the #1 seed with only four weeks left to play. bjennings28 has
-      been steady all year and is fresh off a string of mid-ceiling games. If
-      he hits a 95-plus week, erozier's wire-to-wire coronation stalls and
-      Noahvillasana17 — sitting 20–12 and one back — suddenly has life.
+      The two teams that have led the DPL all year, finally face to face.
+      One game separates them: erozier at 21–12 after a stunning upset loss
+      to bjennings28, Noahvillasana17 at 20–13 after dropping a week himself.
+      A win here and erozier walks into the final stretch with a two-game
+      cushion in the standings — basically uncatchable. A loss and the
+      race is tied with three weeks left, with Noahvillasana17 holding the
+      head-to-head. Expect both sides to go for their ceiling; no one's
+      sitting on leads this week.
 
-  # Matchup 3 of GW33 — biggest offensive mismatch of the season
-  - home_roster_id: 5           # brendog2814  · 18–14 · 4th · 2,902 PF
-    away_roster_id: 11          # jacklynch213 · 13–19 · 12th · 2,082 PF
-    headline: "Highest Offense Meets Lowest"
+  # Matchup 6 of GW34 — identical records, identical stakes
+  - home_roster_id: 2           # skoeiboy   · 14–19
+    away_roster_id: 3           # Flabiano9  · 14–19
+    headline: "Identical Records, One Has to Blink"
     body: >
-      brendog2814 has scored 2,902 points this season — second only to
-      erozier and 820 clear of jacklynch213, who occupies the cellar with
-      the league's lowest offense by nearly 400 points. It is, almost
-      literally, a full season's worth of scoring difference. On paper a
-      blowout, but brendog2814 can't afford to sleepwalk: a win jumps him
-      into the #3-seed conversation with JordiCarb (19–13); a loss drops
-      him closer to the playoff bubble than the top four.
+      skoeiboy and Flabiano9 both sit at 14–19 — tied in wins, tied in
+      losses, separated by only 66 points for on the season. Whoever
+      loses here slips into clear possession of 11th, a full three games
+      behind the bottom of the mid-pack. Whoever wins keeps the fight
+      alive to finish 9th or even 8th with a late run. Neither team has
+      been consistent — skoeiboy ambushed rmeernst last week, Flabiano9
+      got rolled by willmoran. One of them is getting a confidence boost
+      and the other is getting a rough Tuesday morning email.
