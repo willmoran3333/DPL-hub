@@ -126,11 +126,14 @@ def get_current_week(conn) -> int:
 
 
 def get_standings(conn, team_map: dict) -> list[dict]:
+    # PF/PA come from rosters.fpts (Sleeper's official totals — these include
+    # any manual commissioner adjustments). The matchup_legs table is raw
+    # stat×multiplier and won't reflect any manual fixes, so don't sum from it.
     rows = q(conn, """
         SELECT r.roster_id, u.display_name, u.team_name,
                r.wins, r.losses, r.ties,
-               ROUND(COALESCE(r.fpts,0) + COALESCE(r.fpts_decimal,0), 2)         AS pts_for,
-               ROUND(COALESCE(r.fpts_against,0) + COALESCE(r.fpts_against_decimal,0), 2) AS pts_against,
+               ROUND(COALESCE(r.fpts,0) + COALESCE(r.fpts_decimal,0) / 100.0, 2)         AS pts_for,
+               ROUND(COALESCE(r.fpts_against,0) + COALESCE(r.fpts_against_decimal,0) / 100.0, 2) AS pts_against,
                r.total_moves, r.waiver_budget_used,
                r.metadata AS metadata_json
         FROM rosters r
@@ -392,8 +395,8 @@ def get_club_detail(conn, roster_id: int, team_map: dict, standings_map: dict) -
     tm = team_map.get(roster_id, {})
     owner_row = q1(conn, """
         SELECT u.display_name, u.team_name, r.wins, r.losses,
-               ROUND(COALESCE(r.fpts,0) + COALESCE(r.fpts_decimal,0), 2)         AS pts_for,
-               ROUND(COALESCE(r.fpts_against,0) + COALESCE(r.fpts_against_decimal,0), 2) AS pts_against,
+               ROUND(COALESCE(r.fpts,0) + COALESCE(r.fpts_decimal,0) / 100.0, 2)         AS pts_for,
+               ROUND(COALESCE(r.fpts_against,0) + COALESCE(r.fpts_against_decimal,0) / 100.0, 2) AS pts_against,
                r.total_moves, r.metadata AS metadata_json
         FROM rosters r
         LEFT JOIN league_users u ON u.league_id = r.league_id AND u.user_id = r.owner_id
