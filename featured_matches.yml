@@ -2,33 +2,33 @@
 # FEATURED MATCHES  — two actual GW pairings to spotlight
 # ─────────────────────────────────────────────────────────────────────────────
 
-gw: 34
+gw: 35
 
 matches:
-  # Matchup 5 of GW34 — the title showdown
-  - home_roster_id: 10          # erozier           · 21–12 · 1st
-    away_roster_id: 12          # Noahvillasana17   · 20–13 · 2nd
-    headline: "#1 vs #2 — The Title Showdown"
+  # Matchup 6 of GW35 — title closer
+  - home_roster_id: 2           # skoeiboy   · 15–19
+    away_roster_id: 10          # erozier    · 22–12 · 1st
+    headline: "Coronation, Or Spoiler?"
     body: >
-      The two teams that have led the DPL all year, finally face to face.
-      One game separates them: erozier at 21–12 after a stunning upset loss
-      to bjennings28, Noahvillasana17 at 20–13 after dropping a week himself.
-      A win here and erozier walks into the final stretch with a two-game
-      cushion in the standings — basically uncatchable. A loss and the
-      race is tied with three weeks left, with Noahvillasana17 holding the
-      head-to-head. Expect both sides to go for their ceiling; no one's
-      sitting on leads this week.
+      erozier comes in two games clear at 22-12 with a chance to make the
+      rest of the season academic. A win here pushes the lead toward
+      mathematically uncatchable, and the title race effectively closes
+      with three weeks left. skoeiboy sits at 15-19 with nothing to play
+      for except spoiling the script, but he showed the ceiling is there
+      last week with a 106.5 against Flabiano9. Big underdog, but a
+      stunning upset would be the kind of result that re-opens the door
+      for the chasing pack.
 
-  # Matchup 6 of GW34 — identical records, identical stakes
-  - home_roster_id: 2           # skoeiboy   · 14–19
-    away_roster_id: 3           # Flabiano9  · 14–19
-    headline: "Identical Records, One Has to Blink"
+  # Matchup 4 of GW35 — runner-up defense
+  - home_roster_id: 5           # brendog2814 · 20–14 · 2nd
+    away_roster_id: 8           # cstoney20   · 14–20
+    headline: "brendog2814 Defends Second"
     body: >
-      skoeiboy and Flabiano9 both sit at 14–19 — tied in wins, tied in
-      losses, separated by only 66 points for on the season. Whoever
-      loses here slips into clear possession of 11th, a full three games
-      behind the bottom of the mid-pack. Whoever wins keeps the fight
-      alive to finish 9th or even 8th with a late run. Neither team has
-      been consistent — skoeiboy ambushed rmeernst last week, Flabiano9
-      got rolled by willmoran. One of them is getting a confidence boost
-      and the other is getting a rough Tuesday morning email.
+      After his 118.75-point GW34 lifted him into sole possession of
+      second, brendog2814 needs to keep winning. JordiCarb (20-14, 2,815
+      PF) and Noahvillasana17 (20-14, 2,793 PF) are right behind on
+      tiebreakers and both have favorable matchups this week. cstoney20
+      has been a bottom-half team most of the year but pulled the upset
+      over Noahvillasana17 two weeks ago with 104.5. A loss here doesn't
+      just hurt brendog2814's record, it cracks the runner-up race wide
+      open.

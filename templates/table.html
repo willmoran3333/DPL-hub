@@ -10,8 +10,16 @@
     padding: 24px;
     margin-bottom: 32px;
     overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;     /* smooth momentum scroll on iOS */
+    touch-action: pan-x pan-y;
   }
-  .placement-chart { display: block; width: 100%; min-width: 720px; }
+  .placement-chart {
+    display: block;
+    width: 100%;
+    min-width: 720px;
+    height: auto;
+  }
   .placement-chart .grid { stroke: var(--c-border); stroke-width: 1; }
   .placement-chart .axis-label { font-size: 11px; font-weight: 600; fill: var(--c-ink-light); font-family: var(--font-body); }
   .placement-chart .line {
@@ -31,6 +39,30 @@
   .chart-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-top: 16px; font-size: 0.8125rem; }
   .chart-legend__item { display: flex; align-items: center; gap: 6px; }
   .chart-legend__swatch { width: 16px; height: 3px; display: inline-block; }
+
+  /* Mobile: tighter padding, hint that the chart scrolls, kill hover-dim */
+  @media (max-width: 720px) {
+    .placement-chart-wrap {
+      padding: 14px 12px;
+      position: relative;
+    }
+    .placement-chart-wrap::after {
+      content: '← swipe →';
+      display: block;
+      text-align: center;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--c-ink-light);
+      margin-top: 6px;
+    }
+    .chart-legend { font-size: 0.75rem; gap: 8px 14px; }
+  }
+  /* Touch devices: don't dim other lines on hover (touch has no hover) */
+  @media (hover: none) {
+    .placement-chart:hover .hover-fade { opacity: 1 !important; }
+  }
 </style>
 {% endblock %}
 

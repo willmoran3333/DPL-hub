@@ -2,24 +2,28 @@
 # FEATURED MANAGER  — update this each week before running `python3 build_site.py`
 # ─────────────────────────────────────────────────────────────────────────────
 
-roster_id: 10
-gw: 33
-headline: "erozier stumbles, the title race is on"
-subheadline: "A GW33 loss to bjennings28 shrinks the gap to one game with three weeks left"
+roster_id: 5
+gw: 34
+headline: "brendog2814 erupts into second"
+subheadline: "A 118-point GW34 vaults him into clear possession of runner-up"
 body: >
-  After 32 weeks of looking untouchable, erozier finally lost one. bjennings28
-  pulled the upset in GW33, and Noahvillasana17, who also dropped a week, now
-  sits just a single game back. erozier remains the only manager in the
-  league above 3,000 points for this season; his offense has been the story
-  of the year. But the comfortable lead is gone, and he draws Noahvillasana17
-  head-to-head in GW34, a game that could decide the DPL title.
+  brendog2814 has been the quiet contender all season, hovering just behind
+  the leaders without ever quite breaking through. That changed in GW34
+  with a 118.75-point explosion against benditlikebergvall, his third-highest
+  week of the year, that moved him past Noahvillasana17 on tiebreakers and
+  into sole second place. With erozier holding a comfortable two-game
+  cushion at the top, the real story for the remaining four weeks is the
+  three-way fight for second between brendog2814, JordiCarb, and
+  Noahvillasana17, all 20-14 but separated by 230 points-for.
+  brendog2814's offense leads that group; now he just needs to keep his
+  foot on the gas.
 
 highlight_stats:
   - label: "Record"
-    value: "21–12"
+    value: "20–14"
   - label: "Points For"
-    value: "3,166"
-  - label: "Lead Over 2nd"
-    value: "1 game"
-  - label: "Weeks Left"
-    value: "4"
+    value: "3,026"
+  - label: "GW34 Score"
+    value: "118.75"
+  - label: "League Pos"
+    value: "2nd"
