@@ -27,17 +27,35 @@
     stroke-width: 2;
     transition: stroke-width 0.12s, opacity 0.12s;
   }
+  .placement-chart .line-group { cursor: pointer; }
   .placement-chart .line-group:hover .line { stroke-width: 3.5; }
   .placement-chart .line-group:hover .line-label { font-weight: 800; }
   .placement-chart .line-dot { transition: r 0.12s; }
   .placement-chart .line-group:hover .line-dot { r: 5; }
   .placement-chart .line-label { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
   .placement-chart .hover-fade { opacity: 1; transition: opacity 0.12s; }
+  /* Hover (mouse): pointer enters chart → dim everyone, lift the hovered group */
   .placement-chart:hover .hover-fade { opacity: 0.15; }
-  .placement-chart:hover .hover-fade:hover { opacity: 1; }
   .placement-chart:hover .line-group:hover .hover-fade { opacity: 1; }
-  .chart-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-top: 16px; font-size: 0.8125rem; }
-  .chart-legend__item { display: flex; align-items: center; gap: 6px; }
+  /* Selected (tap-locked): explicit highlight overrides hover state */
+  .placement-chart.has-selection .hover-fade { opacity: 0.15; }
+  .placement-chart.has-selection .line-group.is-selected .hover-fade { opacity: 1; }
+  .placement-chart.has-selection .line-group.is-selected .line { stroke-width: 3.5; }
+  .placement-chart.has-selection .line-group.is-selected .line-dot { r: 5; }
+  .placement-chart.has-selection .line-group.is-selected .line-label { font-weight: 800; }
+
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px; font-size: 0.8125rem; }
+  .chart-legend__item {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 10px; border-radius: 4px;
+    background: transparent; border: 1px solid transparent;
+    font-family: inherit; font-size: inherit; color: var(--c-ink);
+    cursor: pointer; transition: background 0.1s, border-color 0.1s;
+  }
+  .chart-legend__item:hover { background: var(--c-bg-soft); border-color: var(--c-border); }
+  .chart-legend__item.is-selected {
+    background: var(--c-primary); color: #FFFFFF; border-color: var(--c-primary);
+  }
   .chart-legend__swatch { width: 16px; height: 3px; display: inline-block; }
 
   /* Mobile: tighter padding, hint that the chart scrolls, kill hover-dim */
@@ -108,7 +126,7 @@
       {% set color = palette[loop.index0 % 12] %}
       {% set rid = t.roster_id %}
       {% set pts = placements.placements.get(rid, []) %}
-      <g class="line-group">
+      <g class="line-group" data-roster="{{ rid }}">
         {# Build polyline points string #}
         {% set pstr = [] %}
         {% for p in pts %}
@@ -116,6 +134,8 @@
           {% set y = pad_t + (p.pos - 1) * step_y %}
           {% set _ = pstr.append(x|string ~ "," ~ y|string) %}
         {% endfor %}
+        {# Invisible fat hit-target so taps register on touch devices #}
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="{{ pstr|join(' ') }}"/>
         <polyline class="line hover-fade" stroke="{{ color }}" points="{{ pstr|join(' ') }}"/>
         {# End-of-line label #}
         {% if pts %}
@@ -131,10 +151,10 @@
     <div class="chart-legend">
       {% for t in standings %}
       {% set color = palette[loop.index0 % 12] %}
-      <div class="chart-legend__item">
+      <button class="chart-legend__item" type="button" data-roster="{{ t.roster_id }}">
         <span class="chart-legend__swatch" style="background:{{ color }}"></span>
         <span>{{ t.display_name }}</span>
-      </div>
+      </button>
       {% endfor %}
     </div>
   </div>
@@ -190,4 +210,62 @@
     Form guide shows last 5 gameweeks (most recent right-most).
   </p>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  const chart  = document.querySelector('.placement-chart');
+  if (!chart) return;
+  const groups = chart.querySelectorAll('.line-group');
+  const legend = document.querySelectorAll('.chart-legend__item');
+
+  function setSelection(rosterId) {
+    if (rosterId === null) {
+      chart.classList.remove('has-selection');
+      groups.forEach(g => g.classList.remove('is-selected'));
+      legend.forEach(b => b.classList.remove('is-selected'));
+      return;
+    }
+    chart.classList.add('has-selection');
+    groups.forEach(g => g.classList.toggle('is-selected', g.dataset.roster === String(rosterId)));
+    legend.forEach(b => b.classList.toggle('is-selected', b.dataset.roster === String(rosterId)));
+  }
+
+  function toggle(rosterId) {
+    const alreadyOn = Array.from(groups).some(g =>
+      g.dataset.roster === String(rosterId) && g.classList.contains('is-selected'));
+    setSelection(alreadyOn ? null : rosterId);
+  }
+
+  // Tap a line (or its invisible fat hit-target)
+  groups.forEach(g => {
+    g.addEventListener('click', e => {
+      e.stopPropagation();
+      toggle(g.dataset.roster);
+    });
+  });
+
+  // Tap a legend chip
+  legend.forEach(b => {
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      toggle(b.dataset.roster);
+    });
+  });
+
+  // Tap empty space inside the chart wrapper to clear selection
+  const wrap = document.querySelector('.placement-chart-wrap');
+  if (wrap) {
+    wrap.addEventListener('click', e => {
+      // Only clear if we tapped the wrapper itself or the SVG background, not a line/legend
+      if (e.target.classList.contains('placement-chart-wrap') ||
+          e.target.tagName === 'svg' ||
+          e.target.tagName === 'SVG') {
+        setSelection(null);
+      }
+    });
+  }
+})();
+</script>
 {% endblock %}
