@@ -39,7 +39,10 @@
     stroke-width: 2;
     transition: stroke-width 0.12s, opacity 0.12s;
   }
-  .placement-chart .line-group { cursor: pointer; }
+  .placement-chart .line-group { cursor: pointer; -webkit-tap-highlight-color: rgba(61,20,82,0.15); }
+  /* iOS needs explicit pointer-events on invisible strokes for taps to register */
+  .placement-chart .line-hit { pointer-events: stroke; }
+  .placement-chart .line     { pointer-events: stroke; }
   .placement-chart .line-group:hover .line { stroke-width: 3.5; }
   .placement-chart .line-group:hover .line-label { font-weight: 800; }
   .placement-chart .line-dot { transition: r 0.12s; }
@@ -2566,16 +2569,27 @@
   const groups = chart.querySelectorAll('.line-group');
   const legend = document.querySelectorAll('.chart-legend__item');
 
+  // Apply dim/highlight via inline style so iOS Safari can't ignore us.
+  function applyOpacity(rosterId) {
+    groups.forEach(g => {
+      const isSel = rosterId !== null && g.dataset.roster === String(rosterId);
+      const op = (rosterId === null) ? '' : (isSel ? '1' : '0.15');
+      g.querySelectorAll('.hover-fade').forEach(el => el.style.opacity = op);
+      // Also bump stroke width on the visible line when selected
+      const line = g.querySelector('.line');
+      if (line) line.setAttribute('stroke-width', isSel ? '3.5' : '2');
+      g.classList.toggle('is-selected', isSel);
+    });
+  }
+
   function setSelection(rosterId) {
     if (rosterId === null) {
       chart.classList.remove('has-selection');
-      groups.forEach(g => g.classList.remove('is-selected'));
-      legend.forEach(b => b.classList.remove('is-selected'));
-      return;
+    } else {
+      chart.classList.add('has-selection');
     }
-    chart.classList.add('has-selection');
-    groups.forEach(g => g.classList.toggle('is-selected', g.dataset.roster === String(rosterId)));
-    legend.forEach(b => b.classList.toggle('is-selected', b.dataset.roster === String(rosterId)));
+    legend.forEach(b => b.classList.toggle('is-selected', rosterId !== null && b.dataset.roster === String(rosterId)));
+    applyOpacity(rosterId);
   }
 
   function toggle(rosterId) {
@@ -2584,30 +2598,18 @@
     setSelection(alreadyOn ? null : rosterId);
   }
 
-  // Tap a line (or its invisible fat hit-target)
   groups.forEach(g => {
-    g.addEventListener('click', e => {
-      e.stopPropagation();
-      toggle(g.dataset.roster);
-    });
+    g.addEventListener('click', e => { e.stopPropagation(); toggle(g.dataset.roster); });
   });
-
-  // Tap a legend chip
   legend.forEach(b => {
-    b.addEventListener('click', e => {
-      e.stopPropagation();
-      toggle(b.dataset.roster);
-    });
+    b.addEventListener('click', e => { e.stopPropagation(); toggle(b.dataset.roster); });
   });
 
-  // Tap empty space inside the chart wrapper to clear selection
+  // Tap empty space inside the wrap to clear
   const wrap = document.querySelector('.placement-chart-wrap');
   if (wrap) {
     wrap.addEventListener('click', e => {
-      // Only clear if we tapped the wrapper itself or the SVG background, not a line/legend
-      if (e.target.classList.contains('placement-chart-wrap') ||
-          e.target.tagName === 'svg' ||
-          e.target.tagName === 'SVG') {
+      if (e.target === wrap || e.target.tagName === 'svg' || e.target.tagName === 'SVG') {
         setSelection(null);
       }
     });
