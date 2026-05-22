@@ -2,33 +2,32 @@
 # FEATURED MATCHES  — two actual GW pairings to spotlight
 # ─────────────────────────────────────────────────────────────────────────────
 
-gw: 35
+gw: 38
 
 matches:
-  # Matchup 6 of GW35 — title closer
-  - home_roster_id: 2           # skoeiboy   · 15–19
-    away_roster_id: 10          # erozier    · 22–12 · 1st
-    headline: "Coronation, Or Spoiler?"
+  # Matchup 3 of GW38 — coronation
+  - home_roster_id: 3           # Flabiano9 · 16–21
+    away_roster_id: 10          # erozier   · 25–12 · DPL Champion
+    headline: "The Champion's Victory Lap"
     body: >
-      erozier comes in two games clear at 22-12 with a chance to make the
-      rest of the season academic. A win here pushes the lead toward
-      mathematically uncatchable, and the title race effectively closes
-      with three weeks left. skoeiboy sits at 15-19 with nothing to play
-      for except spoiling the script, but he showed the ceiling is there
-      last week with a 106.5 against Flabiano9. Big underdog, but a
-      stunning upset would be the kind of result that re-opens the door
-      for the chasing pack.
+      The DPL title is already wrapped, but erozier closes out the season
+      against Flabiano9, who's fighting for a respectable finish inside
+      the 16-21 cluster. erozier has been the league's best offense all
+      year and dropped 100+ in three of his last four games. Flabiano9
+      needs a big number here to stay ahead of skoeiboy, cstoney20, and
+      benditlikebergvall in the final points-for tiebreaker. Probably a
+      coronation, but Flabiano9 has put up 104.25 already in GW37 and
+      could play spoiler.
 
-  # Matchup 4 of GW35 — runner-up defense
-  - home_roster_id: 5           # brendog2814 · 20–14 · 2nd
-    away_roster_id: 8           # cstoney20   · 14–20
-    headline: "brendog2814 Defends Second"
+  # Matchup 2 of GW38 — battle for 4th
+  - home_roster_id: 2           # skoeiboy    · 16–21
+    away_roster_id: 5           # brendog2814 · 20–17 · 4th
+    headline: "brendog2814 Locks in 4th"
     body: >
-      After his 118.75-point GW34 lifted him into sole possession of
-      second, brendog2814 needs to keep winning. JordiCarb (20-14, 2,815
-      PF) and Noahvillasana17 (20-14, 2,793 PF) are right behind on
-      tiebreakers and both have favorable matchups this week. cstoney20
-      has been a bottom-half team most of the year but pulled the upset
-      over Noahvillasana17 two weeks ago with 104.5. A loss here doesn't
-      just hurt brendog2814's record, it cracks the runner-up race wide
-      open.
+      brendog2814 enters the final week at 20-17, tied with bjennings28
+      but holding a massive PF tiebreaker advantage (3,216 vs 3,054). A
+      win here clinches 4th place outright and pushes him to 21-17 with
+      the third-highest points-for in the league. skoeiboy sits at 16-21
+      in the lower cluster but has shown he can score (106.5 vs Flabiano9
+      back in GW34). Expect brendog2814 to bring his ceiling on the way
+      out the door; he's been the quiet star of the back half.

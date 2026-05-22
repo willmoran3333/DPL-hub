@@ -2,28 +2,24 @@
 # FEATURED MANAGER  — update this each week before running `python3 build_site.py`
 # ─────────────────────────────────────────────────────────────────────────────
 
-roster_id: 5
-gw: 34
-headline: "brendog2814 erupts into second"
-subheadline: "A 118-point GW34 vaults him into clear possession of runner-up"
+roster_id: 10
+gw: 37
+headline: "erozier clinches the DPL title"
+subheadline: "A 25-12 regular season with the league's best offense, three games clear with one to play"
 body: >
-  brendog2814 has been the quiet contender all season, hovering just behind
-  the leaders without ever quite breaking through. That changed in GW34
-  with a 118.75-point explosion against benditlikebergvall, his third-highest
-  week of the year, that moved him past Noahvillasana17 on tiebreakers and
-  into sole second place. With erozier holding a comfortable two-game
-  cushion at the top, the real story for the remaining four weeks is the
-  three-way fight for second between brendog2814, JordiCarb, and
-  Noahvillasana17, all 20-14 but separated by 230 points-for.
-  brendog2814's offense leads that group; now he just needs to keep his
-  foot on the gas.
+  After 37 weeks, the math is settled. erozier sits at 25-12 with the
+  highest points-for total in the league (3,460.75) and a three-game
+  cushion that no one can erase in the final week. He led the table for
+  the bulk of the season, weathered a single stumble against bjennings28
+  in GW33, and answered every challenge from Noahvillasana17, brendog2814,
+  and JordiCarb. The 2025/26 DPL champion. GW38 is the victory lap.
 
 highlight_stats:
-  - label: "Record"
-    value: "20–14"
+  - label: "Final Record"
+    value: "25–12"
   - label: "Points For"
-    value: "3,026"
-  - label: "GW34 Score"
-    value: "118.75"
-  - label: "League Pos"
-    value: "2nd"
+    value: "3,460.75"
+  - label: "Cushion"
+    value: "3 games"
+  - label: "Title"
+    value: "Champion"

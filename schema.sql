@@ -200,14 +200,15 @@ CREATE INDEX IF NOT EXISTS idx_tx_leg ON transactions(league_id, leg);
 -- ====================================================================
 
 CREATE TABLE IF NOT EXISTS matchup_legs (
-    league_id   TEXT NOT NULL,
-    season      TEXT NOT NULL,
-    week        INTEGER NOT NULL,
-    roster_id   INTEGER NOT NULL,
-    matchup_id  INTEGER NOT NULL,
-    points      REAL,
-    starters    TEXT,    -- JSON array of player_ids
-    fetched_at  TEXT NOT NULL,
+    league_id     TEXT NOT NULL,
+    season        TEXT NOT NULL,
+    week          INTEGER NOT NULL,
+    roster_id     INTEGER NOT NULL,
+    matchup_id    INTEGER NOT NULL,
+    points        REAL,          -- raw stat × multiplier score
+    custom_points REAL,          -- commissioner-adjusted score (NULL = no adjustment)
+    starters      TEXT,          -- JSON array of player_ids
+    fetched_at    TEXT NOT NULL,
     PRIMARY KEY (league_id, season, week, roster_id)
 );
 
@@ -262,6 +263,21 @@ SELECT
     r.total_moves
 FROM rosters r
 LEFT JOIN league_users u ON u.league_id = r.league_id AND u.user_id = r.owner_id;
+
+-- ────────────────────────────────────────────────────────────────────
+-- A view over matchup_legs that exposes the EFFECTIVE points for each
+-- matchup-side: the commissioner's custom_points override if set, else
+-- the raw stat-computed points. All downstream queries should READ this
+-- view (FROM v_matchup_legs) so manual score adjustments propagate.
+-- Writes (INSERT/UPDATE/DELETE) still go to the base matchup_legs table.
+-- ────────────────────────────────────────────────────────────────────
+CREATE VIEW IF NOT EXISTS v_matchup_legs AS
+SELECT league_id, season, week, roster_id, matchup_id,
+       COALESCE(custom_points, points) AS points,   -- effective score
+       points        AS raw_points,                  -- pre-adjustment
+       custom_points AS adjustment,                  -- NULL if no adjustment
+       starters, fetched_at
+FROM matchup_legs;
 
 -- H2H results per week: each row is one side of a matchup
 -- Join on (league_id, season, week, matchup_id) with different roster_ids to get both sides

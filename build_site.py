@@ -173,8 +173,8 @@ def get_week_matchups(conn, week: int, team_map: dict, standings_map: dict | Non
         SELECT a.roster_id AS roster_a, a.points AS pts_a,
                b.roster_id AS roster_b, b.points AS pts_b,
                a.matchup_id, a.starters AS starters_a, b.starters AS starters_b
-        FROM matchup_legs a
-        JOIN matchup_legs b
+        FROM v_matchup_legs a
+        JOIN v_matchup_legs b
           ON b.league_id = a.league_id AND b.season = a.season
          AND b.week = a.week AND b.matchup_id = a.matchup_id
          AND b.roster_id > a.roster_id
@@ -214,8 +214,8 @@ def get_week_matchups(conn, week: int, team_map: dict, standings_map: dict | Non
 def get_upcoming_matchups(conn, week: int, team_map: dict, standings: list[dict]) -> list[dict]:
     rows = q(conn, """
         SELECT a.roster_id AS roster_a, b.roster_id AS roster_b, a.matchup_id
-        FROM matchup_legs a
-        JOIN matchup_legs b
+        FROM v_matchup_legs a
+        JOIN v_matchup_legs b
           ON b.league_id = a.league_id AND b.season = a.season
          AND b.week = a.week AND b.matchup_id = a.matchup_id
          AND b.roster_id > a.roster_id
@@ -250,7 +250,7 @@ def get_all_weeks_summary(conn) -> list[dict]:
                AVG(points) AS avg_pts,
                MAX(points) AS high_score,
                MIN(points) AS low_score
-        FROM matchup_legs
+        FROM v_matchup_legs
         WHERE league_id = ? AND season = ? AND points IS NOT NULL
         GROUP BY week
         ORDER BY week
@@ -268,7 +268,7 @@ def get_gw_detail(conn, week: int, team_map: dict, standings_map: dict) -> dict:
         JOIN players p ON p.player_id = ps.player_id
         WHERE ps.season = ? AND ps.week = ? AND ps.stat_key = 'pts_std'
           AND ps.player_id IN (
-              SELECT json_each.value FROM matchup_legs ml, json_each(ml.starters)
+              SELECT json_each.value FROM v_matchup_legs ml, json_each(ml.starters)
               WHERE ml.league_id = ? AND ml.season = ? AND ml.week = ?
           )
         GROUP BY ps.player_id
@@ -405,15 +405,15 @@ def get_club_detail(conn, roster_id: int, team_map: dict, standings_map: dict) -
 
     weekly = q(conn, """
         SELECT week, points,
-               (SELECT points FROM matchup_legs b
+               (SELECT points FROM v_matchup_legs b
                 WHERE b.league_id = ml.league_id AND b.season = ml.season
                   AND b.week = ml.week AND b.matchup_id = ml.matchup_id
                   AND b.roster_id != ml.roster_id) AS opp_points,
-               (SELECT roster_id FROM matchup_legs b
+               (SELECT roster_id FROM v_matchup_legs b
                 WHERE b.league_id = ml.league_id AND b.season = ml.season
                   AND b.week = ml.week AND b.matchup_id = ml.matchup_id
                   AND b.roster_id != ml.roster_id) AS opp_roster_id
-        FROM matchup_legs ml
+        FROM v_matchup_legs ml
         WHERE league_id = ? AND season = ? AND roster_id = ?
         ORDER BY week
     """, (LEAGUE_ID, SEASON, roster_id))
@@ -475,7 +475,7 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
 
     # Season high
     high = q1(conn, """
-        SELECT roster_id, week, points FROM matchup_legs
+        SELECT roster_id, week, points FROM v_matchup_legs
         WHERE league_id=? AND season=? AND points IS NOT NULL
         ORDER BY points DESC LIMIT 1
     """, (LEAGUE_ID, SEASON))
@@ -483,7 +483,7 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
 
     # Season low (nonzero)
     low = q1(conn, """
-        SELECT roster_id, week, points FROM matchup_legs
+        SELECT roster_id, week, points FROM v_matchup_legs
         WHERE league_id=? AND season=? AND points IS NOT NULL AND points > 0
         ORDER BY points ASC LIMIT 1
     """, (LEAGUE_ID, SEASON))
@@ -494,8 +494,8 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
         SELECT a.week, a.matchup_id, a.roster_id AS r_a, a.points AS p_a,
                b.roster_id AS r_b, b.points AS p_b,
                ABS(a.points - b.points) AS diff
-        FROM matchup_legs a
-        JOIN matchup_legs b
+        FROM v_matchup_legs a
+        JOIN v_matchup_legs b
           ON b.league_id=a.league_id AND b.season=a.season
          AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id > a.roster_id
         WHERE a.league_id=? AND a.season=?
@@ -525,8 +525,8 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
     pyr = q1(conn, """
         SELECT a.roster_id, a.week, a.points,
                b.roster_id AS opp_roster, b.points AS opp_points
-        FROM matchup_legs a
-        JOIN matchup_legs b
+        FROM v_matchup_legs a
+        JOIN v_matchup_legs b
           ON b.league_id=a.league_id AND b.season=a.season
          AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id != a.roster_id
         WHERE a.league_id=? AND a.season=?
@@ -550,8 +550,8 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
     gift = q1(conn, """
         SELECT a.roster_id, a.week, a.points,
                b.roster_id AS opp_roster, b.points AS opp_points
-        FROM matchup_legs a
-        JOIN matchup_legs b
+        FROM v_matchup_legs a
+        JOIN v_matchup_legs b
           ON b.league_id=a.league_id AND b.season=a.season
          AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id != a.roster_id
         WHERE a.league_id=? AND a.season=?
@@ -600,7 +600,7 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
                    ml.roster_id
             FROM player_stats ps
             JOIN players p ON p.player_id = ps.player_id
-            JOIN matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
+            JOIN v_matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
             WHERE ps.season=? AND ps.stat_key='pts_std'
               AND p.position_primary = ?
               AND EXISTS (
@@ -625,7 +625,7 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
                ps.week, SUM(ps.stat_value) AS pts, ml.roster_id
         FROM player_stats ps
         JOIN players p ON p.player_id = ps.player_id
-        JOIN matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
+        JOIN v_matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
         WHERE ps.season=? AND ps.stat_key='pts_std'
           AND EXISTS (
               SELECT 1 FROM json_each(ml.starters)
@@ -649,7 +649,7 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
                MAX(points)  AS high,
                MIN(points)  AS low,
                COUNT(*)     AS weeks
-        FROM matchup_legs
+        FROM v_matchup_legs
         WHERE league_id=? AND season=? AND points IS NOT NULL AND points > 0
         GROUP BY roster_id
         ORDER BY total DESC
@@ -693,7 +693,7 @@ def compute_weekly_awards(conn, week: int, team_map: dict, standings: list[dict]
 
     # Weekly team high / low
     rows = q(conn, """
-        SELECT roster_id, points FROM matchup_legs
+        SELECT roster_id, points FROM v_matchup_legs
         WHERE league_id=? AND season=? AND week=? AND points IS NOT NULL
         ORDER BY points DESC
     """, (LEAGUE_ID, SEASON, week))
@@ -712,8 +712,8 @@ def compute_weekly_awards(conn, week: int, team_map: dict, standings: list[dict]
         SELECT a.matchup_id, a.roster_id AS r_a, a.points AS p_a,
                b.roster_id AS r_b, b.points AS p_b,
                ABS(a.points - b.points) AS diff
-        FROM matchup_legs a
-        JOIN matchup_legs b
+        FROM v_matchup_legs a
+        JOIN v_matchup_legs b
           ON b.league_id=a.league_id AND b.season=a.season
          AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id > a.roster_id
         WHERE a.league_id=? AND a.season=? AND a.week=?
@@ -745,7 +745,7 @@ def compute_weekly_awards(conn, week: int, team_map: dict, standings: list[dict]
                    ps.stat_value AS pts, ml.roster_id
             FROM player_stats ps
             JOIN players p ON p.player_id = ps.player_id
-            JOIN matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
+            JOIN v_matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
             WHERE ps.season=? AND ps.week=? AND ps.stat_key='pts_std'
               AND p.position_primary = ?
               AND EXISTS (
@@ -841,8 +841,8 @@ def enrich_featured_matches(conn, fm: dict, team_map: dict, standings: list[dict
     # Pull pairings for the week
     pair_rows = q(conn, """
         SELECT a.roster_id AS r_a, b.roster_id AS r_b, a.matchup_id
-        FROM matchup_legs a
-        JOIN matchup_legs b
+        FROM v_matchup_legs a
+        JOIN v_matchup_legs b
           ON b.league_id=a.league_id AND b.season=a.season
          AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id > a.roster_id
         WHERE a.league_id=? AND a.season=? AND a.week=?
@@ -890,8 +890,8 @@ def compute_weekly_placements(conn, team_map: dict, total_weeks: int = 38) -> di
         SELECT a.week, a.roster_id,
                a.points  AS pts,
                b.points  AS opp_pts
-        FROM matchup_legs a
-        JOIN matchup_legs b
+        FROM v_matchup_legs a
+        JOIN v_matchup_legs b
           ON b.league_id=a.league_id AND b.season=a.season
          AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id != a.roster_id
         WHERE a.league_id=? AND a.season=? AND a.points IS NOT NULL AND b.points IS NOT NULL
@@ -1281,7 +1281,7 @@ def build(open_after: bool = False):
     max_week = max((w["week"] for w in weeks_summary), default=1)
     # Include upcoming week if pairings are stored
     has_upcoming = bool(q1(conn,
-        "SELECT 1 FROM matchup_legs WHERE league_id=? AND season=? AND week=? LIMIT 1",
+        "SELECT 1 FROM v_matchup_legs WHERE league_id=? AND season=? AND week=? LIMIT 1",
         (LEAGUE_ID, SEASON, upcoming_week)))
     range_end = upcoming_week if has_upcoming else max_week
     for w in range(1, range_end + 1):

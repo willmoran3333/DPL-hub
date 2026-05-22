@@ -433,7 +433,7 @@ def ingest_transactions(conn: sqlite3.Connection, up_to_leg: int):
 def ingest_matchups(conn: sqlite3.Connection, week: int):
     query = (
         f'{{ matchup_legs_raw(round: {week}, league_id: "{LEAGUE_ID}") '
-        f'{{ roster_id matchup_id points starters }} }}'
+        f'{{ roster_id matchup_id points custom_points starters }} }}'
     )
     data = fetch_graphql(query)
     if not data or not data.get("matchup_legs_raw"):
@@ -445,21 +445,28 @@ def ingest_matchups(conn: sqlite3.Connection, week: int):
         "DELETE FROM matchup_legs WHERE league_id=? AND season=? AND week=?",
         (LEAGUE_ID, SEASON, week),
     )
+    adjusted = 0
     for leg in legs:
+        if leg.get("custom_points") is not None:
+            adjusted += 1
         conn.execute(
             """
             INSERT OR REPLACE INTO matchup_legs
-            (league_id, season, week, roster_id, matchup_id, points, starters, fetched_at)
-            VALUES (?,?,?,?,?,?,?,?)
+            (league_id, season, week, roster_id, matchup_id, points, custom_points, starters, fetched_at)
+            VALUES (?,?,?,?,?,?,?,?,?)
             """,
             (
                 LEAGUE_ID, SEASON, week,
                 leg["roster_id"], leg["matchup_id"],
-                leg.get("points"), jdump(leg.get("starters")),
+                leg.get("points"), leg.get("custom_points"),
+                jdump(leg.get("starters")),
                 now_iso(),
             ),
         )
     conn.commit()
+    if adjusted:
+        print(f"    week {week:>2} matchups: {len(legs)} legs ({adjusted} custom-adjusted)")
+        return len(legs)
     print(f"    week {week:>2} matchups: {len(legs)} legs (matchup_ids: "
           f"{sorted(set(l['matchup_id'] for l in legs))})")
     return len(legs)
