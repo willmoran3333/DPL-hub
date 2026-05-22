@@ -5,29 +5,33 @@
 gw: 38
 
 matches:
-  # Matchup 3 of GW38 — coronation
-  - home_roster_id: 3           # Flabiano9 · 16–21
-    away_roster_id: 10          # erozier   · 25–12 · DPL Champion
-    headline: "The Champion's Victory Lap"
+  # Matchup 5 of GW38 — JordiCarb trying to lock down 2nd
+  - home_roster_id: 4           # benditlikebergvall · 16–21
+    away_roster_id: 9           # JordiCarb          · 22–15 · 2nd
+    headline: "JordiCarb Locks Down Second"
     body: >
-      The DPL title is already wrapped, but erozier closes out the season
-      against Flabiano9, who's fighting for a respectable finish inside
-      the 16-21 cluster. erozier has been the league's best offense all
-      year and dropped 100+ in three of his last four games. Flabiano9
-      needs a big number here to stay ahead of skoeiboy, cstoney20, and
-      benditlikebergvall in the final points-for tiebreaker. Probably a
-      coronation, but Flabiano9 has put up 104.25 already in GW37 and
-      could play spoiler.
+      JordiCarb comes in at 22-15 with 3,044 points-for and a one-game
+      cushion on Noahvillasana17 for second place. Win here and second
+      is sealed outright. Lose, and the door cracks open: Noah could
+      pull level on wins (both 22-16) and the title goes to a PF
+      tiebreaker that's currently a 27-point gap. benditlikebergvall
+      sits at 16-21 with nothing left to play for except spoiler honors,
+      but he's already pulled one upset on JordiCarb this season back in
+      GW34. Don't sleep on this one.
 
-  # Matchup 2 of GW38 — battle for 4th
-  - home_roster_id: 2           # skoeiboy    · 16–21
-    away_roster_id: 5           # brendog2814 · 20–17 · 4th
-    headline: "brendog2814 Locks in 4th"
+  # Matchup 4 of GW38 — Noah's last shot at 2nd, with brennan and brian behind
+  - home_roster_id: 7           # rmeernst        · 17–20
+    away_roster_id: 12          # Noahvillasana17 · 21–16 · 3rd
+    headline: "Noah's Final Climb — and the Chasers Behind"
     body: >
-      brendog2814 enters the final week at 20-17, tied with bjennings28
-      but holding a massive PF tiebreaker advantage (3,216 vs 3,054). A
-      win here clinches 4th place outright and pushes him to 21-17 with
-      the third-highest points-for in the league. skoeiboy sits at 16-21
-      in the lower cluster but has shown he can score (106.5 vs Flabiano9
-      back in GW34). Expect brendog2814 to bring his ceiling on the way
-      out the door; he's been the quiet star of the back half.
+      Noahvillasana17 needs three things to overtake JordiCarb for 2nd:
+      his own win against rmeernst, a JordiCarb loss to bergvall, and at
+      least a 28-point PF swing to flip the tiebreaker. A tall order, but
+      not impossible. The flip side is the threat from below: brennan
+      (brendog2814, 20-17, 3,216 PF) and brian (bjennings28, 20-17,
+      3,054 PF) are both one win away from 21-17. If Noah loses and
+      brennan wins, brennan takes 3rd outright on PF — he's been the
+      league's hottest scorer down the stretch and the PF gap is over
+      200 points already. brian needs a near-miracle to leapfrog both,
+      but a win keeps him relevant. Noah controls his own fate by
+      winning; the rest is scoreboard-watching.
