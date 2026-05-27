@@ -136,9 +136,12 @@ def get_current_week(conn) -> int:
 
 
 def get_standings(conn, team_map: dict) -> list[dict]:
-    # PF/PA come from rosters.fpts (Sleeper's official totals — these include
-    # any manual commissioner adjustments). The matchup_legs table is raw
-    # stat×multiplier and won't reflect any manual fixes, so don't sum from it.
+    """Standings come from rosters.fpts (Sleeper's official totals, with any
+    manual commissioner adjustments). If matchup_legs has more recently scored
+    weeks that aren't yet reflected in rosters (e.g. Sleeper hasn't propagated
+    the final week into the roster table), we add those weeks on top — wins,
+    losses, PF, PA, and the form-guide record string — so the standings stay
+    current without losing manual adjustments."""
     rows = q(conn, """
         SELECT r.roster_id, u.display_name, u.team_name,
                r.wins, r.losses, r.ties,
@@ -149,17 +152,15 @@ def get_standings(conn, team_map: dict) -> list[dict]:
         FROM rosters r
         LEFT JOIN league_users u ON u.league_id = r.league_id AND u.user_id = r.owner_id
         WHERE r.league_id = ?
-        ORDER BY r.wins DESC, pts_for DESC
     """, (LEAGUE_ID,))
 
     standings = []
-    for pos, row in enumerate(rows, 1):
+    for row in rows:
         d = dict(row)
         rid = d["roster_id"]
         tm  = team_map.get(rid, {})
         d["team_name"]   = d["team_name"] or tm.get("team_name", f"Team {rid}")
         d["pl_club"]     = tm.get("pl_club", "")
-        d["position"]    = pos
         d["is_you"]      = rid == YOU_ROSTER_ID
 
         try:
@@ -167,10 +168,43 @@ def get_standings(conn, team_map: dict) -> list[dict]:
         except Exception:
             meta = {}
         rec = meta.get("record") or ""
+
+        # ── Merge any newer scored weeks that rosters hasn't picked up ──
+        games_played = (d["wins"] or 0) + (d["losses"] or 0) + (d["ties"] or 0)
+        extra = q(conn, """
+            SELECT a.week, a.points AS my_pts, b.points AS opp_pts
+            FROM matchup_legs a
+            JOIN matchup_legs b
+              ON b.league_id=a.league_id AND b.season=a.season
+             AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id != a.roster_id
+            WHERE a.league_id=? AND a.season=? AND a.roster_id=?
+              AND a.week > ?
+              AND a.points IS NOT NULL AND b.points IS NOT NULL
+            ORDER BY a.week
+        """, (LEAGUE_ID, SEASON, rid, games_played))
+        for e in extra:
+            mp = e["my_pts"] or 0
+            op = e["opp_pts"] or 0
+            d["pts_for"]     = round((d["pts_for"] or 0) + mp, 2)
+            d["pts_against"] = round((d["pts_against"] or 0) + op, 2)
+            if mp > op:
+                d["wins"]   = (d["wins"]   or 0) + 1
+                rec += "W"
+            elif mp < op:
+                d["losses"] = (d["losses"] or 0) + 1
+                rec += "L"
+            else:
+                d["ties"]   = (d["ties"]   or 0) + 1
+                rec += "T"
+
         d["form"] = list(rec[-5:]) if rec else []
         d["record_str"] = rec
-
         standings.append(d)
+
+    # Re-sort by wins desc, then PF desc (may have shifted after the merge)
+    standings.sort(key=lambda s: (-(s["wins"] or 0), -(s["pts_for"] or 0)))
+    for pos, d in enumerate(standings, 1):
+        d["position"] = pos
     return standings
 
 
