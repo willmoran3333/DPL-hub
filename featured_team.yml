@@ -3,23 +3,25 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 roster_id: 10
-gw: 37
-headline: "erozier clinches the DPL title"
-subheadline: "A 25-12 regular season with the league's best offense, three games clear with one to play"
+gw: 38
+headline: "erozier wins the 2025/26 DPL title"
+subheadline: "Wire-to-wire champion finishes 25-13 with the league's best offense"
 body: >
-  After 37 weeks, the math is settled. erozier sits at 25-12 with the
-  highest points-for total in the league (3,460.75) and a three-game
-  cushion that no one can erase in the final week. He led the table for
-  the bulk of the season, weathered a single stumble against bjennings28
-  in GW33, and answered every challenge from Noahvillasana17, brendog2814,
-  and JordiCarb. The 2025/26 DPL champion. GW38 is the victory lap.
+  After 38 weeks, the DPL crown belongs to erozier. He took the top of the
+  table early, defended it through every challenger that emerged, and
+  finished three games clear of JordiCarb in second place. The road wasn't
+  perfect — bjennings28 stunned him in GW33, and Flabiano9 spoiled the
+  victory lap with a 52.5 to 31.75 finale upset in GW38 — but the cushion
+  he built across the spring made the math academic for weeks. He led the
+  league in points-for (3,492.50) and finished with the largest scoring
+  margin of any manager. The 2025/26 DPL champion.
 
 highlight_stats:
   - label: "Final Record"
-    value: "25–12"
+    value: "25–13"
   - label: "Points For"
-    value: "3,460.75"
-  - label: "Cushion"
-    value: "3 games"
+    value: "3,492.50"
+  - label: "Margin"
+    value: "+405 PF"
   - label: "Title"
     value: "Champion"

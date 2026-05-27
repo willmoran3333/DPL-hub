@@ -121,8 +121,18 @@ def load_featured_matches() -> dict:
 # ────────────────────────────────────────────────────────────────────
 
 def get_current_week(conn) -> int:
+    """Last completed gameweek. Falls back to the highest week in matchup_legs
+    with scored points when the sport state is off-season (week = 0)."""
     row = q1(conn, "SELECT week FROM sport_state WHERE sport = 'clubsoccer:epl'")
-    return (row["week"] if row else 1) - 1  # last completed week
+    state_week = row["week"] if row else 0
+    if state_week and state_week > 0:
+        return state_week - 1
+    # Off-season fallback: highest week that has any scored matchup
+    last = q1(conn, """
+        SELECT MAX(week) AS w FROM matchup_legs
+        WHERE league_id = ? AND season = ? AND points IS NOT NULL
+    """, (LEAGUE_ID, SEASON))
+    return (last["w"] if last and last["w"] else 1)
 
 
 def get_standings(conn, team_map: dict) -> list[dict]:

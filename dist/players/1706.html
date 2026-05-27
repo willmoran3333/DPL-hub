@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>John Stones — Dallas Premier League</title>
+  <meta name="description" content="Dallas Premier League — 12-team Sleeper EPL dynasty fantasy">
+  <meta property="og:title" content="John Stones — Dallas Premier League">
+  <meta property="og:description" content="Dallas Premier League — 12-team Sleeper EPL dynasty fantasy">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../static/img/dpl_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/css/main.css">
+  
+<style>
+  /* ── Layout: scrollable region with sticky edges ── */
+  .pivot-wrap {
+    border: 1px solid var(--c-border);
+    border-radius: 4px;
+    background: var(--c-bg-card);
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  /* Top scrollbar — empty div whose width mirrors the table inside */
+  .pivot-top-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-bottom: 1px solid var(--c-border);
+    background: var(--c-bg-soft);
+  }
+  .pivot-top-scroll__rail { height: 1px; }
+
+  /* Main scroll container — both axes; sticky cells live inside */
+  .pivot-scroll {
+    overflow: auto;
+    max-height: 620px;
+    position: relative;
+  }
+
+  .stat-table {
+    border-collapse: separate;          /* required so sticky cells render their own bg */
+    border-spacing: 0;
+    font-size: 0.8125rem;
+    background: var(--c-bg-card);
+    font-variant-numeric: tabular-nums;
+    width: max-content;                 /* let it overflow the container */
+    min-width: 100%;
+  }
+
+  /* ── Header ── */
+  .stat-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    padding: 10px 10px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: right;
+    white-space: nowrap;
+    background: var(--c-primary);
+    color: rgba(255,255,255,0.78);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+  }
+  .stat-table thead th:last-child { border-right: none; }
+
+  /* Sticky GW corner (top-left) */
+  .stat-table thead th.col-gw {
+    left: 0;
+    z-index: 5;
+    text-align: left;
+    min-width: 64px;
+  }
+
+  /* Sticky Total corner (top-right) */
+  .stat-table thead th.col-total {
+    right: 0;
+    z-index: 5;
+    background: var(--c-primary-dark);
+    color: var(--c-gold);
+  }
+
+  /* ── Body cells ── */
+  .stat-table td {
+    padding: 8px 10px;
+    text-align: right;
+    white-space: nowrap;
+    background: var(--c-bg-card);
+    border-right: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .stat-table td:last-child { border-right: none; }
+
+  /* Sticky GW column (left) */
+  .stat-table td.col-gw {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    text-align: left;
+    font-weight: 700;
+    color: var(--c-primary);
+    background: #FAF7F0;
+    border-right: 2px solid var(--c-border-mid);
+  }
+
+  /* Sticky Total column (right) */
+  .stat-table td.col-total {
+    position: sticky;
+    right: 0;
+    z-index: 2;
+    font-weight: 800;
+    color: var(--c-ink);
+    background: #F5EDD9;
+    border-left: 2px solid var(--c-gold);
+  }
+
+  /* Zero / missing cells */
+  .stat-table td.zero { color: var(--c-ink-light); }
+
+  /* ── Footer (always sticky at bottom) ── */
+  /* Three rows: raw totals, points contributed, % of total */
+  .stat-table tfoot tr.totals  td { position: sticky; bottom: calc(2 * 34px); z-index: 3; background: var(--c-primary); color: #FFFFFF; font-weight: 700; }
+  .stat-table tfoot tr.contrib td { position: sticky; bottom: 34px;           z-index: 3; background: #432160;          color: var(--c-gold); }
+  .stat-table tfoot tr.pct     td { position: sticky; bottom: 0;              z-index: 3; background: var(--c-primary-dark); color: rgba(255,255,255,0.85); }
+
+  .stat-table tfoot td {
+    border-bottom: none;
+    padding: 9px 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.8125rem;
+  }
+  .stat-table tfoot tr.totals td  { border-top: 2px solid var(--c-gold); }
+
+  .stat-table tfoot td.col-gw {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    text-align: left;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .stat-table tfoot tr.totals  td.col-gw { background: var(--c-primary);      color: var(--c-gold); }
+  .stat-table tfoot tr.contrib td.col-gw { background: #432160;               color: var(--c-gold); }
+  .stat-table tfoot tr.pct     td.col-gw { background: var(--c-primary-dark); color: rgba(255,255,255,0.6); }
+
+  .stat-table tfoot td.col-total {
+    position: sticky;
+    right: 0;
+    z-index: 5;
+    font-weight: 800;
+    border-left: 2px solid var(--c-gold);
+  }
+  .stat-table tfoot tr.totals  td.col-total { background: var(--c-primary);      color: var(--c-gold); }
+  .stat-table tfoot tr.contrib td.col-total { background: #432160;               color: var(--c-gold); }
+  .stat-table tfoot tr.pct     td.col-total { background: var(--c-primary-dark); color: var(--c-gold); }
+
+  /* "Dash" cells */
+  .stat-table tfoot td.empty { color: rgba(255,255,255,0.25); font-weight: 500; }
+</style>
+
+</head>
+<body>
+
+<nav class="site-nav" role="navigation" aria-label="Main">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">
+      <img src="../static/img/dpl_logo.png" alt="DPL crest">
+      <div class="nav-brand__text">
+        <strong>DPL</strong>
+        <span>Dallas Premier League</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../table.html">Table</a></li>
+      <li><a href="../gameweeks.html">Gameweek</a></li>
+      <li><a href="../fixtures.html">Fixtures</a></li>
+      <li><a href="../clubs.html">Clubs</a></li>
+      <li><a href="../players.html" class="active">Players</a></li>
+      <li><a href="../stats.html">Stats</a></li>
+      <li><a href="../draft.html">Draft</a></li>
+      <li><a href="../history.html">History</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="page">
+
+  <div style="background:var(--c-primary); margin: calc(-1 * var(--sp-10)) calc(-1 * var(--sp-5)) var(--sp-8); padding: var(--sp-8) var(--sp-5); border-bottom: 3px solid var(--c-gold);">
+    <div style="font-size:0.6875rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--c-gold); margin-bottom:8px;">
+      MCI · D · Rostered by JordiCarb
+    </div>
+    <h1 style="font-size:clamp(1.75rem, 5vw, 2.75rem); font-weight:800; letter-spacing:-0.03em; color:#fff; line-height:1.05;">John Stones</h1>
+    
+  </div>
+
+  <div class="stat-bar">
+    <div class="stat-cell">
+      <div class="stat-cell__value">15.8</div>
+      <div class="stat-cell__label">Season Pts</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-cell__value">5</div>
+      <div class="stat-cell__label">Weeks Scored</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-cell__value">3.1</div>
+      <div class="stat-cell__label">Avg Per Week</div>
+    </div>
+    <div class="stat-cell">
+      
+      <div class="stat-cell__value">11.2</div>
+      <div class="stat-cell__label">Career High</div>
+    </div>
+  </div>
+
+  <div class="section-label">Gameweek Breakdown</div>
+
+  <div class="pivot-wrap">
+    
+    <div class="pivot-top-scroll" id="pivotTopScroll">
+      <div class="pivot-top-scroll__rail" id="pivotTopRail"></div>
+    </div>
+
+    <div class="pivot-scroll" id="pivotScroll">
+      <table class="stat-table" id="pivotTable">
+        <thead>
+          <tr>
+            <th class="col-gw">GW</th>
+            
+            <th title="gp">GP</th>
+            
+            <th title="gs">GS</th>
+            
+            <th title="min">MIN</th>
+            
+            <th title="kp">KP</th>
+            
+            <th title="int">INT</th>
+            
+            <th title="bs">BLK</th>
+            
+            <th title="clr">CLR</th>
+            
+            <th title="cs">CS</th>
+            
+            <th title="aer">AER</th>
+            
+            <th title="cos">COS</th>
+            
+            <th title="dis">DIS</th>
+            
+            <th title="ga">GA</th>
+            
+            <th title="p_att">P_ATT</th>
+            
+            <th title="tkw">TKW</th>
+            
+            <th class="col-total">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/1.html" style="color:var(--c-primary);">GW1</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>82</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>59</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            <td class="col-total">11.2</td>
+          </tr>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/2.html" style="color:var(--c-primary);">GW2</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>90</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>7</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>4</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td>83</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            <td class="col-total">2.8</td>
+          </tr>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/3.html" style="color:var(--c-primary);">GW3</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>90</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>3</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td>72</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            <td class="col-total">-0.2</td>
+          </tr>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/5.html" style="color:var(--c-primary);">GW5</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>3</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            <td class="col-total">-0.8</td>
+          </tr>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/9.html" style="color:var(--c-primary);">GW9</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>61</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>28</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            <td class="col-total">1.8</td>
+          </tr>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/13.html" style="color:var(--c-primary);">GW13</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            <td class="col-total">0.0</td>
+          </tr>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/14.html" style="color:var(--c-primary);">GW14</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>26</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td>13</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            <td class="col-total">-2.8</td>
+          </tr>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/36.html" style="color:var(--c-primary);">GW36</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>8</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>8</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            <td class="col-total">1.0</td>
+          </tr>
+          
+          <tr>
+            <td class="col-gw"><a href="../gameweek/38.html" style="color:var(--c-primary);">GW38</a></td>
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>78</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            
+            <td>7</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td class="zero">—</td>
+            
+            
+            
+            <td>2</td>
+            
+            
+            
+            <td>35</td>
+            
+            
+            
+            <td>1</td>
+            
+            
+            <td class="col-total">2.8</td>
+          </tr>
+          
+        </tbody>
+        <tfoot>
+          
+          <tr class="totals">
+            <td class="col-gw">Total</td>
+            
+            <td>9</td>
+            
+            <td>5</td>
+            
+            <td>439</td>
+            
+            <td>1</td>
+            
+            <td>3</td>
+            
+            <td>6</td>
+            
+            <td>21</td>
+            
+            <td>1</td>
+            
+            <td>11</td>
+            
+            <td>2</td>
+            
+            <td>1</td>
+            
+            <td>10</td>
+            
+            <td>302</td>
+            
+            <td>1</td>
+            
+            <td class="col-total">15.8</td>
+          </tr>
+          
+          <tr class="contrib">
+            <td class="col-gw">Pts</td>
+            
+            <td><span class="empty">—</span></td>
+            
+            <td><span class="empty">—</span></td>
+            
+            <td><span class="empty">—</span></td>
+            
+            <td>+2.0</td>
+            
+            <td>+3.0</td>
+            
+            <td>+6.0</td>
+            
+            <td>+5.2</td>
+            
+            <td>+3.0</td>
+            
+            <td>+11.0</td>
+            
+            <td>+1.0</td>
+            
+            <td>-0.5</td>
+            
+            <td>-20.0</td>
+            
+            <td><span class="empty">—</span></td>
+            
+            <td>+1.0</td>
+            
+            <td class="col-total">15.8</td>
+          </tr>
+          
+          <tr class="pct">
+            <td class="col-gw">% of Total</td>
+            
+            <td><span class="empty">—</span></td>
+            
+            <td><span class="empty">—</span></td>
+            
+            <td><span class="empty">—</span></td>
+            
+            <td>13%</td>
+            
+            <td>19%</td>
+            
+            <td>38%</td>
+            
+            <td>33%</td>
+            
+            <td>19%</td>
+            
+            <td>70%</td>
+            
+            <td>6%</td>
+            
+            <td>-3%</td>
+            
+            <td>-127%</td>
+            
+            <td><span class="empty">—</span></td>
+            
+            <td>6%</td>
+            
+            <td class="col-total">100%</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <p class="mb-6" style="font-size:0.75rem; color:var(--c-ink-light); line-height:1.55;">
+    <strong>Total</strong> = season counts of each stat. <strong>Pts</strong> = fantasy points contributed by that stat (uses the league's position-specific scoring). <strong>% of Total</strong> = share of the player's total points that came from that stat. Hover a column header for the raw stat code.
+  </p>
+
+  <a href="../players.html" style="font-size:0.875rem; color:var(--c-ink-light);">← All Players</a>
+</div>
+
+
+
+<script>
+(function() {
+  // ── Sync top + bottom horizontal scrollbars ──
+  const top    = document.getElementById('pivotTopScroll');
+  const topRail= document.getElementById('pivotTopRail');
+  const bot    = document.getElementById('pivotScroll');
+  const tbl    = document.getElementById('pivotTable');
+  if (!top || !bot || !tbl) return;
+
+  function sizeRail() {
+    // Make the top scroll rail match the actual table width inside bot
+    topRail.style.width = tbl.scrollWidth + 'px';
+  }
+  sizeRail();
+  window.addEventListener('resize', sizeRail);
+
+  let lock = false;
+  top.addEventListener('scroll', () => {
+    if (lock) return;
+    lock = true; bot.scrollLeft = top.scrollLeft; lock = false;
+  });
+  bot.addEventListener('scroll', () => {
+    if (lock) return;
+    lock = true; top.scrollLeft = bot.scrollLeft; lock = false;
+  });
+})();
+</script>
+
+
+<footer class="site-footer">
+  Dallas Premier League · 2025/26 · Powered by <a href="https://sleeper.com" target="_blank" rel="noopener">Sleeper</a> · <a href="../subscribe.html">Subscribe to weekly digest</a>
+</footer>
+
+</body>
+</html>
