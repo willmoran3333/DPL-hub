@@ -432,6 +432,128 @@ def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
 
 
 # ────────────────────────────────────────────────────────────────────
+# Draft Lab (dynamic re-scoring research view)
+# ────────────────────────────────────────────────────────────────────
+
+# Every player-level stat Sleeper records, in display order.
+# (cnr and poss are team-level entities; g_at is a composite; pts_std is
+# Sleeper standard scoring — all excluded.)
+DRAFT_LAB_STATS = [
+    ("min",   "Minutes",             "MIN"),
+    ("gp",    "Games Played",        "GP"),
+    ("gs",    "Games Started",       "GS"),
+    ("g",     "Goals",               "G"),
+    ("at",    "Assists",             "A"),
+    ("sot",   "Shots on Target",     "SOT"),
+    ("sat",   "Shots (Total)",       "SH"),
+    ("kp",    "Key Passes",          "KP"),
+    ("acnc",  "Accurate Crosses",    "ACR"),
+    ("cos",   "Successful Dribbles", "SD"),
+    ("pkd",   "Penalties Drawn",     "PKD"),
+    ("pkm",   "Penalties Missed",    "PKM"),
+    ("og",    "Own Goals",           "OG"),
+    ("tkw",   "Tackles Won",         "TKW"),
+    ("tc",    "Tackles (TC)",        "TC"),
+    ("aer",   "Aerials Won",         "AER"),
+    ("clr",   "Clearances",          "CLR"),
+    ("bs",    "Blocked Shots",       "BS"),
+    ("int",   "Interceptions",       "INT"),
+    ("dis",   "Dispossessed",        "DIS"),
+    ("fl",    "Fouls Committed",     "FL"),
+    ("p_att", "Passes Attempted",    "PAS"),
+    ("cs",    "Clean Sheets (60')",  "CS"),
+    ("cs90",  "Clean Sheets (90')",  "CS90"),
+    ("hcs",   "High Claims",         "HCS"),
+    ("ga",    "Goals Against",       "GA"),
+    ("sv",    "Saves",               "SV"),
+    ("sm",    "Smothers",            "SM"),
+    ("pks",   "Penalty Saves",       "PKS"),
+    ("yc",    "Yellow Cards",        "YC"),
+    ("yc2",   "Second Yellows",      "2YC"),
+    ("rc",    "Red Cards",           "RC"),
+]
+
+_POS_CODE = {"GK": "gk", "D": "d", "M": "m", "F": "f"}
+
+
+def get_draft_lab_data(conn) -> dict:
+    """
+    Season stat totals for every active player plus the league's
+    position-specific scoring weights, packaged for client-side
+    what-if re-scoring on the Draft Lab page.
+    """
+    stat_keys = [s[0] for s in DRAFT_LAB_STATS]
+
+    scoring_row = q1(conn, "SELECT scoring_settings FROM league WHERE league_id = ?", (LEAGUE_ID,))
+    scoring = json.loads(scoring_row["scoring_settings"] or "{}")
+
+    # weights[stat] = {gk, d, m, f} — 0 where the league didn't score it
+    weights = {
+        key: {pc: scoring.get(f"pos_{pc}_{key}", 0) or 0 for pc in ("gk", "d", "m", "f")}
+        for key in stat_keys
+    }
+
+    # Each player's *scoring* position = the pos_X_ prefix they accumulated
+    # the most minutes under (Sleeper applies weights by this, and it can
+    # drift from position_primary for a handful of players).
+    pos_min_rows = q(conn, """
+        SELECT player_id, stat_key, SUM(stat_value) AS v
+        FROM player_stats
+        WHERE season = ? AND stat_key IN ('pos_gk_min','pos_d_min','pos_m_min','pos_f_min')
+        GROUP BY player_id, stat_key
+    """, (SEASON,))
+    scoring_pos: dict[str, tuple[float, str]] = {}
+    for r in pos_min_rows:
+        pc = r["stat_key"].split("_")[1]
+        cur = scoring_pos.get(r["player_id"])
+        if cur is None or (r["v"] or 0) > cur[0]:
+            scoring_pos[r["player_id"]] = ((r["v"] or 0), pc)
+
+    ph = ",".join("?" * len(stat_keys))
+    rows = q(conn, f"""
+        WITH roster_lookup AS (
+            SELECT j.value AS player_id, u.display_name AS owner
+            FROM rosters r, json_each(r.players) j
+            LEFT JOIN league_users u ON u.user_id = r.owner_id AND u.league_id = r.league_id
+            WHERE r.league_id = ?
+        )
+        SELECT p.player_id, p.full_name, p.team_abbr, p.position_primary,
+               p.injury_status, rl.owner,
+               s.stat_key, SUM(s.stat_value) AS v
+        FROM players p
+        JOIN player_stats s ON s.player_id = p.player_id
+             AND s.season = ? AND s.stat_key IN ({ph})
+        LEFT JOIN roster_lookup rl ON rl.player_id = p.player_id
+        WHERE p.position_primary IN ('GK','D','M','F')
+        GROUP BY p.player_id, s.stat_key
+    """, (LEAGUE_ID, SEASON, *stat_keys))
+
+    by_player: dict[str, dict] = {}
+    for r in rows:
+        pl = by_player.setdefault(r["player_id"], {
+            "id":  r["player_id"],
+            "n":   r["full_name"] or r["player_id"],
+            "p":   r["position_primary"],
+            "sp":  scoring_pos.get(r["player_id"], (0, _POS_CODE[r["position_primary"]]))[1],
+            "c":   r["team_abbr"] or "",
+            "o":   r["owner"],
+            "inj": 1 if r["injury_status"] else 0,
+            "s":   [0] * len(stat_keys),
+        })
+        pl["s"][stat_keys.index(r["stat_key"])] = round(r["v"] or 0, 2)
+
+    # Keep only players who actually appeared
+    min_idx = stat_keys.index("min")
+    players = [pl for pl in by_player.values() if pl["s"][min_idx] > 0]
+
+    return {
+        "stats":   [{"key": k, "label": l, "abbr": a} for k, l, a in DRAFT_LAB_STATS],
+        "weights": weights,
+        "players": players,
+    }
+
+
+# ────────────────────────────────────────────────────────────────────
 # Per-club detail
 # ────────────────────────────────────────────────────────────────────
 
@@ -1190,6 +1312,7 @@ def make_env(relative_depth: int = 0) -> Environment:
                 "fixtures":  f"{prefix}fixtures.html",
                 "stats":     f"{prefix}stats.html",
                 "draft":     f"{prefix}draft.html",
+                "draftlab":  f"{prefix}draftlab.html",
                 "history":   f"{prefix}history.html",
                 "subscribe": f"{prefix}subscribe.html",
             }
@@ -1307,6 +1430,11 @@ def build(open_after: bool = False):
     render(env0, "draft.html", DIST_DIR / "draft.html",
            active_nav="draft",
            draft=draft,
+           team_map=team_map)
+
+    render(env0, "draftlab.html", DIST_DIR / "draftlab.html",
+           active_nav="draftlab",
+           lab=get_draft_lab_data(conn),
            team_map=team_map)
 
     render(env0, "history.html", DIST_DIR / "history.html",
