@@ -32,10 +32,6 @@
     color: var(--c-primary);
     user-select: none;
   }
-  .score-panel summary .score-hint {
-    font-weight: 500; text-transform: none; letter-spacing: 0;
-    color: var(--c-ink-light); margin-left: 10px; font-size: 0.75rem;
-  }
   .score-body { padding: 0 16px 16px; }
   .score-toolbar {
     display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
@@ -212,18 +208,10 @@
   <header class="page-header">
     <div class="page-header__eyebrow">Preseason Research · What-If Scoring</div>
     <h1 class="page-header__title">Draft Lab</h1>
-    <p class="page-header__subtitle">
-      Every stat Sleeper tracked in 2025/26, re-scorable on the fly. The inputs below start at
-      last season's league scoring — change any value and every player's points, PPG and Per-90
-      recompute instantly, with the swing vs. the real 2025/26 scoring shown in the &Delta; column.
-    </p>
   </header>
 
   <details class="score-panel" open>
-    <summary>
-      Scoring Editor
-      <span class="score-hint">points per stat, by position — defaults are your 2025/26 league settings</span>
-    </summary>
+    <summary>Scoring Editor</summary>
     <div class="score-body">
       <div class="score-toolbar">
         <button class="filter-reset" id="w-reset">Reset to 2025/26 scoring</button>
