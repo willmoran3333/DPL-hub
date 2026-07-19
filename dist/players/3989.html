@@ -3628,6 +3628,15 @@
 </div>
 
 
+<script>
+(function () {
+  var active = document.querySelector('.nav-links a.active');
+  if (active && active.scrollIntoView) {
+    active.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }
+})();
+</script>
+
 
 <script>
 (function() {

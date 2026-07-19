@@ -42,6 +42,15 @@
 
 {% block body %}{% endblock %}
 
+<script>
+(function () {
+  var active = document.querySelector('.nav-links a.active');
+  if (active && active.scrollIntoView) {
+    active.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }
+})();
+</script>
+
 {% block scripts %}{% endblock %}
 
 <footer class="site-footer">

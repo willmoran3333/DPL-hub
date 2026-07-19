@@ -143,9 +143,15 @@ a:hover { color: var(--c-gold-deep); }
   align-items: center;
   list-style: none;
   flex: 1;
+  min-width: 0;
   gap: 0;
   padding: 0 var(--sp-5);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+
+.nav-links::-webkit-scrollbar { display: none; }
 
 .nav-links a {
   display: block;
@@ -939,10 +945,20 @@ a > .match-card { display: block; text-decoration: none; color: inherit; }
 
 @media (max-width: 760px) {
   .nav-links a {
-    padding: var(--sp-2);
+    padding: var(--sp-3) var(--sp-2);
     font-size: 0.6875rem;
     letter-spacing: 0.06em;
   }
+  .nav-brand { padding: 0 var(--sp-4) 0 var(--sp-3); }
   .nav-brand__text { display: none; }
+  /* fade hint that the nav scrolls horizontally */
+  .site-nav::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 28px;
+    background: linear-gradient(to right, rgba(0,0,0,0), var(--c-primary));
+    pointer-events: none;
+  }
   .standings-table .col-hide-sm { display: none; }
 }

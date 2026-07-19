@@ -47,7 +47,7 @@
   .filter-row input:focus, .filter-row select:focus { border-color: var(--c-gold); }
   .filter-row-b {
     display: grid;
-    grid-template-columns: auto auto auto 1fr auto;
+    grid-template-columns: auto auto auto 1fr auto auto;
     gap: 10px;
     align-items: center;
     margin-bottom: 20px;
@@ -77,6 +77,13 @@
     color: var(--c-ink-mid); letter-spacing: 0.04em; text-transform: uppercase;
   }
   .filter-reset:hover { border-color: var(--c-accent-red); color: var(--c-accent-red); }
+  .filter-export {
+    padding: 6px 14px; background: var(--c-primary); border: 1px solid var(--c-primary);
+    border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    color: #FFFFFF; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: opacity 0.12s;
+  }
+  .filter-export:hover { opacity: 0.85; }
 
   /* ── Counter ── */
   .result-count {
@@ -212,6 +219,7 @@
       <output id="p-games-out">0</output>
     </div>
     <div></div>
+    <button class="filter-export" id="p-export" title="Download the currently filtered and sorted rows as CSV">Export CSV</button>
     <button class="filter-reset" id="p-reset">Reset</button>
   </div>
 
@@ -423,6 +431,39 @@
       const dir = (curCol === idx) ? curDir * -1 : (th.dataset.sort === 'num' ? -1 : 1);
       sortByColumn(idx, dir);
     });
+  });
+
+  // ── CSV export of the current view ──────────────────
+  function csvEscape(v) {
+    v = String(v);
+    return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
+
+  document.getElementById('p-export').addEventListener('click', () => {
+    const headers = Array.from(ths).map(th => th.textContent.trim());
+    // DOM order = current sort order; skip rows hidden by filters
+    const visible = Array.from(tbody.querySelectorAll('.player-row:not(.player-row--hidden)'));
+    const lines = [headers.map(csvEscape).join(',')];
+
+    visible.forEach(r => {
+      const cells = Array.from(r.children).map((td, i) => {
+        if (i === 0) return td.querySelector('a').textContent.trim();
+        if (i === 3) return r.dataset.free === '1' ? 'Free Agent' : r.dataset.owner;
+        return td.dataset.val ?? td.innerText.trim();
+      });
+      lines.push(cells.map(csvEscape).join(','));
+    });
+
+    const stamp = new Date().toISOString().slice(0, 10);
+    const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = 'dpl_players_' + stamp + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   });
 
   // Initial sort + filter
