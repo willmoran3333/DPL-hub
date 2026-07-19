@@ -8,10 +8,9 @@
     display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
   }
   .preset-chip {
-    padding: 7px 14px;
+    padding: 6px 14px;
     border: 1px solid var(--c-border-mid);
-    border-radius: 16px;
-    background: var(--c-bg-card);
+    background: transparent;
     color: var(--c-ink-mid);
     font-family: inherit;
     font-size: 0.75rem;
@@ -20,11 +19,11 @@
     cursor: pointer;
     transition: all 0.12s;
   }
-  .preset-chip:hover { border-color: var(--c-gold); color: var(--c-primary); }
+  .preset-chip:hover { border-color: var(--c-ink); color: var(--c-ink); }
   .preset-chip.active {
-    background: var(--c-primary);
-    color: #FFFFFF;
-    border-color: var(--c-primary);
+    background: var(--c-ink);
+    color: var(--c-bg);
+    border-color: var(--c-ink);
   }
 
   /* ── Filter row ── */
@@ -39,7 +38,7 @@
     font-size: 0.875rem;
     padding: 8px 12px;
     border: 1px solid var(--c-border-mid);
-    border-radius: 4px;
+    border-radius: 0;
     background: var(--c-bg-card);
     color: var(--c-ink);
     outline: none;
@@ -56,12 +55,12 @@
   }
   .filter-row-b label {
     display: flex; gap: 6px; align-items: center; cursor: pointer;
-    padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 4px;
+    padding: 6px 10px; border: 1px solid var(--c-border); border-radius: 0;
   }
   .filter-row-b input[type=checkbox] { accent-color: var(--c-primary); }
   .filter-row-b .slider {
     display: flex; align-items: center; gap: 10px;
-    padding: 6px 12px; border: 1px solid var(--c-border); border-radius: 4px;
+    padding: 6px 12px; border: 1px solid var(--c-border); border-radius: 0;
   }
   .filter-row-b .slider input {
     flex: 1; min-width: 120px;
@@ -73,13 +72,13 @@
   }
   .filter-reset {
     padding: 6px 14px; background: transparent; border: 1px solid var(--c-border-mid);
-    border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    border-radius: 0; font-size: 0.75rem; font-weight: 600; cursor: pointer;
     color: var(--c-ink-mid); letter-spacing: 0.04em; text-transform: uppercase;
   }
   .filter-reset:hover { border-color: var(--c-accent-red); color: var(--c-accent-red); }
   .filter-export {
-    padding: 6px 14px; background: var(--c-primary); border: 1px solid var(--c-primary);
-    border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    padding: 6px 14px; background: var(--c-ink); border: 1px solid var(--c-ink);
+    font-size: 0.75rem; font-weight: 600; cursor: pointer;
     color: #FFFFFF; letter-spacing: 0.04em; text-transform: uppercase;
     transition: opacity 0.12s;
   }
@@ -96,14 +95,13 @@
   /* ── Sortable table ── */
   table.p-table {
     width: 100%; border-collapse: collapse; font-size: 0.875rem;
-    background: var(--c-bg-card);
     font-variant-numeric: tabular-nums;
   }
-  table.p-table thead { background: var(--c-primary); color: rgba(255,255,255,0.75); }
+  table.p-table thead { color: var(--c-ink-mid); }
   table.p-table thead th {
     padding: 9px 8px; font-size: 0.6875rem; font-weight: 700;
     letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
-    text-align: right; border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-align: right; border-bottom: 2px solid var(--c-rule);
     cursor: pointer; user-select: none; position: relative; padding-right: 22px;
   }
   table.p-table thead th:first-child { text-align: left; }
@@ -115,7 +113,7 @@
   }
   table.p-table thead th.sort-asc::after  { border-bottom: 5px solid currentColor; opacity: 1; }
   table.p-table thead th.sort-desc::after { border-top:    5px solid currentColor; opacity: 1; }
-  table.p-table thead th:hover { color: #FFFFFF; }
+  table.p-table thead th:hover { color: var(--c-ink); }
   table.p-table tbody tr { border-bottom: 1px solid var(--c-border); }
   table.p-table tbody tr:last-child { border-bottom: none; }
   table.p-table tbody tr:hover { background: var(--c-bg-soft); }
@@ -125,14 +123,14 @@
   .p-name a { color: var(--c-ink); }
   .p-name a:hover { color: var(--c-primary); }
   .p-owner-chip {
-    display: inline-block; padding: 2px 7px; border-radius: 10px;
+    display: inline-block; padding: 2px 7px;
     background: var(--c-bg-soft); color: var(--c-ink-mid);
     font-size: 0.6875rem; font-weight: 600;
   }
   .p-owner-chip.free { background: rgba(47, 117, 71, 0.14); color: var(--c-success); }
   .p-pts { font-weight: 700; color: var(--c-ink); }
   .p-injury { display: inline-block; margin-left: 6px; padding: 1px 5px; font-size: 0.5625rem;
-              font-weight: 700; border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase;
+              font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
               background: var(--c-accent-red); color: #FFFFFF; }
 
   /* ── Sparkline ── */

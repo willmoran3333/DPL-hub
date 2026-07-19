@@ -6,24 +6,19 @@
   .clubs-grid-uniform {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
+    gap: 24px 32px;
   }
   .club-card-uniform {
-    background: var(--c-bg-card);
-    border: 1px solid var(--c-border);
-    border-radius: 6px;
-    overflow: hidden;
-    transition: all 0.12s;
+    border-top: 2px solid var(--c-rule);
+    transition: background 0.12s;
     height: 180px;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 16px 0;
     text-decoration: none;
   }
   .club-card-uniform:hover {
-    border-color: var(--c-gold);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(61, 20, 82, 0.08);
+    background: var(--c-bg-soft);
   }
   .club-card-uniform__pos {
     font-size: 0.6875rem;

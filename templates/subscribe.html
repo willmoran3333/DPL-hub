@@ -9,21 +9,21 @@
     <p class="page-header__subtitle">Get a recap of last week and a look-ahead at the next, every Tuesday morning.</p>
   </header>
 
-  <div style="background:var(--c-bg-card); border:1px solid var(--c-border); border-radius:6px; padding:32px;">
+  <div style="border-top:2px solid var(--c-rule); padding:24px 0 0;">
     <form id="subscribe-form" action="{{ subscribe_endpoint }}" method="POST">
       <input type="hidden" name="form-name" value="dpl-subscribe">
       <div style="display:flex; flex-direction:column; gap:16px;">
         <div>
           <label style="display:block; font-size:0.6875rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--c-ink-mid); margin-bottom:6px;">Your Name</label>
-          <input type="text" name="name" required style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); border-radius:4px; font-family:inherit; font-size:0.9375rem; outline:none;">
+          <input type="text" name="name" required style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); font-family:inherit; font-size:0.9375rem; outline:none; background:var(--c-bg);">
         </div>
         <div>
           <label style="display:block; font-size:0.6875rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--c-ink-mid); margin-bottom:6px;">Email Address</label>
-          <input type="email" name="email" required value="{{ prefill_email or '' }}" style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); border-radius:4px; font-family:inherit; font-size:0.9375rem; outline:none;">
+          <input type="email" name="email" required value="{{ prefill_email or '' }}" style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); font-family:inherit; font-size:0.9375rem; outline:none; background:var(--c-bg);">
         </div>
         <div>
           <label style="display:block; font-size:0.6875rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--c-ink-mid); margin-bottom:6px;">Which DPL Manager Are You? (optional)</label>
-          <select name="manager" style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); border-radius:4px; font-family:inherit; font-size:0.9375rem; outline:none; background:var(--c-bg-card);">
+          <select name="manager" style="width:100%; padding:10px 14px; border:1px solid var(--c-border-mid); font-family:inherit; font-size:0.9375rem; outline:none; background:var(--c-bg);">
             <option value="">— Select —</option>
             {% for m in managers %}
             <option value="{{ m.display_name }}">{{ m.display_name }}</option>
@@ -31,7 +31,7 @@
             <option value="other">Friend of the league</option>
           </select>
         </div>
-        <button type="submit" style="margin-top:8px; padding:12px 24px; background:var(--c-primary); color:#fff; border:none; border-radius:4px; font-family:inherit; font-size:0.8125rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer;">
+        <button type="submit" style="margin-top:8px; padding:12px 24px; background:var(--c-ink); color:var(--c-bg); border:1px solid var(--c-ink); font-family:inherit; font-size:0.8125rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer;">
           Subscribe to Weekly Digest
         </button>
       </div>
@@ -41,7 +41,7 @@
     </p>
   </div>
 
-  <div style="margin-top:32px; padding:24px; background:var(--c-bg-soft); border-radius:6px; border:1px solid var(--c-border);">
+  <div style="margin-top:40px; padding:16px 0 0; border-top:1px solid var(--c-border-mid);">
     <div style="font-size:0.6875rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--c-gold-deep); margin-bottom:8px;">What You'll Get</div>
     <ul style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55;">
       <li style="display:flex; gap:10px;"><span style="color:var(--c-gold); font-weight:800; flex-shrink:0;">›</span><span><strong style="color:var(--c-ink);">Past Week Recap</strong> — every H2H result, the top performer of the week, biggest blowout, closest game.</span></li>

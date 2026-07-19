@@ -11,15 +11,13 @@
   <link rel="icon" type="image/png" href="../static/img/dpl_logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../static/css/main.css">
   
 <style>
   /* ── Layout: scrollable region with sticky edges ── */
   .pivot-wrap {
-    border: 1px solid var(--c-border);
-    border-radius: 4px;
-    background: var(--c-bg-card);
+    border: 1px solid var(--c-border-mid);
     margin-bottom: 32px;
     overflow: hidden;
   }
@@ -62,10 +60,10 @@
     text-transform: uppercase;
     text-align: right;
     white-space: nowrap;
-    background: var(--c-primary);
-    color: rgba(255,255,255,0.78);
-    border-right: 1px solid rgba(255,255,255,0.08);
-    border-bottom: 1px solid rgba(255,255,255,0.18);
+    background: var(--c-bg-soft);
+    color: var(--c-ink-mid);
+    border-right: 1px solid var(--c-border);
+    box-shadow: inset 0 -2px 0 var(--c-rule);
   }
   .stat-table thead th:last-child { border-right: none; }
 
@@ -81,8 +79,8 @@
   .stat-table thead th.col-total {
     right: 0;
     z-index: 5;
-    background: var(--c-primary-dark);
-    color: var(--c-gold);
+    background: var(--c-bg-soft);
+    color: var(--c-ink);
   }
 
   /* ── Body cells ── */
@@ -103,8 +101,8 @@
     z-index: 2;
     text-align: left;
     font-weight: 700;
-    color: var(--c-primary);
-    background: #FAF7F0;
+    color: var(--c-ink);
+    background: var(--c-bg-soft);
     border-right: 2px solid var(--c-border-mid);
   }
 
@@ -115,8 +113,8 @@
     z-index: 2;
     font-weight: 800;
     color: var(--c-ink);
-    background: #F5EDD9;
-    border-left: 2px solid var(--c-gold);
+    background: #F0EADC;
+    border-left: 2px solid var(--c-border-mid);
   }
 
   /* Zero / missing cells */
@@ -124,17 +122,17 @@
 
   /* ── Footer (always sticky at bottom) ── */
   /* Three rows: raw totals, points contributed, % of total */
-  .stat-table tfoot tr.totals  td { position: sticky; bottom: calc(2 * 34px); z-index: 3; background: var(--c-primary); color: #FFFFFF; font-weight: 700; }
-  .stat-table tfoot tr.contrib td { position: sticky; bottom: 34px;           z-index: 3; background: #432160;          color: var(--c-gold); }
-  .stat-table tfoot tr.pct     td { position: sticky; bottom: 0;              z-index: 3; background: var(--c-primary-dark); color: rgba(255,255,255,0.85); }
+  .stat-table tfoot tr.totals  td { position: sticky; bottom: calc(2 * 34px); z-index: 3; background: var(--c-rule); color: #F2EDE3; font-weight: 700; }
+  .stat-table tfoot tr.contrib td { position: sticky; bottom: 34px;           z-index: 3; background: #EAE2D0;       color: var(--c-ink); }
+  .stat-table tfoot tr.pct     td { position: sticky; bottom: 0;              z-index: 3; background: var(--c-bg-soft); color: var(--c-ink-mid); }
 
   .stat-table tfoot td {
     border-bottom: none;
     padding: 9px 10px;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid var(--c-border);
     font-size: 0.8125rem;
   }
-  .stat-table tfoot tr.totals td  { border-top: 2px solid var(--c-gold); }
+  .stat-table tfoot tr.totals td  { border-top: 2px solid var(--c-rule); }
 
   .stat-table tfoot td.col-gw {
     position: sticky;
@@ -146,23 +144,23 @@
     text-transform: uppercase;
     font-weight: 700;
   }
-  .stat-table tfoot tr.totals  td.col-gw { background: var(--c-primary);      color: var(--c-gold); }
-  .stat-table tfoot tr.contrib td.col-gw { background: #432160;               color: var(--c-gold); }
-  .stat-table tfoot tr.pct     td.col-gw { background: var(--c-primary-dark); color: rgba(255,255,255,0.6); }
+  .stat-table tfoot tr.totals  td.col-gw { background: var(--c-rule);    color: #F2EDE3; }
+  .stat-table tfoot tr.contrib td.col-gw { background: #EAE2D0;           color: var(--c-ink); }
+  .stat-table tfoot tr.pct     td.col-gw { background: var(--c-bg-soft);  color: var(--c-ink-mid); }
 
   .stat-table tfoot td.col-total {
     position: sticky;
     right: 0;
     z-index: 5;
     font-weight: 800;
-    border-left: 2px solid var(--c-gold);
+    border-left: 2px solid var(--c-border-mid);
   }
-  .stat-table tfoot tr.totals  td.col-total { background: var(--c-primary);      color: var(--c-gold); }
-  .stat-table tfoot tr.contrib td.col-total { background: #432160;               color: var(--c-gold); }
-  .stat-table tfoot tr.pct     td.col-total { background: var(--c-primary-dark); color: var(--c-gold); }
+  .stat-table tfoot tr.totals  td.col-total { background: var(--c-rule);   color: #F2EDE3; }
+  .stat-table tfoot tr.contrib td.col-total { background: #EAE2D0;         color: var(--c-ink); }
+  .stat-table tfoot tr.pct     td.col-total { background: var(--c-bg-soft); color: var(--c-ink); }
 
   /* "Dash" cells */
-  .stat-table tfoot td.empty { color: rgba(255,255,255,0.25); font-weight: 500; }
+  .stat-table tfoot td.empty { opacity: 0.35; font-weight: 500; }
 </style>
 
 </head>
@@ -195,11 +193,11 @@
 
 <div class="page">
 
-  <div style="background:var(--c-primary); margin: calc(-1 * var(--sp-10)) calc(-1 * var(--sp-5)) var(--sp-8); padding: var(--sp-8) var(--sp-5); border-bottom: 3px solid var(--c-gold);">
-    <div style="font-size:0.6875rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--c-gold); margin-bottom:8px;">
+  <div style="margin-bottom: var(--sp-8); padding-bottom: var(--sp-4); border-bottom: 2px solid var(--c-rule);">
+    <div style="font-size:0.6875rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--c-gold-deep); margin-bottom:8px;">
       BHA · M · Rostered by bjennings28
     </div>
-    <h1 style="font-size:clamp(1.75rem, 5vw, 2.75rem); font-weight:800; letter-spacing:-0.03em; color:#fff; line-height:1.05;">Pascal Groß</h1>
+    <h1 style="font-family:var(--font-display); font-size:clamp(1.75rem, 5vw, 2.75rem); font-weight:800; letter-spacing:-0.03em; color:var(--c-ink); line-height:1.05;">Pascal Groß</h1>
     
   </div>
 

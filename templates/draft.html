@@ -4,7 +4,7 @@
 {% block extra_head %}
 <style>
   table.sortable thead th { cursor: pointer; user-select: none; position: relative; padding-right: 18px; }
-  table.sortable thead th:hover { color: #FFFFFF; }
+  table.sortable thead th:hover { color: var(--c-ink); }
   table.sortable thead th::after {
     content: '';
     position: absolute;
@@ -76,7 +76,7 @@
   <div class="section-label">Pre-Season Scouting Notes</div>
   <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(360px, 1fr)); gap:16px; margin-bottom:48px;">
     {% for m in draft.managers %}
-    <div class="award-card" style="padding:20px;">
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
       <div class="award-card__title">#{{ m.preseason_rank }} · {{ m.display_name }}</div>
       <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">{{ m.notes }}</div>
       <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">

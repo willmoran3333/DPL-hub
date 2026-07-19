@@ -11,15 +11,13 @@
   <link rel="icon" type="image/png" href="static/img/dpl_logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/main.css">
   
 <style>
   .placement-chart-wrap {
-    background: var(--c-bg-card);
-    border: 1px solid var(--c-border);
-    border-radius: 6px;
-    padding: 24px;
+    border-bottom: 1px solid var(--c-border-mid);
+    padding: 12px 0 24px;
     margin-bottom: 32px;
     overflow-x: auto;
     overflow-y: hidden;
@@ -62,14 +60,14 @@
   .chart-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px; font-size: 0.8125rem; }
   .chart-legend__item {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 10px; border-radius: 4px;
+    padding: 6px 10px;
     background: transparent; border: 1px solid transparent;
     font-family: inherit; font-size: inherit; color: var(--c-ink);
     cursor: pointer; transition: background 0.1s, border-color 0.1s;
   }
   .chart-legend__item:hover { background: var(--c-bg-soft); border-color: var(--c-border); }
   .chart-legend__item.is-selected {
-    background: var(--c-primary); color: #FFFFFF; border-color: var(--c-primary);
+    background: var(--c-ink); color: var(--c-bg); border-color: var(--c-ink);
   }
   .chart-legend__swatch { width: 16px; height: 3px; display: inline-block; }
 

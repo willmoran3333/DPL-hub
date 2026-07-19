@@ -6,13 +6,12 @@
 <style>
   /* ── Scoring editor ── */
   .score-panel {
-    margin-bottom: 24px;
-    border: 1px solid var(--c-border-mid);
-    border-radius: 6px;
-    background: var(--c-bg-card);
+    margin-bottom: 32px;
+    border-top: 2px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-border-mid);
   }
   .score-panel summary {
-    padding: 12px 16px;
+    padding: 12px 0;
     cursor: pointer;
     font-weight: 700;
     font-size: 0.8125rem;
@@ -21,19 +20,20 @@
     color: var(--c-primary);
     user-select: none;
   }
-  .score-body { padding: 0 16px 16px; }
+  .score-body { padding: 0 0 16px; }
   .score-toolbar {
     display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
     margin-bottom: 12px; font-size: 0.75rem; color: var(--c-ink-light);
   }
   .score-scroll {
     max-height: 320px; overflow: auto;
-    border: 1px solid var(--c-border); border-radius: 4px;
+    border: 1px solid var(--c-border-mid);
   }
   table.score-grid { border-collapse: collapse; width: 100%; font-size: 0.8125rem; }
   table.score-grid thead th {
     position: sticky; top: 0; z-index: 2;
-    background: var(--c-primary); color: rgba(255,255,255,0.85);
+    background: var(--c-bg-soft); color: var(--c-ink-mid);
+    box-shadow: inset 0 -2px 0 var(--c-rule);
     font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em;
     text-transform: uppercase; padding: 7px 10px; text-align: center;
   }
@@ -48,11 +48,11 @@
   .w-input {
     width: 64px; padding: 4px 6px; text-align: right;
     font-family: inherit; font-size: 0.8125rem; font-variant-numeric: tabular-nums;
-    border: 1px solid var(--c-border-mid); border-radius: 4px;
-    background: var(--c-bg-card); color: var(--c-ink); outline: none;
+    border: 1px solid var(--c-border-mid);
+    background: var(--c-bg); color: var(--c-ink); outline: none;
   }
   .w-input:focus { border-color: var(--c-gold); }
-  .w-input.changed { border-color: var(--c-gold); background: rgba(199, 154, 60, 0.12); font-weight: 700; }
+  .w-input.changed { border-color: var(--c-gold-deep); background: rgba(184, 153, 104, 0.16); font-weight: 700; }
 
   /* ── Filters (mirrors Players page) ── */
   .filter-row {
@@ -63,8 +63,8 @@
   }
   .filter-row input, .filter-row select {
     font-family: inherit; font-size: 0.875rem; padding: 8px 12px;
-    border: 1px solid var(--c-border-mid); border-radius: 4px;
-    background: var(--c-bg-card); color: var(--c-ink); outline: none;
+    border: 1px solid var(--c-border-mid);
+    background: var(--c-bg); color: var(--c-ink); outline: none;
   }
   .filter-row input:focus, .filter-row select:focus { border-color: var(--c-gold); }
   .filter-row-b {
@@ -75,7 +75,7 @@
   }
   .filter-row-b .slider {
     display: flex; align-items: center; gap: 10px;
-    padding: 6px 12px; border: 1px solid var(--c-border); border-radius: 4px;
+    padding: 6px 12px; border: 1px solid var(--c-border-mid);
   }
   .filter-row-b .slider input { flex: 1; min-width: 120px; accent-color: var(--c-primary); }
   .filter-row-b .slider output {
@@ -84,13 +84,13 @@
   }
   .filter-reset {
     padding: 6px 14px; background: transparent; border: 1px solid var(--c-border-mid);
-    border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    font-size: 0.75rem; font-weight: 600; cursor: pointer;
     color: var(--c-ink-mid); letter-spacing: 0.04em; text-transform: uppercase;
   }
   .filter-reset:hover { border-color: var(--c-accent-red); color: var(--c-accent-red); }
   .filter-export {
-    padding: 6px 14px; background: var(--c-primary); border: 1px solid var(--c-primary);
-    border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    padding: 6px 14px; background: var(--c-ink); border: 1px solid var(--c-ink);
+    font-size: 0.75rem; font-weight: 600; cursor: pointer;
     color: #FFFFFF; letter-spacing: 0.04em; text-transform: uppercase;
     transition: opacity 0.12s;
   }
@@ -106,8 +106,7 @@
   /* ── Wide results table ── */
   .dl-wrap {
     overflow: auto; max-height: 75vh;
-    border: 1px solid var(--c-border-mid); border-radius: 4px;
-    background: var(--c-bg-card);
+    border: 1px solid var(--c-border-mid);
   }
   table.dl-table {
     border-collapse: separate; border-spacing: 0;
@@ -116,7 +115,8 @@
   }
   table.dl-table thead th {
     position: sticky; top: 0; z-index: 3;
-    background: var(--c-primary); color: rgba(255,255,255,0.75);
+    background: var(--c-bg-soft); color: var(--c-ink-mid);
+    box-shadow: inset 0 -2px 0 var(--c-rule);
     padding: 8px 8px; font-size: 0.6875rem; font-weight: 700;
     letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
     text-align: right; cursor: pointer; user-select: none; padding-right: 20px;
@@ -128,7 +128,7 @@
   }
   table.dl-table thead th.sort-asc::after  { border-bottom: 5px solid currentColor; opacity: 1; }
   table.dl-table thead th.sort-desc::after { border-top:    5px solid currentColor; opacity: 1; }
-  table.dl-table thead th:hover { color: #FFFFFF; }
+  table.dl-table thead th:hover { color: var(--c-ink); }
   table.dl-table thead th:first-child {
     left: 0; z-index: 4; text-align: left;
   }
@@ -149,13 +149,13 @@
   .dl-delta-neg { color: var(--c-accent-red); font-weight: 600; }
   .dl-delta-zero { color: var(--c-ink-light); }
   .p-owner-chip {
-    display: inline-block; padding: 2px 7px; border-radius: 10px;
+    display: inline-block; padding: 2px 7px;
     background: var(--c-bg-soft); color: var(--c-ink-mid);
     font-size: 0.6875rem; font-weight: 600;
   }
   .p-owner-chip.free { background: rgba(47, 117, 71, 0.14); color: var(--c-success); }
   .p-injury { display: inline-block; margin-left: 6px; padding: 1px 5px; font-size: 0.5625rem;
-              font-weight: 700; border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase;
+              font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
               background: var(--c-accent-red); color: #FFFFFF; }
 
   @media (max-width: 900px) {
