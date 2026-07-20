@@ -1,121 +1,136 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # DRAFT DATA  — pre-season power rankings & draft metrics
 # ─────────────────────────────────────────────────────────────────────────────
-# Source: 2025/26 DPL Pre-Season Power Rankings spreadsheet.
-# Update `preseason_rank` (1=best), `draft_strength`, `concentration`,
-# `best_position`, and `notes` for any new season.
+# Source: 2025/26 DPL Pre-Season Power Rankings spreadsheet (IMG_6922),
+# re-transcribed 2026-07-20 against the original image; names matched to
+# Sleeper usernames via each manager's 2024/25 record.
 #
-# roster_id matches team_mapping.yml. draft_strength is 0–1 (higher = better).
-# concentration = the real club with the most rostered players (e.g. "ARS-5").
+# preseason_rank = the sheet's subjective 2025/26 Power Rank (1=best).
+# draft_rank     = rank by draft_strength (the sheet's "Draft Rank" row).
+# draft_strength is 0–1 (higher = better).
+# concentration  = real club with the most rostered players (e.g. "ARS-5").
+# best_position  = strongest position group and its rating from the sheet.
 
 season: "2025/26"
 ranking_date: "Pre-season"
 
 managers:
-  - roster_id: 10
-    display_name: erozier
-    team_name: Haalandcaust FC
-    preseason_rank: 1
-    draft_strength: 0.6100
-    concentration: "AVL-3"
-    best_position: "Forward"
-    notes: "Deep across all lines; Haaland anchors the attack"
-
-  - roster_id: 4
-    display_name: benditlikebergvall
-    team_name: Return of the Djedi
-    preseason_rank: 2
-    draft_strength: 0.6324
-    concentration: "NEW-3"
-    best_position: "Forward"
-    notes: "Strong Newcastle/Crystal Palace core"
-
-  - roster_id: 12
-    display_name: Noahvillasana17
-    team_name: Welcome to the Show
-    preseason_rank: 3
-    draft_strength: 0.6547
-    concentration: "MUN-3"
-    best_position: "Forward"
-    notes: "Highest draft strength; Man Utd/Fulham heavy"
-
-  - roster_id: 9
-    display_name: JordiCarb
-    team_name: Goo Goo Kaka FC
-    preseason_rank: 4
-    draft_strength: 0.6259
-    concentration: "ARS-5"
-    best_position: "Forward"
-    notes: "Arsenal-heavy roster; highest single-club concentration"
-
   - roster_id: 3
     display_name: Flabiano9
     team_name: Aura FC
+    preseason_rank: 1
+    draft_rank: 1
+    draft_strength: 0.6751
+    concentration: "NEW-4"
+    best_position: "Forward · 0.84"
+    notes: "Top of both boards — best draft strength in the league and the No. 1 power rank, built on a four-man Newcastle stack."
+
+  - roster_id: 8
+    display_name: cstoney20
+    team_name: "Next stop: The Londoner"
+    preseason_rank: 2
+    draft_rank: 2
+    draft_strength: 0.6547
+    concentration: "BRF-3"
+    best_position: "Forward · 0.77"
+    notes: "Second in draft strength in his first DPL season, leaning on a Brentford trio."
+
+  - roster_id: 5
+    display_name: brendog2814
+    team_name: brendog2814
+    preseason_rank: 3
+    draft_rank: 4
+    draft_strength: 0.6290
+    concentration: "CHE-2"
+    best_position: "Forward · 0.83"
+    notes: "Fourth-best draft with a strong forward line; power rank 3 on the strength of the attack."
+
+  - roster_id: 6
+    display_name: bjennings28
+    team_name: Smith-Rowe v Wade
+    preseason_rank: 4
+    draft_rank: 6
+    draft_strength: 0.6224
+    concentration: "NOT-2"
+    best_position: "Forward · 0.78"
+    notes: "Mid-pack draft strength but ranked 4th — trusted to outperform the board."
+
+  - roster_id: 7
+    display_name: rmeernst
+    team_name: Xhaka Xhaka
     preseason_rank: 5
-    draft_strength: 0.6260
-    concentration: "MCI-3"
-    best_position: "Forward"
-    notes: "Man City core with strong midfield depth"
+    draft_rank: 3
+    draft_strength: 0.6326
+    concentration: "LIV-2"
+    best_position: "Forward · 0.83"
+    notes: "Third-strongest draft on paper, slotted 5th in the power rank."
 
   - roster_id: 1
     display_name: willmoran
     team_name: Derby County
     preseason_rank: 6
-    draft_strength: 0.5874
-    concentration: "TOT-4"
-    best_position: "Midfield"
-    notes: "Spurs-heavy; solid floor but limited ceiling"
+    draft_rank: 9
+    draft_strength: 0.5929
+    concentration: "NOT-3"
+    best_position: "Midfield · 0.62"
+    notes: "Defending 31–7 champion ranked 6th despite the 9th-rated draft — reputation carrying the ranking."
 
-  - roster_id: 7
-    display_name: rmeernst
-    team_name: Xhaka Xhaka
+  - roster_id: 12
+    display_name: Noahvillasana17
+    team_name: Welcome to the show
     preseason_rank: 7
-    draft_strength: 0.6138
-    concentration: "BRE-2"
-    best_position: "Forward"
-    notes: "Balanced build; strong Brentford/Liverpool pieces"
-
-  - roster_id: 5
-    display_name: brendog2814
-    team_name: team brendog
-    preseason_rank: 8
-    draft_strength: 0.6526
-    concentration: "CHE-2"
-    best_position: "Forward"
-    notes: "Chelsea and Bournemouth core"
-
-  - roster_id: 6
-    display_name: bjennings28
-    team_name: Smith-Rowe v Wade
-    preseason_rank: 9
-    draft_strength: 0.6106
-    concentration: "BHA-2"
-    best_position: "Midfield"
-    notes: "Brighton/Liverpool midfield-focused build"
-
-  - roster_id: 8
-    display_name: cstoney20
-    team_name: "Next Stop: The Londoner"
-    preseason_rank: 10
-    draft_strength: 0.5975
-    concentration: "SUN-3"
-    best_position: "Forward"
-    notes: "Sunderland heavy; boom-or-bust potential"
-
-  - roster_id: 2
-    display_name: skoeiboy
-    team_name: Fantasy Soccer is Dumb FC
-    preseason_rank: 11
-    draft_strength: 0.5609
-    concentration: "EVE-2"
-    best_position: "Forward"
-    notes: "Everton-based; lowest projected ceiling"
+    draft_rank: 10
+    draft_strength: 0.5814
+    concentration: "WHU-2"
+    best_position: "Midfield · 0.65"
+    notes: "Last season's runner-up gets rank 7 with only the 10th-rated draft."
 
   - roster_id: 11
     display_name: jacklynch213
     team_name: LPLLC
+    preseason_rank: 8
+    draft_rank: 7
+    draft_strength: 0.6138
+    concentration: "CRY-4"
+    best_position: "Forward · 0.65"
+    notes: "Four Palace players and the 7th-rated draft."
+
+  - roster_id: 10
+    display_name: erozier
+    team_name: Haalandcaust FC
+    preseason_rank: 9
+    draft_rank: 8
+    draft_strength: 0.6106
+    concentration: "MCI-3"
+    best_position: "Forward · 0.75"
+    notes: "Ranked 9th pre-season with an 8th-rated draft built on a City core — then won the whole thing."
+
+  - roster_id: 9
+    display_name: JordiCarb
+    team_name: Goo Goo Kaka FC
+    preseason_rank: 10
+    draft_rank: 5
+    draft_strength: 0.6259
+    concentration: "ARS-5"
+    best_position: "Midfield · 0.72"
+    notes: "The board's biggest snub — 5th-best draft strength but ranked 10th; heaviest single-club bet with five Arsenal players."
+
+  - roster_id: 4
+    display_name: benditlikebergvall
+    team_name: Return of the djedi
+    preseason_rank: 11
+    draft_rank: 12
+    draft_strength: 0.5609
+    concentration: "CRY-3"
+    best_position: "Midfield · 0.62"
+    notes: "Weakest draft strength in the league; ranked 11th."
+
+  - roster_id: 2
+    display_name: skoeiboy
+    team_name: Fantasy Soccer is Dumb FC
     preseason_rank: 12
-    draft_strength: 0.5698
-    concentration: "CRY-6"
-    best_position: "Midfield"
-    notes: "Crystal Palace overloaded; high-risk build"
+    draft_rank: 11
+    draft_strength: 0.5672
+    concentration: "WHU-3"
+    best_position: "Midfield · 0.71"
+    notes: "11th in draft strength, 12th in the power rank."

@@ -38,12 +38,13 @@
     <table class="standings-table sortable" id="draft-table">
       <thead>
         <tr>
-          <th class="col-pos" data-sort="num">Rank</th>
+          <th class="col-pos" data-sort="num">Power Rank</th>
           <th class="col-team" data-sort="str">Manager</th>
           <th data-sort="num">Draft Strength</th>
+          <th data-sort="num">Draft Rank</th>
           <th data-sort="str">Concentration</th>
           <th data-sort="str">Best Pos</th>
-          <th data-sort="num">Current Pos</th>
+          <th data-sort="num">Final Pos</th>
         </tr>
       </thead>
       <tbody>
@@ -57,6 +58,7 @@
             </a>
           </td>
           <td class="col-pts" data-val="{{ m.draft_strength }}">{{ "%.4f"|format(m.draft_strength) }}</td>
+          <td data-val="{{ m.draft_rank or 99 }}">{{ m.draft_rank or '—' }}</td>
           <td data-val="{{ m.concentration }}">{{ m.concentration }}</td>
           <td data-val="{{ m.best_position }}">{{ m.best_position }}</td>
           <td data-val="{{ m.current_pos or 99 }}">
