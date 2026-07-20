@@ -114,9 +114,13 @@ a:hover { color: var(--c-gold-deep); }
 }
 
 .nav-brand img {
-  height: 40px;
+  height: 48px;
   width: auto;
   display: block;
+  /* the crest artwork has a white ground baked in — frame it deliberately */
+  background: #FFFFFF;
+  border: 2px solid var(--c-primary);
+  padding: 2px;
 }
 
 .nav-brand__text {
@@ -917,7 +921,7 @@ a > .match-card { display: block; text-decoration: none; color: inherit; }
     font-size: 0.6875rem;
     letter-spacing: 0.05em;
   }
-  .nav-brand img { height: 34px; }
+  .nav-brand img { height: 42px; }
   .nav-brand__text { display: none; }
   /* fade hint that the nav scrolls horizontally */
   .site-nav::after {
