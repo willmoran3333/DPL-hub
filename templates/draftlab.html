@@ -177,8 +177,9 @@
     <summary>Scoring Editor</summary>
     <div class="score-body">
       <div class="score-toolbar">
-        <button class="filter-reset" id="w-reset">Reset to 2025/26 scoring</button>
-        <span id="w-status">Using last season's scoring.</span>
+        <button class="filter-reset" id="w-proposal">Load 2026/27 proposal</button>
+        <button class="filter-reset" id="w-reset">Revert to 2025/26 scoring</button>
+        <span id="w-status">Showing the proposed 2026/27 scoring — Δ is the change vs last season.</span>
       </div>
       <div class="score-scroll">
         <table class="score-grid" id="score-grid">
@@ -239,8 +240,11 @@ const LAB = {{ lab|tojson }};
   const PLAYERS = LAB.players;             // [{id,n,p,sp,c,o,inj,s:[…]}]
   const POSCOLS = ['gk', 'd', 'm', 'f'];
 
-  // Working + default weights: W[statIdx][posCode]
-  const DEFAULTS = STATS.map(st => ({...LAB.weights[st.key]}));
+  // DEFAULTS = official 2025/26 scoring (the Δ baseline);
+  // PROPOSAL = proposed 2026/27 scoring — the page starts on it so the
+  // changed weights and green/red point deltas show immediately.
+  const DEFAULTS = STATS.map(st => ({...LAB.weights_2526[st.key]}));
+  const PROPOSAL = STATS.map(st => ({...LAB.weights[st.key]}));
   const W        = STATS.map(st => ({...LAB.weights[st.key]}));
 
   // ── Points computation ──────────────────────────────
@@ -292,12 +296,16 @@ const LAB = {{ lab|tojson }};
       '<td>' + st.label + '<span class="stat-code">' + st.key + '</span></td>' +
       POSCOLS.map(pc =>
         '<td><input class="w-input" type="number" step="' + step + '" ' +
-        'data-stat="' + i + '" data-pos="' + pc + '" value="' + DEFAULTS[i][pc] + '"></td>'
+        'data-stat="' + i + '" data-pos="' + pc + '" value="' + W[i][pc] + '"></td>'
       ).join('');
     gridBody.appendChild(tr);
   });
 
   const wStatus = document.getElementById('w-status');
+  function matches(ref) {
+    return W.every((row, i) => POSCOLS.every(pc =>
+      Math.abs((row[pc] || 0) - (ref[i][pc] || 0)) < 1e-9));
+  }
   function refreshWeightState() {
     let changed = 0;
     document.querySelectorAll('.w-input').forEach(inp => {
@@ -306,10 +314,23 @@ const LAB = {{ lab|tojson }};
       inp.classList.toggle('changed', isChanged);
       if (isChanged) changed++;
     });
-    wStatus.textContent = changed
-      ? changed + ' weight' + (changed > 1 ? 's' : '') + ' changed from last season.'
-      : "Using last season's scoring.";
+    wStatus.textContent = matches(PROPOSAL)
+      ? 'Showing the proposed 2026/27 scoring — Δ is the change vs last season.'
+      : (changed
+          ? changed + ' weight' + (changed > 1 ? 's' : '') + ' changed from last season.'
+          : "Using last season's official scoring.");
   }
+
+  function setWeights(src) {
+    document.querySelectorAll('.w-input').forEach(inp => {
+      const i = +inp.dataset.stat, pc = inp.dataset.pos;
+      W[i][pc] = src[i][pc];
+      inp.value = src[i][pc];
+    });
+    refreshWeightState();
+    update();
+  }
+  document.getElementById('w-proposal').addEventListener('click', () => setWeights(PROPOSAL));
 
   let debounceT = null;
   gridBody.addEventListener('input', e => {
@@ -320,15 +341,7 @@ const LAB = {{ lab|tojson }};
     debounceT = setTimeout(() => { refreshWeightState(); update(); }, 120);
   });
 
-  document.getElementById('w-reset').addEventListener('click', () => {
-    document.querySelectorAll('.w-input').forEach(inp => {
-      const i = +inp.dataset.stat, pc = inp.dataset.pos;
-      W[i][pc] = DEFAULTS[i][pc];
-      inp.value = DEFAULTS[i][pc];
-    });
-    refreshWeightState();
-    update();
-  });
+  document.getElementById('w-reset').addEventListener('click', () => setWeights(DEFAULTS));
 
   // ── Filters ─────────────────────────────────────────
   const f = {
@@ -451,6 +464,7 @@ const LAB = {{ lab|tojson }};
     URL.revokeObjectURL(url);
   });
 
+  refreshWeightState();
   update();
 })();
 </script>

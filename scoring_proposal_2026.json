@@ -1,0 +1,1638 @@
+{
+  "prepared": "2026-07-24",
+  "based_on": "2025/26 season, GW1-38, dpl.db",
+  "recommended": "V1 Defensive value",
+  "v1_changes": {
+    "pos_gk_cs": {
+      "old": 4.0,
+      "new": 5.0
+    },
+    "pos_gk_cs90": {
+      "old": 4.0,
+      "new": 5.0
+    },
+    "pos_gk_hcs": {
+      "old": 1.0,
+      "new": 2.0
+    },
+    "pos_d_cs": {
+      "old": 3.0,
+      "new": 4.0
+    },
+    "pos_d_cs90": {
+      "old": 3.0,
+      "new": 4.0
+    },
+    "pos_d_bs": {
+      "old": 1.0,
+      "new": 1.5
+    },
+    "pos_m_tkw": {
+      "old": 1.0,
+      "new": 1.5
+    },
+    "pos_m_cs90": {
+      "old": 0.5,
+      "new": 1.0
+    }
+  },
+  "v1_full_scoring_settings": {
+    "pos_f_yc2": -5.0,
+    "pos_d_og": -5.0,
+    "pos_m_at": 6.0,
+    "pos_gk_sm": 1.0,
+    "pos_f_sv": 2.0,
+    "pos_gk_cs": 5.0,
+    "pos_f_cos": 0.5,
+    "pos_m_bs": 1.0,
+    "pos_d_g": 10.0,
+    "pos_d_min": 0.0,
+    "pos_gk_yc": -2.0,
+    "pos_d_at": 7.0,
+    "pos_d_pks": 8.0,
+    "pos_m_sm": 1.0,
+    "pos_f_yc": -2.0,
+    "pos_gk_int": 1.0,
+    "pos_m_sv": 2.0,
+    "pos_m_hcs": 1.0,
+    "pos_gk_sv": 2.0,
+    "pos_f_ga": 0.0,
+    "pos_d_yc": -2.0,
+    "pos_m_clr": 0.0,
+    "pos_gk_at": 7.0,
+    "pos_gk_cos": 1.0,
+    "pos_f_g": 9.0,
+    "pos_f_int": 1.0,
+    "pos_d_hcs": 1.0,
+    "pos_m_pks": 8.0,
+    "pos_f_sm": 1.0,
+    "pos_f_clr": 0.0,
+    "pos_m_yc": -2.0,
+    "pos_f_dis": -0.5,
+    "pos_gk_rc": -7.0,
+    "pos_f_pkm": -4.0,
+    "pos_gk_clr": 0.25,
+    "pos_gk_bs": 1.0,
+    "pos_f_acnc": 1.0,
+    "pos_m_min": 0.0,
+    "pos_d_sv": 2.0,
+    "pos_d_bs": 1.5,
+    "pos_m_ga": 0.0,
+    "pos_f_sot": 2.0,
+    "pos_m_aer": 0.5,
+    "pos_gk_g": 10.0,
+    "pos_d_yc2": -5.0,
+    "pos_d_pkd": 2.0,
+    "pos_f_rc": -7.0,
+    "pos_gk_min": 0.0,
+    "pos_m_sot": 2.0,
+    "pos_f_cs": 0.0,
+    "pos_gk_sot": 2.0,
+    "pos_f_kp": 2.0,
+    "pos_d_cs": 4.0,
+    "pos_gk_dis": -0.5,
+    "pos_d_int": 1.0,
+    "pos_m_acnc": 1.0,
+    "pos_gk_cs90": 5.0,
+    "pos_d_pkm": -4.0,
+    "pos_d_acnc": 1.0,
+    "pos_m_dis": -0.5,
+    "pos_d_cs90": 4.0,
+    "pos_gk_og": -5.0,
+    "pos_d_kp": 2.0,
+    "pos_d_aer": 1.0,
+    "pos_gk_aer": 1.0,
+    "pos_gk_acnc": 1.0,
+    "pos_m_tkw": 1.5,
+    "pos_gk_pkm": -4.0,
+    "pos_f_aer": 1.0,
+    "pos_m_pkd": 2.0,
+    "pos_gk_hcs": 2.0,
+    "pos_d_clr": 0.25,
+    "pos_d_rc": -7.0,
+    "pos_f_og": -5.0,
+    "pos_m_og": -5.0,
+    "pos_gk_ga": -2.0,
+    "pos_d_dis": -0.5,
+    "pos_m_cs": 0.0,
+    "pos_d_cos": 0.5,
+    "pos_f_hcs": 1.0,
+    "pos_m_rc": -7.0,
+    "pos_f_pks": 8.0,
+    "pos_gk_pks": 8.0,
+    "pos_gk_tkw": 1.0,
+    "pos_f_min": 0.0,
+    "pos_d_sot": 2.0,
+    "pos_m_int": 1.0,
+    "pos_gk_pkd": 2.0,
+    "pos_m_cos": 0.5,
+    "pos_m_kp": 2.0,
+    "pos_gk_kp": 2.0,
+    "pos_m_pkm": -4.0,
+    "pos_f_at": 6.0,
+    "pos_gk_yc2": -5.0,
+    "pos_d_sm": 1.0,
+    "pos_f_pkd": 2.0,
+    "pos_m_g": 9.0,
+    "pos_f_tkw": 1.0,
+    "pos_d_tkw": 1.0,
+    "pos_m_yc2": -5.0,
+    "pos_m_cs90": 1.0,
+    "pos_f_bs": 1.0,
+    "pos_d_ga": -2.0
+  },
+  "alternatives": {
+    "V2 Clean-sheet heavy": {
+      "pos_gk_cs": 6.0,
+      "pos_gk_cs90": 5.0,
+      "pos_gk_ga": -1.5,
+      "pos_d_cs": 5.0,
+      "pos_d_cs90": 4.0,
+      "pos_m_tkw": 1.25,
+      "pos_m_int": 1.25,
+      "pos_m_at": 7.0
+    },
+    "V3 Star compression": {
+      "pos_gk_cs": 5.0,
+      "pos_gk_cs90": 5.0,
+      "pos_gk_hcs": 2.0,
+      "pos_d_cs": 4.0,
+      "pos_d_cs90": 4.0,
+      "pos_d_bs": 1.5,
+      "pos_m_tkw": 1.5,
+      "pos_m_cs90": 1.0,
+      "pos_m_kp": 1.5,
+      "pos_f_kp": 1.5
+    },
+    "V4 Minimal GK only": {
+      "pos_gk_cs": 5.0,
+      "pos_gk_cs90": 5.0,
+      "pos_gk_hcs": 2.0
+    }
+  },
+  "august_rebalance": {
+    "prepared": "2026-08-09",
+    "based_on": "2025/26 season, GW1-38, dpl.db \u2014 18 rule sets simulated (10 opening + 4 hybrid + 3 final tune + baseline)",
+    "objective": "F top-heavy boom/bust > M consistent > D > GK; ~4-5 F in top-10 scorers; overall per-slot balance kept",
+    "recommended": "Forward Tilt, Balanced (F2)",
+    "changes": {
+      "pos_f_g": {
+        "old": 9.0,
+        "new": 11
+      },
+      "pos_f_at": {
+        "old": 6.0,
+        "new": 7
+      },
+      "pos_f_pks": {
+        "old": 8.0,
+        "new": 9
+      },
+      "pos_m_kp": {
+        "old": 2.0,
+        "new": 2.5
+      },
+      "pos_m_tkw": {
+        "old": 1.0,
+        "new": 1.5
+      },
+      "pos_d_cs": {
+        "old": 3.0,
+        "new": 4
+      },
+      "pos_d_cs90": {
+        "old": 3.0,
+        "new": 4
+      },
+      "pos_d_bs": {
+        "old": 1.0,
+        "new": 1.5
+      },
+      "pos_d_tkw": {
+        "old": 1.0,
+        "new": 1.25
+      },
+      "pos_gk_cs": {
+        "old": 4.0,
+        "new": 5
+      },
+      "pos_gk_cs90": {
+        "old": 4.0,
+        "new": 4.5
+      },
+      "pos_gk_hcs": {
+        "old": 1.0,
+        "new": 2
+      }
+    },
+    "full_scoring_settings": {
+      "pos_f_yc2": -5.0,
+      "pos_d_og": -5.0,
+      "pos_m_at": 6.0,
+      "pos_gk_sm": 1.0,
+      "pos_f_sv": 2.0,
+      "pos_gk_cs": 5,
+      "pos_f_cos": 0.5,
+      "pos_m_bs": 1.0,
+      "pos_d_g": 10.0,
+      "pos_d_min": 0.0,
+      "pos_gk_yc": -2.0,
+      "pos_d_at": 7.0,
+      "pos_d_pks": 8.0,
+      "pos_m_sm": 1.0,
+      "pos_f_yc": -2.0,
+      "pos_gk_int": 1.0,
+      "pos_m_sv": 2.0,
+      "pos_m_hcs": 1.0,
+      "pos_gk_sv": 2.0,
+      "pos_f_ga": 0.0,
+      "pos_d_yc": -2.0,
+      "pos_m_clr": 0.0,
+      "pos_gk_at": 7.0,
+      "pos_gk_cos": 1.0,
+      "pos_f_g": 11,
+      "pos_f_int": 1.0,
+      "pos_d_hcs": 1.0,
+      "pos_m_pks": 8.0,
+      "pos_f_sm": 1.0,
+      "pos_f_clr": 0.0,
+      "pos_m_yc": -2.0,
+      "pos_f_dis": -0.5,
+      "pos_gk_rc": -7.0,
+      "pos_f_pkm": -4.0,
+      "pos_gk_clr": 0.25,
+      "pos_gk_bs": 1.0,
+      "pos_f_acnc": 1.0,
+      "pos_m_min": 0.0,
+      "pos_d_sv": 2.0,
+      "pos_d_bs": 1.5,
+      "pos_m_ga": 0.0,
+      "pos_f_sot": 2.0,
+      "pos_m_aer": 0.5,
+      "pos_gk_g": 10.0,
+      "pos_d_yc2": -5.0,
+      "pos_d_pkd": 2.0,
+      "pos_f_rc": -7.0,
+      "pos_gk_min": 0.0,
+      "pos_m_sot": 2.0,
+      "pos_f_cs": 0.0,
+      "pos_gk_sot": 2.0,
+      "pos_f_kp": 2.0,
+      "pos_d_cs": 4,
+      "pos_gk_dis": -0.5,
+      "pos_d_int": 1.0,
+      "pos_m_acnc": 1.0,
+      "pos_gk_cs90": 4.5,
+      "pos_d_pkm": -4.0,
+      "pos_d_acnc": 1.0,
+      "pos_m_dis": -0.5,
+      "pos_d_cs90": 4,
+      "pos_gk_og": -5.0,
+      "pos_d_kp": 2.0,
+      "pos_d_aer": 1.0,
+      "pos_gk_aer": 1.0,
+      "pos_gk_acnc": 1.0,
+      "pos_m_tkw": 1.5,
+      "pos_gk_pkm": -4.0,
+      "pos_f_aer": 1.0,
+      "pos_m_pkd": 2.0,
+      "pos_gk_hcs": 2,
+      "pos_d_clr": 0.25,
+      "pos_d_rc": -7.0,
+      "pos_f_og": -5.0,
+      "pos_m_og": -5.0,
+      "pos_gk_ga": -2.0,
+      "pos_d_dis": -0.5,
+      "pos_m_cs": 0.0,
+      "pos_d_cos": 0.5,
+      "pos_f_hcs": 1.0,
+      "pos_m_rc": -7.0,
+      "pos_f_pks": 9,
+      "pos_gk_pks": 8.0,
+      "pos_gk_tkw": 1.0,
+      "pos_f_min": 0.0,
+      "pos_d_sot": 2.0,
+      "pos_m_int": 1.0,
+      "pos_gk_pkd": 2.0,
+      "pos_m_cos": 0.5,
+      "pos_m_kp": 2.5,
+      "pos_gk_kp": 2.0,
+      "pos_m_pkm": -4.0,
+      "pos_f_at": 7,
+      "pos_gk_yc2": -5.0,
+      "pos_d_sm": 1.0,
+      "pos_f_pkd": 2.0,
+      "pos_m_g": 9.0,
+      "pos_f_tkw": 1.0,
+      "pos_d_tkw": 1.25,
+      "pos_m_yc2": -5.0,
+      "pos_m_cs90": 0.5,
+      "pos_f_bs": 1.0,
+      "pos_d_ga": -2.0
+    },
+    "replay_results": {
+      "slot_value_per_week": {
+        "F": 10.39,
+        "M": 8.63,
+        "D": 7.88,
+        "GK": 7.79
+      },
+      "baseline_slot_value": {
+        "F": 9.55,
+        "M": 7.61,
+        "D": 6.93,
+        "GK": 6.62
+      },
+      "median_cv_starters": {
+        "F": 0.93,
+        "M": 0.8,
+        "D": 0.91,
+        "GK": 0.9
+      },
+      "top10_position_mix": {
+        "F": 4,
+        "M": 5,
+        "D": 1,
+        "GK": 0
+      },
+      "top10_forward_ranks": [
+        2,
+        3,
+        4,
+        10
+      ]
+    },
+    "report_artifact": "https://claude.ai/code/artifact/b819ed58-9928-4b46-abcd-4537c62b23bd",
+    "note": "Supersedes the July 'V1 Defensive value' recommendation (kept above for history) \u2014 July optimized for flat positional parity; August optimizes for a deliberate F>M>D>GK gradient per Will's brief.",
+    "per_minute_sweep": {
+      "prepared": "2026-08-09 (same session, later pass)",
+      "method": "50-version structured sweep (5 F x 5 M x 2 D/GK packages); scored on points-per-90 dispersion per position (players >=5% of season minutes, i.e. >=171 min) plus the top-10/ladder/weekly-variance objective",
+      "recommended": "Boom Forwards + Steady Mids + Strong Backline (sweep rank #1, score 3.77 vs 4.12 for the earlier F2 equivalent)",
+      "changes": {
+        "pos_f_g": {
+          "old": 9.0,
+          "new": 12
+        },
+        "pos_f_at": {
+          "old": 6.0,
+          "new": 8
+        },
+        "pos_f_sot": {
+          "old": 2.0,
+          "new": 1.5
+        },
+        "pos_m_kp": {
+          "old": 2.0,
+          "new": 2.5
+        },
+        "pos_m_tkw": {
+          "old": 1.0,
+          "new": 1.5
+        },
+        "pos_d_cs": {
+          "old": 3.0,
+          "new": 4
+        },
+        "pos_d_cs90": {
+          "old": 3.0,
+          "new": 4
+        },
+        "pos_d_bs": {
+          "old": 1.0,
+          "new": 1.5
+        },
+        "pos_d_tkw": {
+          "old": 1.0,
+          "new": 1.25
+        },
+        "pos_gk_cs": {
+          "old": 4.0,
+          "new": 5
+        },
+        "pos_gk_cs90": {
+          "old": 4.0,
+          "new": 5
+        },
+        "pos_gk_hcs": {
+          "old": 1.0,
+          "new": 2
+        },
+        "pos_gk_sv": {
+          "old": 2.0,
+          "new": 1.75
+        }
+      },
+      "full_scoring_settings": {
+        "pos_f_yc2": -5.0,
+        "pos_d_og": -5.0,
+        "pos_m_at": 6.0,
+        "pos_gk_sm": 1.0,
+        "pos_f_sv": 2.0,
+        "pos_gk_cs": 5,
+        "pos_f_cos": 0.5,
+        "pos_m_bs": 1.0,
+        "pos_d_g": 10.0,
+        "pos_d_min": 0.0,
+        "pos_gk_yc": -2.0,
+        "pos_d_at": 7.0,
+        "pos_d_pks": 8.0,
+        "pos_m_sm": 1.0,
+        "pos_f_yc": -2.0,
+        "pos_gk_int": 1.0,
+        "pos_m_sv": 2.0,
+        "pos_m_hcs": 1.0,
+        "pos_gk_sv": 1.75,
+        "pos_f_ga": 0.0,
+        "pos_d_yc": -2.0,
+        "pos_m_clr": 0.0,
+        "pos_gk_at": 7.0,
+        "pos_gk_cos": 1.0,
+        "pos_f_g": 12,
+        "pos_f_int": 1.0,
+        "pos_d_hcs": 1.0,
+        "pos_m_pks": 8.0,
+        "pos_f_sm": 1.0,
+        "pos_f_clr": 0.0,
+        "pos_m_yc": -2.0,
+        "pos_f_dis": -0.5,
+        "pos_gk_rc": -7.0,
+        "pos_f_pkm": -4.0,
+        "pos_gk_clr": 0.25,
+        "pos_gk_bs": 1.0,
+        "pos_f_acnc": 1.0,
+        "pos_m_min": 0.0,
+        "pos_d_sv": 2.0,
+        "pos_d_bs": 1.5,
+        "pos_m_ga": 0.0,
+        "pos_f_sot": 1.5,
+        "pos_m_aer": 0.5,
+        "pos_gk_g": 10.0,
+        "pos_d_yc2": -5.0,
+        "pos_d_pkd": 2.0,
+        "pos_f_rc": -7.0,
+        "pos_gk_min": 0.0,
+        "pos_m_sot": 2.0,
+        "pos_f_cs": 0.0,
+        "pos_gk_sot": 2.0,
+        "pos_f_kp": 2.0,
+        "pos_d_cs": 4,
+        "pos_gk_dis": -0.5,
+        "pos_d_int": 1.0,
+        "pos_m_acnc": 1.0,
+        "pos_gk_cs90": 5,
+        "pos_d_pkm": -4.0,
+        "pos_d_acnc": 1.0,
+        "pos_m_dis": -0.5,
+        "pos_d_cs90": 4,
+        "pos_gk_og": -5.0,
+        "pos_d_kp": 2.0,
+        "pos_d_aer": 1.0,
+        "pos_gk_aer": 1.0,
+        "pos_gk_acnc": 1.0,
+        "pos_m_tkw": 1.5,
+        "pos_gk_pkm": -4.0,
+        "pos_f_aer": 1.0,
+        "pos_m_pkd": 2.0,
+        "pos_gk_hcs": 2,
+        "pos_d_clr": 0.25,
+        "pos_d_rc": -7.0,
+        "pos_f_og": -5.0,
+        "pos_m_og": -5.0,
+        "pos_gk_ga": -2.0,
+        "pos_d_dis": -0.5,
+        "pos_m_cs": 0.0,
+        "pos_d_cos": 0.5,
+        "pos_f_hcs": 1.0,
+        "pos_m_rc": -7.0,
+        "pos_f_pks": 8.0,
+        "pos_gk_pks": 8.0,
+        "pos_gk_tkw": 1.0,
+        "pos_f_min": 0.0,
+        "pos_d_sot": 2.0,
+        "pos_m_int": 1.0,
+        "pos_gk_pkd": 2.0,
+        "pos_m_cos": 0.5,
+        "pos_m_kp": 2.5,
+        "pos_gk_kp": 2.0,
+        "pos_m_pkm": -4.0,
+        "pos_f_at": 8,
+        "pos_gk_yc2": -5.0,
+        "pos_d_sm": 1.0,
+        "pos_f_pkd": 2.0,
+        "pos_m_g": 9.0,
+        "pos_f_tkw": 1.0,
+        "pos_d_tkw": 1.25,
+        "pos_m_yc2": -5.0,
+        "pos_m_cs90": 0.5,
+        "pos_f_bs": 1.0,
+        "pos_d_ga": -2.0
+      },
+      "per90_results": {
+        "mean_pts_per_90": {
+          "F": 10.34,
+          "M": 8.69,
+          "D": 7.06,
+          "GK": 6.38
+        },
+        "cv_pts_per_90": {
+          "F": 0.33,
+          "M": 0.31,
+          "D": 0.38,
+          "GK": 0.33
+        },
+        "p90_pts_per_90": {
+          "F": 14.57,
+          "M": 11.95,
+          "D": 10.64,
+          "GK": 9.08
+        },
+        "slot_value_per_week": {
+          "F": 10.42,
+          "M": 8.63,
+          "D": 7.88,
+          "GK": 7.3
+        },
+        "top10_position_mix": {
+          "F": 4,
+          "M": 5,
+          "D": 1,
+          "GK": 0
+        }
+      },
+      "key_refinements_vs_F2": [
+        "GK saves 2 -> 1.75: on a per-minute basis this is what finally seats GK below D (6.38 vs 7.06 pts/90); without it GK and D were tied",
+        "F goal 11 -> 12, assist 7 -> 8, shot-on-target 2 -> 1.5: bigger boom, less floor - widest per-90 spread of any position (p90 14.6 vs p10 6.3)",
+        "F penalty-scored bump dropped - made no measurable difference in any metric"
+      ]
+    }
+  },
+  "minor_stat_exploration": {
+    "prepared": "2026-08-09 (third pass)",
+    "stat_glossary_corrections": {
+      "cos": "successful dribbles (IS tracked)",
+      "pks": "penalty SAVES not scored",
+      "hcs": "GK high claims not half clean sheet"
+    },
+    "sensitivity_headlines": {
+      "F": "dis (dispossessed) is the boom/bust dial: -0.5 harsher = +0.03 weekly CV; aer is the F floor stat",
+      "M": "cos (dribbles) and tkw/int are the consistency levers (each ~-0.02 to -0.03 weekly CV per +0.5)",
+      "D": "clr dominates everything: +0.5 weight = +2.19 pts/90 and -0.14 weekly CV",
+      "GK": "only small levers exist (clr +0.62, hcs +0.36 per +0.5)"
+    },
+    "minors_only_finding": "432-combo sweep with majors frozen: shapes dispersion well (F wkCV .91 vs M .78-.81) but every top combo flips the top-10 to 3F-7M \u2014 cutting F floor stats drops their totals below the boosted mids. Minor stats alone cannot put forwards on top of the leaderboard.",
+    "recommended_hybrid": "Boom Forwards majors + dribble/dispossession shaping (variant I)",
+    "changes": {
+      "pos_f_g": {
+        "old": 9.0,
+        "new": 12
+      },
+      "pos_f_at": {
+        "old": 6.0,
+        "new": 8
+      },
+      "pos_f_sot": {
+        "old": 2.0,
+        "new": 1.5
+      },
+      "pos_f_dis": {
+        "old": -0.5,
+        "new": -1
+      },
+      "pos_f_cos": {
+        "old": 0.5,
+        "new": 1.5
+      },
+      "pos_m_kp": {
+        "old": 2.0,
+        "new": 2.5
+      },
+      "pos_m_tkw": {
+        "old": 1.0,
+        "new": 1.5
+      },
+      "pos_m_int": {
+        "old": 1.0,
+        "new": 1.5
+      },
+      "pos_d_cs": {
+        "old": 3.0,
+        "new": 4
+      },
+      "pos_d_cs90": {
+        "old": 3.0,
+        "new": 4
+      },
+      "pos_d_bs": {
+        "old": 1.0,
+        "new": 1.5
+      },
+      "pos_d_tkw": {
+        "old": 1.0,
+        "new": 1.25
+      },
+      "pos_gk_cs": {
+        "old": 4.0,
+        "new": 5
+      },
+      "pos_gk_cs90": {
+        "old": 4.0,
+        "new": 5
+      },
+      "pos_gk_hcs": {
+        "old": 1.0,
+        "new": 2
+      },
+      "pos_gk_sv": {
+        "old": 2.0,
+        "new": 1.75
+      }
+    },
+    "full_scoring_settings": {
+      "pos_f_yc2": -5.0,
+      "pos_d_og": -5.0,
+      "pos_m_at": 6.0,
+      "pos_gk_sm": 1.0,
+      "pos_f_sv": 2.0,
+      "pos_gk_cs": 5,
+      "pos_f_cos": 1.5,
+      "pos_m_bs": 1.0,
+      "pos_d_g": 10.0,
+      "pos_d_min": 0.0,
+      "pos_gk_yc": -2.0,
+      "pos_d_at": 7.0,
+      "pos_d_pks": 8.0,
+      "pos_m_sm": 1.0,
+      "pos_f_yc": -2.0,
+      "pos_gk_int": 1.0,
+      "pos_m_sv": 2.0,
+      "pos_m_hcs": 1.0,
+      "pos_gk_sv": 1.75,
+      "pos_f_ga": 0.0,
+      "pos_d_yc": -2.0,
+      "pos_m_clr": 0.0,
+      "pos_gk_at": 7.0,
+      "pos_gk_cos": 1.0,
+      "pos_f_g": 12,
+      "pos_f_int": 1.0,
+      "pos_d_hcs": 1.0,
+      "pos_m_pks": 8.0,
+      "pos_f_sm": 1.0,
+      "pos_f_clr": 0.0,
+      "pos_m_yc": -2.0,
+      "pos_f_dis": -1,
+      "pos_gk_rc": -7.0,
+      "pos_f_pkm": -4.0,
+      "pos_gk_clr": 0.25,
+      "pos_gk_bs": 1.0,
+      "pos_f_acnc": 1.0,
+      "pos_m_min": 0.0,
+      "pos_d_sv": 2.0,
+      "pos_d_bs": 1.5,
+      "pos_m_ga": 0.0,
+      "pos_f_sot": 1.5,
+      "pos_m_aer": 0.5,
+      "pos_gk_g": 10.0,
+      "pos_d_yc2": -5.0,
+      "pos_d_pkd": 2.0,
+      "pos_f_rc": -7.0,
+      "pos_gk_min": 0.0,
+      "pos_m_sot": 2.0,
+      "pos_f_cs": 0.0,
+      "pos_gk_sot": 2.0,
+      "pos_f_kp": 2.0,
+      "pos_d_cs": 4,
+      "pos_gk_dis": -0.5,
+      "pos_d_int": 1.0,
+      "pos_m_acnc": 1.0,
+      "pos_gk_cs90": 5,
+      "pos_d_pkm": -4.0,
+      "pos_d_acnc": 1.0,
+      "pos_m_dis": -0.5,
+      "pos_d_cs90": 4,
+      "pos_gk_og": -5.0,
+      "pos_d_kp": 2.0,
+      "pos_d_aer": 1.0,
+      "pos_gk_aer": 1.0,
+      "pos_gk_acnc": 1.0,
+      "pos_m_tkw": 1.5,
+      "pos_gk_pkm": -4.0,
+      "pos_f_aer": 1.0,
+      "pos_m_pkd": 2.0,
+      "pos_gk_hcs": 2,
+      "pos_d_clr": 0.25,
+      "pos_d_rc": -7.0,
+      "pos_f_og": -5.0,
+      "pos_m_og": -5.0,
+      "pos_gk_ga": -2.0,
+      "pos_d_dis": -0.5,
+      "pos_m_cs": 0.0,
+      "pos_d_cos": 0.5,
+      "pos_f_hcs": 1.0,
+      "pos_m_rc": -7.0,
+      "pos_f_pks": 8.0,
+      "pos_gk_pks": 8.0,
+      "pos_gk_tkw": 1.0,
+      "pos_f_min": 0.0,
+      "pos_d_sot": 2.0,
+      "pos_m_int": 1.5,
+      "pos_gk_pkd": 2.0,
+      "pos_m_cos": 0.5,
+      "pos_m_kp": 2.5,
+      "pos_gk_kp": 2.0,
+      "pos_m_pkm": -4.0,
+      "pos_f_at": 8,
+      "pos_gk_yc2": -5.0,
+      "pos_d_sm": 1.0,
+      "pos_f_pkd": 2.0,
+      "pos_m_g": 9.0,
+      "pos_f_tkw": 1.0,
+      "pos_d_tkw": 1.25,
+      "pos_m_yc2": -5.0,
+      "pos_m_cs90": 0.5,
+      "pos_f_bs": 1.0,
+      "pos_d_ga": -2.0
+    },
+    "replay_results": {
+      "per90_mean": {
+        "F": 10.68,
+        "M": 9.09,
+        "D": 7.06,
+        "GK": 6.38
+      },
+      "weekly_cv": {
+        "F": 0.94,
+        "M": 0.78,
+        "D": 0.91,
+        "GK": 0.96
+      },
+      "top10_position_mix": {
+        "F": 4,
+        "M": 5,
+        "D": 1,
+        "GK": 0
+      }
+    }
+  },
+  "parity_per_minute": {
+    "prepared": "2026-08-09 (fourth pass)",
+    "objective": "equalize average points per 90 minutes across all four positions (coordinate-descent over 22 levers)",
+    "changes": {
+      "pos_gk_cs": {
+        "old": 4.0,
+        "new": 5.0
+      },
+      "pos_f_cos": {
+        "old": 0.5,
+        "new": 0.25
+      },
+      "pos_gk_sv": {
+        "old": 2.0,
+        "new": 2.25
+      },
+      "pos_f_dis": {
+        "old": -0.5,
+        "new": -0.75
+      },
+      "pos_gk_clr": {
+        "old": 0.25,
+        "new": 0.5
+      },
+      "pos_f_kp": {
+        "old": 2.0,
+        "new": 1.5
+      },
+      "pos_gk_cs90": {
+        "old": 4.0,
+        "new": 4.5
+      },
+      "pos_d_aer": {
+        "old": 1.0,
+        "new": 1.25
+      },
+      "pos_f_aer": {
+        "old": 1.0,
+        "new": 0.5
+      },
+      "pos_gk_hcs": {
+        "old": 1.0,
+        "new": 1.5
+      },
+      "pos_d_clr": {
+        "old": 0.25,
+        "new": 0.5
+      },
+      "pos_m_int": {
+        "old": 1.0,
+        "new": 0.75
+      },
+      "pos_m_kp": {
+        "old": 2.0,
+        "new": 2.25
+      }
+    },
+    "full_scoring_settings": {
+      "pos_f_yc2": -5.0,
+      "pos_d_og": -5.0,
+      "pos_m_at": 6.0,
+      "pos_gk_sm": 1.0,
+      "pos_f_sv": 2.0,
+      "pos_gk_cs": 5.0,
+      "pos_f_cos": 0.25,
+      "pos_m_bs": 1.0,
+      "pos_d_g": 10.0,
+      "pos_d_min": 0.0,
+      "pos_gk_yc": -2.0,
+      "pos_d_at": 7.0,
+      "pos_d_pks": 8.0,
+      "pos_m_sm": 1.0,
+      "pos_f_yc": -2.0,
+      "pos_gk_int": 1.0,
+      "pos_m_sv": 2.0,
+      "pos_m_hcs": 1.0,
+      "pos_gk_sv": 2.25,
+      "pos_f_ga": 0.0,
+      "pos_d_yc": -2.0,
+      "pos_m_clr": 0.0,
+      "pos_gk_at": 7.0,
+      "pos_gk_cos": 1.0,
+      "pos_f_g": 9.0,
+      "pos_f_int": 1.0,
+      "pos_d_hcs": 1.0,
+      "pos_m_pks": 8.0,
+      "pos_f_sm": 1.0,
+      "pos_f_clr": 0.0,
+      "pos_m_yc": -2.0,
+      "pos_f_dis": -0.75,
+      "pos_gk_rc": -7.0,
+      "pos_f_pkm": -4.0,
+      "pos_gk_clr": 0.5,
+      "pos_gk_bs": 1.0,
+      "pos_f_acnc": 1.0,
+      "pos_m_min": 0.0,
+      "pos_d_sv": 2.0,
+      "pos_d_bs": 1.0,
+      "pos_m_ga": 0.0,
+      "pos_f_sot": 2.0,
+      "pos_m_aer": 0.5,
+      "pos_gk_g": 10.0,
+      "pos_d_yc2": -5.0,
+      "pos_d_pkd": 2.0,
+      "pos_f_rc": -7.0,
+      "pos_gk_min": 0.0,
+      "pos_m_sot": 2.0,
+      "pos_f_cs": 0.0,
+      "pos_gk_sot": 2.0,
+      "pos_f_kp": 1.5,
+      "pos_d_cs": 3.0,
+      "pos_gk_dis": -0.5,
+      "pos_d_int": 1.0,
+      "pos_m_acnc": 1.0,
+      "pos_gk_cs90": 4.5,
+      "pos_d_pkm": -4.0,
+      "pos_d_acnc": 1.0,
+      "pos_m_dis": -0.5,
+      "pos_d_cs90": 3.0,
+      "pos_gk_og": -5.0,
+      "pos_d_kp": 2.0,
+      "pos_d_aer": 1.25,
+      "pos_gk_aer": 1.0,
+      "pos_gk_acnc": 1.0,
+      "pos_m_tkw": 1.0,
+      "pos_gk_pkm": -4.0,
+      "pos_f_aer": 0.5,
+      "pos_m_pkd": 2.0,
+      "pos_gk_hcs": 1.5,
+      "pos_d_clr": 0.5,
+      "pos_d_rc": -7.0,
+      "pos_f_og": -5.0,
+      "pos_m_og": -5.0,
+      "pos_gk_ga": -2.0,
+      "pos_d_dis": -0.5,
+      "pos_m_cs": 0.0,
+      "pos_d_cos": 0.5,
+      "pos_f_hcs": 1.0,
+      "pos_m_rc": -7.0,
+      "pos_f_pks": 8.0,
+      "pos_gk_pks": 8.0,
+      "pos_gk_tkw": 1.0,
+      "pos_f_min": 0.0,
+      "pos_d_sot": 2.0,
+      "pos_m_int": 0.75,
+      "pos_gk_pkd": 2.0,
+      "pos_m_cos": 0.5,
+      "pos_m_kp": 2.25,
+      "pos_gk_kp": 2.0,
+      "pos_m_pkm": -4.0,
+      "pos_f_at": 6.0,
+      "pos_gk_yc2": -5.0,
+      "pos_d_sm": 1.0,
+      "pos_f_pkd": 2.0,
+      "pos_m_g": 9.0,
+      "pos_f_tkw": 1.0,
+      "pos_d_tkw": 1.0,
+      "pos_m_yc2": -5.0,
+      "pos_m_cs90": 0.5,
+      "pos_f_bs": 1.0,
+      "pos_d_ga": -2.0
+    },
+    "replay_results": {
+      "per90_mean": {
+        "F": 7.65,
+        "M": 7.62,
+        "D": 7.66,
+        "GK": 7.6
+      },
+      "weekly_cv": {
+        "F": 0.96,
+        "M": 0.84,
+        "D": 0.84,
+        "GK": 0.87
+      },
+      "slot": {
+        "F": 7.91,
+        "M": 7.77,
+        "D": 8.48,
+        "GK": 8.32
+      },
+      "mix": {
+        "M": 3,
+        "D": 6,
+        "F": 1
+      }
+    },
+    "tradeoff": "Per-minute parity is achieved (spread 0.06 pts/90: F 7.65 / M 7.62 / D 7.66 / GK 7.60) and F stays boomiest week-to-week (CV .96 vs M/D .84). BUT the season leaderboard flips to 6 defenders in the top 10: defenders/keepers play ~90 min every week while forwards rotate, so equal per-minute pay means the highest-minute positions dominate totals. Per-minute parity and a forward-topped leaderboard are mutually exclusive."
+  },
+  "slot_ladder_9_8_7_65": {
+    "prepared": "2026-08-09 (fifth pass)",
+    "objective": "hit explicit per-slot targets F 9 / M 8 / D 7 / GK 6.5 pts per started slot per week",
+    "exact_fit_7_changes": {
+      "changes": {
+        "pos_gk_cs": {
+          "old": 4.0,
+          "new": 3.5
+        },
+        "pos_f_dis": {
+          "old": -0.5,
+          "new": -0.75
+        },
+        "pos_d_cs": {
+          "old": 3.0,
+          "new": 3.5
+        },
+        "pos_d_cs90": {
+          "old": 3.0,
+          "new": 2.5
+        },
+        "pos_f_aer": {
+          "old": 1.0,
+          "new": 0.75
+        },
+        "pos_m_int": {
+          "old": 1.0,
+          "new": 1.25
+        },
+        "pos_m_kp": {
+          "old": 2.0,
+          "new": 2.25
+        }
+      },
+      "full_scoring_settings": {
+        "pos_f_yc2": -5.0,
+        "pos_d_og": -5.0,
+        "pos_m_at": 6.0,
+        "pos_gk_sm": 1.0,
+        "pos_f_sv": 2.0,
+        "pos_gk_cs": 3.5,
+        "pos_f_cos": 0.5,
+        "pos_m_bs": 1.0,
+        "pos_d_g": 10.0,
+        "pos_d_min": 0.0,
+        "pos_gk_yc": -2.0,
+        "pos_d_at": 7.0,
+        "pos_d_pks": 8.0,
+        "pos_m_sm": 1.0,
+        "pos_f_yc": -2.0,
+        "pos_gk_int": 1.0,
+        "pos_m_sv": 2.0,
+        "pos_m_hcs": 1.0,
+        "pos_gk_sv": 2.0,
+        "pos_f_ga": 0.0,
+        "pos_d_yc": -2.0,
+        "pos_m_clr": 0.0,
+        "pos_gk_at": 7.0,
+        "pos_gk_cos": 1.0,
+        "pos_f_g": 9.0,
+        "pos_f_int": 1.0,
+        "pos_d_hcs": 1.0,
+        "pos_m_pks": 8.0,
+        "pos_f_sm": 1.0,
+        "pos_f_clr": 0.0,
+        "pos_m_yc": -2.0,
+        "pos_f_dis": -0.75,
+        "pos_gk_rc": -7.0,
+        "pos_f_pkm": -4.0,
+        "pos_gk_clr": 0.25,
+        "pos_gk_bs": 1.0,
+        "pos_f_acnc": 1.0,
+        "pos_m_min": 0.0,
+        "pos_d_sv": 2.0,
+        "pos_d_bs": 1.0,
+        "pos_m_ga": 0.0,
+        "pos_f_sot": 2.0,
+        "pos_m_aer": 0.5,
+        "pos_gk_g": 10.0,
+        "pos_d_yc2": -5.0,
+        "pos_d_pkd": 2.0,
+        "pos_f_rc": -7.0,
+        "pos_gk_min": 0.0,
+        "pos_m_sot": 2.0,
+        "pos_f_cs": 0.0,
+        "pos_gk_sot": 2.0,
+        "pos_f_kp": 2.0,
+        "pos_d_cs": 3.5,
+        "pos_gk_dis": -0.5,
+        "pos_d_int": 1.0,
+        "pos_m_acnc": 1.0,
+        "pos_gk_cs90": 4.0,
+        "pos_d_pkm": -4.0,
+        "pos_d_acnc": 1.0,
+        "pos_m_dis": -0.5,
+        "pos_d_cs90": 2.5,
+        "pos_gk_og": -5.0,
+        "pos_d_kp": 2.0,
+        "pos_d_aer": 1.0,
+        "pos_gk_aer": 1.0,
+        "pos_gk_acnc": 1.0,
+        "pos_m_tkw": 1.0,
+        "pos_gk_pkm": -4.0,
+        "pos_f_aer": 0.75,
+        "pos_m_pkd": 2.0,
+        "pos_gk_hcs": 1.0,
+        "pos_d_clr": 0.25,
+        "pos_d_rc": -7.0,
+        "pos_f_og": -5.0,
+        "pos_m_og": -5.0,
+        "pos_gk_ga": -2.0,
+        "pos_d_dis": -0.5,
+        "pos_m_cs": 0.0,
+        "pos_d_cos": 0.5,
+        "pos_f_hcs": 1.0,
+        "pos_m_rc": -7.0,
+        "pos_f_pks": 8.0,
+        "pos_gk_pks": 8.0,
+        "pos_gk_tkw": 1.0,
+        "pos_f_min": 0.0,
+        "pos_d_sot": 2.0,
+        "pos_m_int": 1.25,
+        "pos_gk_pkd": 2.0,
+        "pos_m_cos": 0.5,
+        "pos_m_kp": 2.25,
+        "pos_gk_kp": 2.0,
+        "pos_m_pkm": -4.0,
+        "pos_f_at": 6.0,
+        "pos_gk_yc2": -5.0,
+        "pos_d_sm": 1.0,
+        "pos_f_pkd": 2.0,
+        "pos_m_g": 9.0,
+        "pos_f_tkw": 1.0,
+        "pos_d_tkw": 1.0,
+        "pos_m_yc2": -5.0,
+        "pos_m_cs90": 0.5,
+        "pos_f_bs": 1.0,
+        "pos_d_ga": -2.0
+      },
+      "replay_results": {
+        "slot": {
+          "F": 8.9,
+          "M": 8.06,
+          "D": 6.94,
+          "GK": 6.48
+        },
+        "per90_mean": {
+          "F": 8.88,
+          "M": 8.03,
+          "D": 6.1,
+          "GK": 5.82
+        },
+        "weekly_cv": {
+          "F": 0.92,
+          "M": 0.84,
+          "D": 0.93,
+          "GK": 0.93
+        },
+        "mix": {
+          "M": 6,
+          "F": 3,
+          "D": 1
+        },
+        "top10": [
+          [
+            "Bruno Fernandes",
+            "M",
+            643.5
+          ],
+          [
+            "Erling Haaland",
+            "F",
+            486.0
+          ],
+          [
+            "Igor Thiago",
+            "F",
+            434.0
+          ],
+          [
+            "Dominik Szoboszlai",
+            "M",
+            418.0
+          ],
+          [
+            "James Garner",
+            "M",
+            397.8
+          ],
+          [
+            "Antoine Semenyo",
+            "F",
+            397.0
+          ],
+          [
+            "Morgan Gibbs-White",
+            "M",
+            396.5
+          ],
+          [
+            "Jarrod Bowen",
+            "M",
+            386.5
+          ],
+          [
+            "James Tarkowski",
+            "D",
+            375.0
+          ],
+          [
+            "Elliot Anderson",
+            "M",
+            373.8
+          ]
+        ]
+      },
+      "note": "Hits 8.90/8.06/6.94/6.48 \u2014 but the tight 1-pt F-M gap caps the top 10 at 3 forwards (6 mids). Star-concentration (goals up to 11.5 with floor stats cut) cannot fix this: the 4th/5th forwards live on floor stats and fall below the boosted mid pack."
+    },
+    "keep_forwards_2_changes": {
+      "changes": {
+        "pos_gk_cs": {
+          "old": 4.0,
+          "new": 3.5
+        },
+        "pos_m_kp": {
+          "old": 2.0,
+          "new": 2.25
+        }
+      },
+      "full_scoring_settings": {
+        "pos_f_yc2": -5.0,
+        "pos_d_og": -5.0,
+        "pos_m_at": 6.0,
+        "pos_gk_sm": 1.0,
+        "pos_f_sv": 2.0,
+        "pos_gk_cs": 3.5,
+        "pos_f_cos": 0.5,
+        "pos_m_bs": 1.0,
+        "pos_d_g": 10.0,
+        "pos_d_min": 0.0,
+        "pos_gk_yc": -2.0,
+        "pos_d_at": 7.0,
+        "pos_d_pks": 8.0,
+        "pos_m_sm": 1.0,
+        "pos_f_yc": -2.0,
+        "pos_gk_int": 1.0,
+        "pos_m_sv": 2.0,
+        "pos_m_hcs": 1.0,
+        "pos_gk_sv": 2.0,
+        "pos_f_ga": 0.0,
+        "pos_d_yc": -2.0,
+        "pos_m_clr": 0.0,
+        "pos_gk_at": 7.0,
+        "pos_gk_cos": 1.0,
+        "pos_f_g": 9.0,
+        "pos_f_int": 1.0,
+        "pos_d_hcs": 1.0,
+        "pos_m_pks": 8.0,
+        "pos_f_sm": 1.0,
+        "pos_f_clr": 0.0,
+        "pos_m_yc": -2.0,
+        "pos_f_dis": -0.5,
+        "pos_gk_rc": -7.0,
+        "pos_f_pkm": -4.0,
+        "pos_gk_clr": 0.25,
+        "pos_gk_bs": 1.0,
+        "pos_f_acnc": 1.0,
+        "pos_m_min": 0.0,
+        "pos_d_sv": 2.0,
+        "pos_d_bs": 1.0,
+        "pos_m_ga": 0.0,
+        "pos_f_sot": 2.0,
+        "pos_m_aer": 0.5,
+        "pos_gk_g": 10.0,
+        "pos_d_yc2": -5.0,
+        "pos_d_pkd": 2.0,
+        "pos_f_rc": -7.0,
+        "pos_gk_min": 0.0,
+        "pos_m_sot": 2.0,
+        "pos_f_cs": 0.0,
+        "pos_gk_sot": 2.0,
+        "pos_f_kp": 2.0,
+        "pos_d_cs": 3.0,
+        "pos_gk_dis": -0.5,
+        "pos_d_int": 1.0,
+        "pos_m_acnc": 1.0,
+        "pos_gk_cs90": 4.0,
+        "pos_d_pkm": -4.0,
+        "pos_d_acnc": 1.0,
+        "pos_m_dis": -0.5,
+        "pos_d_cs90": 3.0,
+        "pos_gk_og": -5.0,
+        "pos_d_kp": 2.0,
+        "pos_d_aer": 1.0,
+        "pos_gk_aer": 1.0,
+        "pos_gk_acnc": 1.0,
+        "pos_m_tkw": 1.0,
+        "pos_gk_pkm": -4.0,
+        "pos_f_aer": 1.0,
+        "pos_m_pkd": 2.0,
+        "pos_gk_hcs": 1.0,
+        "pos_d_clr": 0.25,
+        "pos_d_rc": -7.0,
+        "pos_f_og": -5.0,
+        "pos_m_og": -5.0,
+        "pos_gk_ga": -2.0,
+        "pos_d_dis": -0.5,
+        "pos_m_cs": 0.0,
+        "pos_d_cos": 0.5,
+        "pos_f_hcs": 1.0,
+        "pos_m_rc": -7.0,
+        "pos_f_pks": 8.0,
+        "pos_gk_pks": 8.0,
+        "pos_gk_tkw": 1.0,
+        "pos_f_min": 0.0,
+        "pos_d_sot": 2.0,
+        "pos_m_int": 1.0,
+        "pos_gk_pkd": 2.0,
+        "pos_m_cos": 0.5,
+        "pos_m_kp": 2.25,
+        "pos_gk_kp": 2.0,
+        "pos_m_pkm": -4.0,
+        "pos_f_at": 6.0,
+        "pos_gk_yc2": -5.0,
+        "pos_d_sm": 1.0,
+        "pos_f_pkd": 2.0,
+        "pos_m_g": 9.0,
+        "pos_f_tkw": 1.0,
+        "pos_d_tkw": 1.0,
+        "pos_m_yc2": -5.0,
+        "pos_m_cs90": 0.5,
+        "pos_f_bs": 1.0,
+        "pos_d_ga": -2.0
+      },
+      "replay_results": {
+        "slot": {
+          "F": 9.55,
+          "M": 7.92,
+          "D": 6.93,
+          "GK": 6.48
+        },
+        "weekly_cv": {
+          "F": 0.88,
+          "M": 0.84,
+          "D": 0.94,
+          "GK": 0.93
+        },
+        "top10_position_mix": {
+          "F": 4,
+          "M": 5,
+          "D": 1
+        }
+      },
+      "note": "M/D/GK land on target with F left at its natural 9.55; keeps 4 forwards in the top 10. Rule of thumb discovered: each ~0.5 of F-M slot gap is worth about one forward in the top 10 (gap 1.0 -> 3F, 1.8 -> 4F, 2.5+ -> 5F)."
+    },
+    "forward_aerials_addendum": {
+      "prepared": "2026-08-09 (sixth pass)",
+      "question": "effect of raising F aerials on top of the 2-change compromise (GK cs 3.5, M kp 2.25)",
+      "results_by_weight": {
+        "1.0 (current)": {
+          "F_slot": 9.55,
+          "top10": "4F-5M-1D",
+          "F_weekly_cv": 0.88
+        },
+        "1.25": {
+          "F_slot": 9.94,
+          "top10": "5F-5M (Calvert-Lewin enters #6)",
+          "F_weekly_cv": 0.87
+        },
+        "1.5": {
+          "F_slot": 10.35,
+          "top10": "5F-5M (Calvert-Lewin #5)",
+          "F_weekly_cv": 0.87
+        },
+        "2.0": {
+          "F_slot": 11.3,
+          "top10": "7F-3M \u2014 overkill, target men flood in",
+          "F_weekly_cv": 0.84
+        }
+      },
+      "recommended_3_change_set": {
+        "changes": {
+          "pos_gk_cs": {
+            "old": 4.0,
+            "new": 3.5
+          },
+          "pos_m_kp": {
+            "old": 2.0,
+            "new": 2.25
+          },
+          "pos_f_aer": {
+            "old": 1.0,
+            "new": 1.25
+          }
+        },
+        "full_scoring_settings": {
+          "pos_f_yc2": -5.0,
+          "pos_d_og": -5.0,
+          "pos_m_at": 6.0,
+          "pos_gk_sm": 1.0,
+          "pos_f_sv": 2.0,
+          "pos_gk_cs": 3.5,
+          "pos_f_cos": 0.5,
+          "pos_m_bs": 1.0,
+          "pos_d_g": 10.0,
+          "pos_d_min": 0.0,
+          "pos_gk_yc": -2.0,
+          "pos_d_at": 7.0,
+          "pos_d_pks": 8.0,
+          "pos_m_sm": 1.0,
+          "pos_f_yc": -2.0,
+          "pos_gk_int": 1.0,
+          "pos_m_sv": 2.0,
+          "pos_m_hcs": 1.0,
+          "pos_gk_sv": 2.0,
+          "pos_f_ga": 0.0,
+          "pos_d_yc": -2.0,
+          "pos_m_clr": 0.0,
+          "pos_gk_at": 7.0,
+          "pos_gk_cos": 1.0,
+          "pos_f_g": 9.0,
+          "pos_f_int": 1.0,
+          "pos_d_hcs": 1.0,
+          "pos_m_pks": 8.0,
+          "pos_f_sm": 1.0,
+          "pos_f_clr": 0.0,
+          "pos_m_yc": -2.0,
+          "pos_f_dis": -0.5,
+          "pos_gk_rc": -7.0,
+          "pos_f_pkm": -4.0,
+          "pos_gk_clr": 0.25,
+          "pos_gk_bs": 1.0,
+          "pos_f_acnc": 1.0,
+          "pos_m_min": 0.0,
+          "pos_d_sv": 2.0,
+          "pos_d_bs": 1.0,
+          "pos_m_ga": 0.0,
+          "pos_f_sot": 2.0,
+          "pos_m_aer": 0.5,
+          "pos_gk_g": 10.0,
+          "pos_d_yc2": -5.0,
+          "pos_d_pkd": 2.0,
+          "pos_f_rc": -7.0,
+          "pos_gk_min": 0.0,
+          "pos_m_sot": 2.0,
+          "pos_f_cs": 0.0,
+          "pos_gk_sot": 2.0,
+          "pos_f_kp": 2.0,
+          "pos_d_cs": 3.0,
+          "pos_gk_dis": -0.5,
+          "pos_d_int": 1.0,
+          "pos_m_acnc": 1.0,
+          "pos_gk_cs90": 4.0,
+          "pos_d_pkm": -4.0,
+          "pos_d_acnc": 1.0,
+          "pos_m_dis": -0.5,
+          "pos_d_cs90": 3.0,
+          "pos_gk_og": -5.0,
+          "pos_d_kp": 2.0,
+          "pos_d_aer": 1.0,
+          "pos_gk_aer": 1.0,
+          "pos_gk_acnc": 1.0,
+          "pos_m_tkw": 1.0,
+          "pos_gk_pkm": -4.0,
+          "pos_f_aer": 1.25,
+          "pos_m_pkd": 2.0,
+          "pos_gk_hcs": 1.0,
+          "pos_d_clr": 0.25,
+          "pos_d_rc": -7.0,
+          "pos_f_og": -5.0,
+          "pos_m_og": -5.0,
+          "pos_gk_ga": -2.0,
+          "pos_d_dis": -0.5,
+          "pos_m_cs": 0.0,
+          "pos_d_cos": 0.5,
+          "pos_f_hcs": 1.0,
+          "pos_m_rc": -7.0,
+          "pos_f_pks": 8.0,
+          "pos_gk_pks": 8.0,
+          "pos_gk_tkw": 1.0,
+          "pos_f_min": 0.0,
+          "pos_d_sot": 2.0,
+          "pos_m_int": 1.0,
+          "pos_gk_pkd": 2.0,
+          "pos_m_cos": 0.5,
+          "pos_m_kp": 2.25,
+          "pos_gk_kp": 2.0,
+          "pos_m_pkm": -4.0,
+          "pos_f_at": 6.0,
+          "pos_gk_yc2": -5.0,
+          "pos_d_sm": 1.0,
+          "pos_f_pkd": 2.0,
+          "pos_m_g": 9.0,
+          "pos_f_tkw": 1.0,
+          "pos_d_tkw": 1.0,
+          "pos_m_yc2": -5.0,
+          "pos_m_cs90": 0.5,
+          "pos_f_bs": 1.0,
+          "pos_d_ga": -2.0
+        },
+        "replay": {
+          "slot": {
+            "F": 9.94,
+            "M": 7.92,
+            "D": 6.93,
+            "GK": 6.48
+          },
+          "top10_mix": "5F-5M-0D"
+        }
+      },
+      "notes": [
+        "Aerials are a FLOOR stat for forwards (sensitivity: +0.88 pts/90 per +0.5, weekly CV down) \u2014 at 1.25-1.5 the boom/bust dent is negligible (0.88 -> 0.87), at 2.0 it erases the F/M variance gap entirely",
+        "Beneficiaries are target men: Muniz 7.0 aerials/90, Arokodare 6.5, Barry 6.1, Beto 5.3, Calvert-Lewin 4.2 (128 won) \u2014 NOT dribbly wingers",
+        "At 2.0 the top 10 goes 7F with Gakpo and Barry entering \u2014 past the brief"
+      ]
+    }
+  },
+  "wills_config_aug9": {
+    "prepared": "2026-08-09 (Will's picks, seventh pass)",
+    "description": "Will's chosen direction: aerials 1.5 for F and D, midfield successful dribbles added at 1.0, on the 2-change compromise base (GK cs 3.5, M kp 2.25)",
+    "changes": {
+      "pos_gk_cs": {
+        "old": 4.0,
+        "new": 3.5
+      },
+      "pos_m_kp": {
+        "old": 2.0,
+        "new": 2.25
+      },
+      "pos_m_cos": {
+        "old": 0.5,
+        "new": 1.0
+      },
+      "pos_f_aer": {
+        "old": 1.0,
+        "new": 1.5
+      },
+      "pos_d_aer": {
+        "old": 1.0,
+        "new": 1.5
+      }
+    },
+    "full_scoring_settings": {
+      "pos_f_yc2": -5.0,
+      "pos_d_og": -5.0,
+      "pos_m_at": 6.0,
+      "pos_gk_sm": 1.0,
+      "pos_f_sv": 2.0,
+      "pos_gk_cs": 3.5,
+      "pos_f_cos": 0.5,
+      "pos_m_bs": 1.0,
+      "pos_d_g": 10.0,
+      "pos_d_min": 0.0,
+      "pos_gk_yc": -2.0,
+      "pos_d_at": 7.0,
+      "pos_d_pks": 8.0,
+      "pos_m_sm": 1.0,
+      "pos_f_yc": -2.0,
+      "pos_gk_int": 1.0,
+      "pos_m_sv": 2.0,
+      "pos_m_hcs": 1.0,
+      "pos_gk_sv": 2.0,
+      "pos_f_ga": 0.0,
+      "pos_d_yc": -2.0,
+      "pos_m_clr": 0.0,
+      "pos_gk_at": 7.0,
+      "pos_gk_cos": 1.0,
+      "pos_f_g": 9.0,
+      "pos_f_int": 1.0,
+      "pos_d_hcs": 1.0,
+      "pos_m_pks": 8.0,
+      "pos_f_sm": 1.0,
+      "pos_f_clr": 0.0,
+      "pos_m_yc": -2.0,
+      "pos_f_dis": -0.5,
+      "pos_gk_rc": -7.0,
+      "pos_f_pkm": -4.0,
+      "pos_gk_clr": 0.25,
+      "pos_gk_bs": 1.0,
+      "pos_f_acnc": 1.0,
+      "pos_m_min": 0.0,
+      "pos_d_sv": 2.0,
+      "pos_d_bs": 1.0,
+      "pos_m_ga": 0.0,
+      "pos_f_sot": 2.0,
+      "pos_m_aer": 0.5,
+      "pos_gk_g": 10.0,
+      "pos_d_yc2": -5.0,
+      "pos_d_pkd": 2.0,
+      "pos_f_rc": -7.0,
+      "pos_gk_min": 0.0,
+      "pos_m_sot": 2.0,
+      "pos_f_cs": 0.0,
+      "pos_gk_sot": 2.0,
+      "pos_f_kp": 2.0,
+      "pos_d_cs": 3.0,
+      "pos_gk_dis": -0.5,
+      "pos_d_int": 1.0,
+      "pos_m_acnc": 1.0,
+      "pos_gk_cs90": 4.0,
+      "pos_d_pkm": -4.0,
+      "pos_d_acnc": 1.0,
+      "pos_m_dis": -0.5,
+      "pos_d_cs90": 3.0,
+      "pos_gk_og": -5.0,
+      "pos_d_kp": 2.0,
+      "pos_d_aer": 1.5,
+      "pos_gk_aer": 1.0,
+      "pos_gk_acnc": 1.0,
+      "pos_m_tkw": 1.0,
+      "pos_gk_pkm": -4.0,
+      "pos_f_aer": 1.5,
+      "pos_m_pkd": 2.0,
+      "pos_gk_hcs": 1.0,
+      "pos_d_clr": 0.25,
+      "pos_d_rc": -7.0,
+      "pos_f_og": -5.0,
+      "pos_m_og": -5.0,
+      "pos_gk_ga": -2.0,
+      "pos_d_dis": -0.5,
+      "pos_m_cs": 0.0,
+      "pos_d_cos": 0.5,
+      "pos_f_hcs": 1.0,
+      "pos_m_rc": -7.0,
+      "pos_f_pks": 8.0,
+      "pos_gk_pks": 8.0,
+      "pos_gk_tkw": 1.0,
+      "pos_f_min": 0.0,
+      "pos_d_sot": 2.0,
+      "pos_m_int": 1.0,
+      "pos_gk_pkd": 2.0,
+      "pos_m_cos": 1.0,
+      "pos_m_kp": 2.25,
+      "pos_gk_kp": 2.0,
+      "pos_m_pkm": -4.0,
+      "pos_f_at": 6.0,
+      "pos_gk_yc2": -5.0,
+      "pos_d_sm": 1.0,
+      "pos_f_pkd": 2.0,
+      "pos_m_g": 9.0,
+      "pos_f_tkw": 1.0,
+      "pos_d_tkw": 1.0,
+      "pos_m_yc2": -5.0,
+      "pos_m_cs90": 0.5,
+      "pos_f_bs": 1.0,
+      "pos_d_ga": -2.0
+    },
+    "replay_results": {
+      "slot_value": {
+        "F": 10.35,
+        "M": 8.29,
+        "D": 7.98,
+        "GK": 6.48
+      },
+      "per90_mean": {
+        "F": 10.57,
+        "M": 8.26,
+        "D": 7.06,
+        "GK": 5.82
+      },
+      "weekly_cv": {
+        "F": 0.84,
+        "M": 0.79,
+        "D": 0.85,
+        "GK": 0.93
+      },
+      "top10_mix": "5F-3M-2D (Van Dijk #5, Tarkowski #6 enter via aerials)"
+    },
+    "dials": {
+      "m_cos_sensitivity": "each +0.25 dribbles = +0.19 M slot; at 1.25 top10 becomes 4F-4M-2D",
+      "d_aer_note": "D aer 1.5 lifts D slot 6.93 -> 7.98 (close under M) and puts Van Dijk + Tarkowski in the top 10; use 1.25 for a gentler ~7.5 if D should stay nearer the 7.0 target"
+    }
+  }
+}

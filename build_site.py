@@ -487,11 +487,24 @@ def get_draft_lab_data(conn) -> dict:
     scoring_row = q1(conn, "SELECT scoring_settings FROM league WHERE league_id = ?", (LEAGUE_ID,))
     scoring = json.loads(scoring_row["scoring_settings"] or "{}")
 
-    # weights[stat] = {gk, d, m, f} — 0 where the league didn't score it
-    weights = {
-        key: {pc: scoring.get(f"pos_{pc}_{key}", 0) or 0 for pc in ("gk", "d", "m", "f")}
-        for key in stat_keys
-    }
+    # 2026/27 proposed scoring (wills_config_aug9) is the page default;
+    # the official 2025/26 settings stay available as a one-click preset.
+    proposed = scoring
+    try:
+        with open(HERE / "scoring_proposal_2026.json") as f:
+            proposed = json.load(f)["wills_config_aug9"]["full_scoring_settings"]
+    except (OSError, KeyError, json.JSONDecodeError):
+        pass
+
+    def _weights(src: dict) -> dict:
+        # weights[stat] = {gk, d, m, f} — 0 where the league didn't score it
+        return {
+            key: {pc: src.get(f"pos_{pc}_{key}", 0) or 0 for pc in ("gk", "d", "m", "f")}
+            for key in stat_keys
+        }
+
+    weights = _weights(proposed)
+    weights_2526 = _weights(scoring)
 
     # Each player's *scoring* position = the pos_X_ prefix they accumulated
     # the most minutes under (Sleeper applies weights by this, and it can
@@ -549,6 +562,7 @@ def get_draft_lab_data(conn) -> dict:
     return {
         "stats":   [{"key": k, "label": l, "abbr": a} for k, l, a in DRAFT_LAB_STATS],
         "weights": weights,
+        "weights_2526": weights_2526,
         "players": players,
     }
 
