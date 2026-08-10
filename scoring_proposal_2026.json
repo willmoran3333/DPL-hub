@@ -1480,8 +1480,8 @@
     }
   },
   "wills_config_aug9": {
-    "prepared": "2026-08-09 (Will's picks, seventh pass)",
-    "description": "Will's chosen direction: aerials 1.5 for F and D, midfield successful dribbles added at 1.0, on the 2-change compromise base (GK cs 3.5, M kp 2.25)",
+    "prepared": "2026-08-09 (Will's picks, rev 2 \u2014 D aerials trimmed 1.5 -> 1.25)",
+    "description": "Will's chosen direction: F aerials 1.5, D aerials 1.25, midfield successful dribbles 1.0, M key pass 2.25, GK clean sheet 3.5",
     "changes": {
       "pos_gk_cs": {
         "old": 4.0,
@@ -1501,7 +1501,7 @@
       },
       "pos_d_aer": {
         "old": 1.0,
-        "new": 1.5
+        "new": 1.25
       }
     },
     "full_scoring_settings": {
@@ -1568,7 +1568,7 @@
       "pos_d_cs90": 3.0,
       "pos_gk_og": -5.0,
       "pos_d_kp": 2.0,
-      "pos_d_aer": 1.5,
+      "pos_d_aer": 1.25,
       "pos_gk_aer": 1.0,
       "pos_gk_acnc": 1.0,
       "pos_m_tkw": 1.0,
@@ -1613,26 +1613,74 @@
       "slot_value": {
         "F": 10.35,
         "M": 8.29,
-        "D": 7.98,
+        "D": 7.46,
         "GK": 6.48
       },
       "per90_mean": {
         "F": 10.57,
         "M": 8.26,
-        "D": 7.06,
+        "D": 6.57,
         "GK": 5.82
       },
       "weekly_cv": {
         "F": 0.84,
         "M": 0.79,
-        "D": 0.85,
+        "D": 0.9,
         "GK": 0.93
       },
-      "top10_mix": "5F-3M-2D (Van Dijk #5, Tarkowski #6 enter via aerials)"
-    },
-    "dials": {
-      "m_cos_sensitivity": "each +0.25 dribbles = +0.19 M slot; at 1.25 top10 becomes 4F-4M-2D",
-      "d_aer_note": "D aer 1.5 lifts D slot 6.93 -> 7.98 (close under M) and puts Van Dijk + Tarkowski in the top 10; use 1.25 for a gentler ~7.5 if D should stay nearer the 7.0 target"
+      "top10_mix": "5F-3M-2D",
+      "top10": [
+        [
+          "Bruno Fernandes",
+          "M",
+          646.0
+        ],
+        [
+          "Erling Haaland",
+          "F",
+          546.5
+        ],
+        [
+          "Igor Thiago",
+          "F",
+          527.0
+        ],
+        [
+          "Antoine Semenyo",
+          "F",
+          456.0
+        ],
+        [
+          "Dominic Calvert-Lewin",
+          "F",
+          433.5
+        ],
+        [
+          "Dominik Szoboszlai",
+          "M",
+          423.5
+        ],
+        [
+          "James Tarkowski",
+          "D",
+          411.8
+        ],
+        [
+          "Virgil van Dijk",
+          "D",
+          411.8
+        ],
+        [
+          "Jo\u00e3o Pedro",
+          "F",
+          409.5
+        ],
+        [
+          "Morgan Gibbs-White",
+          "M",
+          407.8
+        ]
+      ]
     }
   }
 }
