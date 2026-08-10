@@ -1480,8 +1480,8 @@
     }
   },
   "wills_config_aug9": {
-    "prepared": "2026-08-09 (Will's picks, rev 3 \u2014 M kp back to 2.0, D clearances 0.25 -> 0.15)",
-    "description": "Will's chosen direction: F aerials 1.5, D aerials 1.25, D clearances 0.15, midfield successful dribbles 1.0, GK clean sheet 3.5 (M key pass restored to 2.0; GK clearances untouched at 0.25)",
+    "prepared": "2026-08-09 (Will's picks, rev 4 \u2014 D aerials back to 1.0; D lifted via key passes 2.5 and dribbles 1.5)",
+    "description": "F aerials 1.5, D key passes 2.5, D successful dribbles 1.5, D clearances 0.15, M successful dribbles 1.0, GK clean sheet 3.5. All aerials except F back at 1.0.",
     "changes": {
       "pos_gk_cs": {
         "old": 4.0,
@@ -1495,13 +1495,17 @@
         "old": 1.0,
         "new": 1.5
       },
-      "pos_d_aer": {
-        "old": 1.0,
-        "new": 1.25
-      },
       "pos_d_clr": {
         "old": 0.25,
         "new": 0.15
+      },
+      "pos_d_kp": {
+        "old": 2.0,
+        "new": 2.5
+      },
+      "pos_d_cos": {
+        "old": 0.5,
+        "new": 1.5
       }
     },
     "full_scoring_settings": {
@@ -1567,8 +1571,8 @@
       "pos_m_dis": -0.5,
       "pos_d_cs90": 3.0,
       "pos_gk_og": -5.0,
-      "pos_d_kp": 2.0,
-      "pos_d_aer": 1.25,
+      "pos_d_kp": 2.5,
+      "pos_d_aer": 1.0,
       "pos_gk_aer": 1.0,
       "pos_gk_acnc": 1.0,
       "pos_m_tkw": 1.0,
@@ -1583,7 +1587,7 @@
       "pos_gk_ga": -2.0,
       "pos_d_dis": -0.5,
       "pos_m_cs": 0.0,
-      "pos_d_cos": 0.5,
+      "pos_d_cos": 1.5,
       "pos_f_hcs": 1.0,
       "pos_m_rc": -7.0,
       "pos_f_pks": 8.0,
@@ -1613,22 +1617,22 @@
       "slot_value": {
         "F": 10.35,
         "M": 7.98,
-        "D": 7.05,
+        "D": 7.1,
         "GK": 6.48
       },
       "per90_mean": {
         "F": 10.57,
         "M": 7.96,
-        "D": 6.13,
+        "D": 6.3,
         "GK": 5.82
       },
       "weekly_cv": {
-        "F": 0.86,
+        "F": 0.87,
         "M": 0.8,
-        "D": 0.93,
+        "D": 0.9,
         "GK": 0.93
       },
-      "top10_mix": "5F-4M-1D",
+      "top10_mix": "5F-5M-0D",
       "top10": [
         [
           "Bruno Fernandes",
@@ -1676,12 +1680,12 @@
           394.5
         ],
         [
-          "James Tarkowski",
-          "D",
-          387.5
+          "James Garner",
+          "M",
+          378.0
         ]
       ],
-      "note": "D clr 0.10 was also tested: D falls to 6.85/slot and no defender makes the top 10; 0.15 keeps D on the 7 rung with Tarkowski at #10"
+      "note": "Also tested: D kp 2.5 alone (6.80), kp 3.0 alone (7.07 but streakier), cos 1.5 alone (6.83), kp 3+cos 1.5 (7.38, too high). No defender makes the top 10 under kp/cos \u2014 aerials was what carried Tarkowski/Van Dijk there; value now flows to ball-players (Neco Williams and Truffert join the top-6 defenders)."
     }
   }
 }
