@@ -1480,24 +1480,28 @@
     }
   },
   "wills_config_aug9": {
-    "prepared": "2026-08-09 (Will's picks, rev 4 \u2014 D aerials back to 1.0; D lifted via key passes 2.5 and dribbles 1.5)",
-    "description": "F aerials 1.5, D key passes 2.5, D successful dribbles 1.5, D clearances 0.15, M successful dribbles 1.0, GK clean sheet 3.5. All aerials except F back at 1.0.",
+    "prepared": "2026-08-09 (Will's picks, rev 5 \u2014 all aerials back to 1.0; F and M per-slot brought level)",
+    "description": "No forward or aerial changes at all. M lifted to F's level via floor stats (kp 2.5, tkw 1.5, int 1.5, dribbles 1.25); D rebalanced to ball-players (kp 2.5, dribbles 1.5, clearances 0.15); GK cs 3.5.",
     "changes": {
       "pos_gk_cs": {
         "old": 4.0,
         "new": 3.5
       },
-      "pos_m_cos": {
-        "old": 0.5,
-        "new": 1.0
+      "pos_m_kp": {
+        "old": 2.0,
+        "new": 2.5
       },
-      "pos_f_aer": {
+      "pos_m_tkw": {
         "old": 1.0,
         "new": 1.5
       },
-      "pos_d_clr": {
-        "old": 0.25,
-        "new": 0.15
+      "pos_m_int": {
+        "old": 1.0,
+        "new": 1.5
+      },
+      "pos_m_cos": {
+        "old": 0.5,
+        "new": 1.25
       },
       "pos_d_kp": {
         "old": 2.0,
@@ -1506,6 +1510,10 @@
       "pos_d_cos": {
         "old": 0.5,
         "new": 1.5
+      },
+      "pos_d_clr": {
+        "old": 0.25,
+        "new": 0.15
       }
     },
     "full_scoring_settings": {
@@ -1575,9 +1583,9 @@
       "pos_d_aer": 1.0,
       "pos_gk_aer": 1.0,
       "pos_gk_acnc": 1.0,
-      "pos_m_tkw": 1.0,
+      "pos_m_tkw": 1.5,
       "pos_gk_pkm": -4.0,
-      "pos_f_aer": 1.5,
+      "pos_f_aer": 1.0,
       "pos_m_pkd": 2.0,
       "pos_gk_hcs": 1.0,
       "pos_d_clr": 0.15,
@@ -1595,10 +1603,10 @@
       "pos_gk_tkw": 1.0,
       "pos_f_min": 0.0,
       "pos_d_sot": 2.0,
-      "pos_m_int": 1.0,
+      "pos_m_int": 1.5,
       "pos_gk_pkd": 2.0,
-      "pos_m_cos": 1.0,
-      "pos_m_kp": 2.0,
+      "pos_m_cos": 1.25,
+      "pos_m_kp": 2.5,
       "pos_gk_kp": 2.0,
       "pos_m_pkm": -4.0,
       "pos_f_at": 6.0,
@@ -1615,77 +1623,77 @@
     },
     "replay_results": {
       "slot_value": {
-        "F": 10.35,
-        "M": 7.98,
+        "F": 9.55,
+        "M": 9.48,
         "D": 7.1,
         "GK": 6.48
       },
       "per90_mean": {
-        "F": 10.57,
-        "M": 7.96,
-        "D": 6.3,
+        "F": 9.7,
+        "M": 9.71,
+        "D": 6.31,
         "GK": 5.82
       },
       "weekly_cv": {
-        "F": 0.87,
-        "M": 0.8,
-        "D": 0.9,
+        "F": 0.88,
+        "M": 0.74,
+        "D": 0.88,
         "GK": 0.93
       },
-      "top10_mix": "5F-5M-0D",
+      "top10_mix": "3F-7M-0D",
       "top10": [
         [
           "Bruno Fernandes",
           "M",
-          612.0
+          709.8
         ],
         [
           "Erling Haaland",
           "F",
-          546.5
-        ],
-        [
-          "Igor Thiago",
-          "F",
-          527.0
-        ],
-        [
-          "Antoine Semenyo",
-          "F",
-          456.0
-        ],
-        [
-          "Dominic Calvert-Lewin",
-          "F",
-          433.5
-        ],
-        [
-          "Jo\u00e3o Pedro",
-          "F",
-          409.5
+          510.0
         ],
         [
           "Dominik Szoboszlai",
           "M",
-          404.0
-        ],
-        [
-          "Morgan Gibbs-White",
-          "M",
-          395.5
-        ],
-        [
-          "Jarrod Bowen",
-          "M",
-          394.5
+          480.5
         ],
         [
           "James Garner",
           "M",
-          378.0
+          475.5
+        ],
+        [
+          "Igor Thiago",
+          "F",
+          472.0
+        ],
+        [
+          "Elliot Anderson",
+          "M",
+          466.5
+        ],
+        [
+          "Jarrod Bowen",
+          "M",
+          458.0
+        ],
+        [
+          "Morgan Gibbs-White",
+          "M",
+          441.2
+        ],
+        [
+          "Bukayo Saka",
+          "M",
+          434.0
+        ],
+        [
+          "Antoine Semenyo",
+          "F",
+          427.0
         ]
       ],
-      "note": "Also tested: D kp 2.5 alone (6.80), kp 3.0 alone (7.07 but streakier), cos 1.5 alone (6.83), kp 3+cos 1.5 (7.38, too high). No defender makes the top 10 under kp/cos \u2014 aerials was what carried Tarkowski/Van Dijk there; value now flows to ball-players (Neco Williams and Truffert join the top-6 defenders)."
+      "note": "F-M slot gap 0.07 (9.55 vs 9.48). Consequence of parity: top 10 shifts to 3F-7M (the gap rule: ~0.5 slot gap per top-10 forward). F stays the boom position (weekly CV .88 vs M .74)."
     }
   }
 }
