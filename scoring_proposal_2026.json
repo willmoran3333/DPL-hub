@@ -1480,16 +1480,12 @@
     }
   },
   "wills_config_aug9": {
-    "prepared": "2026-08-09 (Will's picks, rev 2 \u2014 D aerials trimmed 1.5 -> 1.25)",
-    "description": "Will's chosen direction: F aerials 1.5, D aerials 1.25, midfield successful dribbles 1.0, M key pass 2.25, GK clean sheet 3.5",
+    "prepared": "2026-08-09 (Will's picks, rev 3 \u2014 M kp back to 2.0, D clearances 0.25 -> 0.15)",
+    "description": "Will's chosen direction: F aerials 1.5, D aerials 1.25, D clearances 0.15, midfield successful dribbles 1.0, GK clean sheet 3.5 (M key pass restored to 2.0; GK clearances untouched at 0.25)",
     "changes": {
       "pos_gk_cs": {
         "old": 4.0,
         "new": 3.5
-      },
-      "pos_m_kp": {
-        "old": 2.0,
-        "new": 2.25
       },
       "pos_m_cos": {
         "old": 0.5,
@@ -1502,6 +1498,10 @@
       "pos_d_aer": {
         "old": 1.0,
         "new": 1.25
+      },
+      "pos_d_clr": {
+        "old": 0.25,
+        "new": 0.15
       }
     },
     "full_scoring_settings": {
@@ -1576,7 +1576,7 @@
       "pos_f_aer": 1.5,
       "pos_m_pkd": 2.0,
       "pos_gk_hcs": 1.0,
-      "pos_d_clr": 0.25,
+      "pos_d_clr": 0.15,
       "pos_d_rc": -7.0,
       "pos_f_og": -5.0,
       "pos_m_og": -5.0,
@@ -1594,7 +1594,7 @@
       "pos_m_int": 1.0,
       "pos_gk_pkd": 2.0,
       "pos_m_cos": 1.0,
-      "pos_m_kp": 2.25,
+      "pos_m_kp": 2.0,
       "pos_gk_kp": 2.0,
       "pos_m_pkm": -4.0,
       "pos_f_at": 6.0,
@@ -1612,28 +1612,28 @@
     "replay_results": {
       "slot_value": {
         "F": 10.35,
-        "M": 8.29,
-        "D": 7.46,
+        "M": 7.98,
+        "D": 7.05,
         "GK": 6.48
       },
       "per90_mean": {
         "F": 10.57,
-        "M": 8.26,
-        "D": 6.57,
+        "M": 7.96,
+        "D": 6.13,
         "GK": 5.82
       },
       "weekly_cv": {
-        "F": 0.84,
-        "M": 0.79,
-        "D": 0.9,
+        "F": 0.86,
+        "M": 0.8,
+        "D": 0.93,
         "GK": 0.93
       },
-      "top10_mix": "5F-3M-2D",
+      "top10_mix": "5F-4M-1D",
       "top10": [
         [
           "Bruno Fernandes",
           "M",
-          646.0
+          612.0
         ],
         [
           "Erling Haaland",
@@ -1656,31 +1656,32 @@
           433.5
         ],
         [
-          "Dominik Szoboszlai",
-          "M",
-          423.5
-        ],
-        [
-          "James Tarkowski",
-          "D",
-          411.8
-        ],
-        [
-          "Virgil van Dijk",
-          "D",
-          411.8
-        ],
-        [
           "Jo\u00e3o Pedro",
           "F",
           409.5
         ],
         [
+          "Dominik Szoboszlai",
+          "M",
+          404.0
+        ],
+        [
           "Morgan Gibbs-White",
           "M",
-          407.8
+          395.5
+        ],
+        [
+          "Jarrod Bowen",
+          "M",
+          394.5
+        ],
+        [
+          "James Tarkowski",
+          "D",
+          387.5
         ]
-      ]
+      ],
+      "note": "D clr 0.10 was also tested: D falls to 6.85/slot and no defender makes the top 10; 0.15 keeps D on the 7 rung with Tarkowski at #10"
     }
   }
 }
