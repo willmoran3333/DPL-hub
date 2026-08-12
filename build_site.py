@@ -339,6 +339,15 @@ def get_gw_detail(conn, week: int, team_map: dict, standings_map: dict) -> dict:
 # Players
 # ────────────────────────────────────────────────────────────────────
 
+def load_proposed_scoring() -> dict | None:
+    """The proposed 2026/27 scoring (the Draft Lab default), or None if absent."""
+    try:
+        with open(HERE / "scoring_proposal_2026.json") as f:
+            return json.load(f)["wills_config_aug9"]["full_scoring_settings"]
+    except (OSError, KeyError, json.JSONDecodeError):
+        return None
+
+
 def get_rostered_players(conn) -> list[dict]:
     """Legacy shim kept for backward compatibility; now returns all active players."""
     return get_all_active_players(conn)
@@ -395,6 +404,29 @@ def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
     """, (SEASON, LEAGUE_ID))
     players = [dict(r) for r in rows]
 
+    # Re-score this table (and only this table) with the proposed 2026/27
+    # weights — the same set the Draft Lab defaults to. Match results,
+    # standings and history keep the real 2025/26 scores.
+    proposed = load_proposed_scoring()
+    prop_week: dict[str, dict[int, float]] = {}
+    if proposed:
+        prop_tot: dict[str, float] = {}
+        for r in q(conn, """
+            SELECT player_id, week, stat_key, stat_value
+            FROM player_stats
+            WHERE season = ? AND stat_key LIKE 'pos_%' AND stat_value IS NOT NULL
+        """, (SEASON,)):
+            w = proposed.get(r["stat_key"], 0) or 0
+            if w:
+                pts = r["stat_value"] * w
+                pid = r["player_id"]
+                prop_tot[pid] = prop_tot.get(pid, 0.0) + pts
+                wkmap = prop_week.setdefault(pid, {})
+                wkmap[r["week"]] = wkmap.get(r["week"], 0.0) + pts
+        for pl in players:
+            pl["pts"] = round(prop_tot.get(pl["player_id"], 0.0), 1)
+        players.sort(key=lambda p: -(p["pts"] or 0))
+
     # Pull last-5-weeks pts_std for each player (for the sparkline)
     # Determine the window of weeks we care about
     last_weeks = q(conn, """
@@ -414,6 +446,12 @@ def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
     recent_map: dict[str, dict[int, float]] = {}
     for r in pts_rows:
         recent_map.setdefault(r["player_id"], {})[r["week"]] = r["pts"] or 0
+    if proposed:
+        # Same weeks-played structure, proposed-scoring values
+        recent_map = {
+            pid: {w: round(prop_week.get(pid, {}).get(w, 0.0), 1) for w in wkmap}
+            for pid, wkmap in recent_map.items()
+        }
 
     # Enrich each player with last5 array (aligned to window_weeks) + per-game avg + form
     for pl in players:
@@ -489,12 +527,7 @@ def get_draft_lab_data(conn) -> dict:
 
     # 2026/27 proposed scoring (wills_config_aug9) is the page default;
     # the official 2025/26 settings stay available as a one-click preset.
-    proposed = scoring
-    try:
-        with open(HERE / "scoring_proposal_2026.json") as f:
-            proposed = json.load(f)["wills_config_aug9"]["full_scoring_settings"]
-    except (OSError, KeyError, json.JSONDecodeError):
-        pass
+    proposed = load_proposed_scoring() or scoring
 
     def _weights(src: dict) -> dict:
         # weights[stat] = {gk, d, m, f} — 0 where the league didn't score it
