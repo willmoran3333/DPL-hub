@@ -1480,12 +1480,12 @@
     }
   },
   "wills_config_aug9": {
-    "prepared": "2026-08-11 (rev 7 \u2014 Will's hand-tuned blend, built in the Draft Lab editor)",
+    "prepared": "2026-08-11 (rev 8 \u2014 aer F/D 0.85 -> 0.75, D clearances 0.35 -> 0.30)",
     "description": "Will's own blend of Catholic Bowl flavor + defender volume-stat repair. Deltas on the site shown vs original DPL 2025/26 scoring.",
     "changes": {
       "pos_d_aer": {
         "old": 1.0,
-        "new": 0.85
+        "new": 0.75
       },
       "pos_d_at": {
         "old": 7.0,
@@ -1497,7 +1497,7 @@
       },
       "pos_d_clr": {
         "old": 0.25,
-        "new": 0.35
+        "new": 0.3
       },
       "pos_d_cos": {
         "old": 0.5,
@@ -1537,7 +1537,7 @@
       },
       "pos_f_aer": {
         "old": 1.0,
-        "new": 0.85
+        "new": 0.75
       },
       "pos_f_cos": {
         "old": 0.5,
@@ -1582,10 +1582,10 @@
     },
     "full_scoring_settings": {
       "pos_d_acnc": 1.0,
-      "pos_d_aer": 0.85,
+      "pos_d_aer": 0.75,
       "pos_d_at": 6,
       "pos_d_bs": 1.1,
-      "pos_d_clr": 0.35,
+      "pos_d_clr": 0.3,
       "pos_d_cos": 0.75,
       "pos_d_cs": 2,
       "pos_d_cs90": 2,
@@ -1608,7 +1608,7 @@
       "pos_d_yc": -2.0,
       "pos_d_yc2": -5.0,
       "pos_f_acnc": 1.0,
-      "pos_f_aer": 0.85,
+      "pos_f_aer": 0.75,
       "pos_f_at": 6.0,
       "pos_f_bs": 1.0,
       "pos_f_clr": 0.0,
@@ -1687,24 +1687,24 @@
     },
     "replay_results": {
       "slot_value": {
-        "F": 9.78,
+        "F": 9.65,
         "M": 7.92,
-        "D": 7.17,
+        "D": 6.77,
         "GK": 6.62
       },
       "per90_mean": {
-        "F": 10.06,
+        "F": 9.89,
         "M": 7.93,
-        "D": 6.7,
+        "D": 6.28,
         "GK": 5.92
       },
       "weekly_cv": {
-        "F": 0.88,
-        "M": 0.79,
-        "D": 0.79,
+        "F": 0.89,
+        "M": 0.81,
+        "D": 0.81,
         "GK": 0.93
       },
-      "top10_mix": "4F-5M-1D",
+      "top10_mix": "4F-6M-0D",
       "top10": [
         [
           "Bruno Fernandes",
@@ -1714,17 +1714,17 @@
         [
           "Erling Haaland",
           "F",
-          507.7
+          500.4
         ],
         [
           "Igor Thiago",
           "F",
-          470.6
+          459.6
         ],
         [
           "Antoine Semenyo",
           "F",
-          446.4
+          440.6
         ],
         [
           "Dominik Szoboszlai",
@@ -1744,20 +1744,19 @@
         [
           "Jo\u00e3o Pedro",
           "F",
-          384.2
-        ],
-        [
-          "James Tarkowski",
-          "D",
-          382.2
+          376.8
         ],
         [
           "Elliot Anderson",
           "M",
           374.8
+        ],
+        [
+          "James Garner",
+          "M",
+          373.2
         ]
-      ],
-      "note": "Hits the original 9/8/7/6.5 slot ladder almost exactly with 4F top-10 and D properly above GK."
+      ]
     }
   }
 }
