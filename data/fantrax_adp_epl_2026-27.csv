@@ -1,0 +1,434 @@
+rank,adp,name,pos,fantrax_id
+1,1.51,"Haaland, Erling",F,061vq
+2,1.82,"Borges Fernandes, Bruno Miguel",M,05gcr
+3,3.71,"Saka, Bukayo",F,04y92
+4,5.27,"Semenyo, Antoine",F,068y0
+5,6.68,"Szoboszlai, Dominik",M,06cmm
+6,8.83,"Wirtz, Florian",M,06v21
+7,9.45,"Palmer, Cole",M,05l8q
+8,10.66,"Junqueira de Jesus, Joao Pedro",F,05g2o
+9,12.23,"Gibbs-White, Morgan",M,04qr9
+10,12.56,"Santos Carneiro Da Cunha, Matheus",F,067yz
+11,12.82,"Isak, Alexander",F,0646f
+12,13.25,"Rice, Declan",M,04agz
+13,13.54,"Cherki, Rayan",M,06v07
+14,14.67,"Doku, Jeremy",F,06fup
+15,16.98,"Rogers, Morgan",F,05uht
+16,18.65,"Nascimento Rodrigues, Igor Thiago",F,06mn0
+17,19.44,"Mbeumo, Bryan",F,05trb
+18,22.17,"Simplício Rocha, Rayan Vitor",F,072wq
+19,23.85,"dos Santos Magalhaes, Gabriel",D,05nzu
+20,24.39,"Watkins, Ollie",F,05ocl
+21,25.41,"Guimaraes Rodriguez Moura, Bruno",M,05ylj
+22,25.51,"Munoz, Daniel",D,06jgi
+23,26.47,"Stach, Anton",M,06zbx
+24,27.45,"Gakpo, Cody",F,067yv
+25,27.79,"Fernandez, Enzo",M,068ym
+26,28.79,"Odegaard, Martin",M,05r9b
+27,29.25,"van Dijk, Virgil",D,03vlj
+28,30.24,"Porro, Pedro",D,05n07
+29,32.17,"Anderson, Elliot",M,05opj
+30,35.94,"Gyökeres, Viktor",F,04tsb
+31,35.96,"Tarkowski, James",D,0427d
+32,36.46,"Kudus, Mohammed",M,06fv8
+33,37.32,"Ndiaye, Iliman",F,05r94
+34,38.82,"Gross, Pascal",M,04fk1
+35,39.34,"Guehi, Marc",D,050jq
+36,43.05,"Tavernier, Marcus",M,0639x
+37,43.78,"Foden, Phil",M,04abb
+38,44.16,"O'Reilly, Nico",M,067x8
+39,46.06,"Minteh, Yankuba",F,06c6g
+40,46.44,"Sarr, Ismaila",F,05748
+41,48.96,"Garner, James",M,04spw
+42,49.68,"Lomba Neto, Pedro",F,056iy
+43,50.76,"Wilson, Harry",F,03rxs
+44,50.77,"Sesko, Benjamin",F,06zxy
+45,50.94,"Le Fée, Enzo",M,06v0p
+46,51.51,"Calvert-Lewin, Dominic",F,049tq
+47,51.97,"Dorgu, Patrick",D,06rlj
+48,52.66,"Ouattara, Dango",F,068lx
+49,54.03,"Dewsbury-Hall, Kiernan",M,05gcc
+50,54.86,"Tielemans, Youri",M,04yo7
+51,57.59,"Williams, Neco",D,05a6e
+52,60.93,"Nunes, Matheus Luiz",M,063zi
+53,62.26,"Diallo, Amad",F,05r34
+54,63.68,"Solanke, Dominic",F,03fgo
+55,64.52,"James, Reece",D,051k7
+56,65.11,"Eze, Eberechi",M,05nt6
+57,65.15,"Truffert, Adrien",D,06uyc
+58,65.42,"Mateta, Jean-Philippe",F,05r8o
+59,66.77,"Timber, Jurrien",D,06dmj
+60,67.43,"Robinson, Antonee",D,03rzp
+61,68.15,"Hill, James",D,061vb
+62,68.41,"Gvardiol, Josko",D,06ex4
+63,68.76,"Mukiele, Nordi",D,0703c
+64,72.03,"Espanha Fernandes, Mateus Goncalo",M,06pe1
+65,72.2,"Havertz, Kai",F,05o6h
+66,72.21,"Lacroix, Maxence",D,06pia
+67,72.3,"Iwobi, Alex",F,038ze
+68,73.17,"Kerkez, Milos",D,06do9
+69,74.58,"Damsgaard, Mikkel",M,063q8
+70,74.83,"Calafiori, Riccardo",D,06nu7
+71,77.46,"Schade, Kevin",M,067zv
+72,77.56,"van Hecke, Jan-Paul",D,05oh0
+73,77.92,"Maddison, James",M,0414o
+74,78.25,"Manzambi, Johan",M,07848
+75,82.45,"Hall, Lewis",D,05y9n
+76,85.84,"Almeida de Oliveira Gonçalves, Estevao Willian",F,06yxe
+77,86.64,"Senesi, Marcos",D,063e7
+78,86.89,"Gravenberch, Ryan",M,06fxe
+79,87.01,"Ballard, Danny",D,05nns
+80,87.61,"Tonali, Sandro",M,06cms
+81,89.34,"Scott, Alex",M,06f8y
+82,91.01,"Brobbey, Brian",F,070hc
+83,91.86,"Mitoma, Kaoru",M,062ci
+84,92.98,"Woltemade, Nick",F,070g7
+85,94.59,"Barnes, Harvey",M,04abn
+86,97.1,"McBurnie, Oliver",F,0477b
+87,97.98,"Frimpong, Jeremie",D,06v05
+88,99.11,"Tel, Mathys",F,06rm8
+89,99.5,"de Lima Barbosa, Francisco Evanilson",F,06p6j
+90,99.63,"Xhaka, Granit",M,0435m
+91,101.45,"Raya, David",G,05tqx
+92,102.93,"Thiaw, Malick",D,0700p
+93,103.21,"Richards, Chris",D,0635j
+94,103.86,"Botman, Sven",D,062a9
+95,106.31,"Kayode, Michael",D,06rgg
+96,107.0,"Maciel da Cruz, Igor Jesus",F,06y9o
+97,108.97,"García, Gonzalo",F,07898
+98,109.19,"Kluivert, Justin",F,06clt
+99,111.06,"Vuskovic, Luka",D,06v0y
+100,111.82,"Pino, Yeremy",M,070f9
+101,113.13,"Ngumoha, Rio",F,06r2g
+102,113.2,"Grealish, Jack",M,02lm7
+103,115.34,"Wieffer, Mats",M,06mpp
+104,115.81,"Muñoz, Victor",F,076qg
+105,115.86,"McGinn, John",M,051k0
+106,115.91,"Mac Allister, Alexis",M,0522h
+107,116.34,"Buendia, Emiliano",M,051kl
+108,116.75,"Osula, William",F,05t6x
+109,118.85,"Anthony, Jaidon",F,061vk
+110,118.87,"Wissa, Yoane",F,05uor
+111,118.96,"Rashford, Marcus",F,03ybi
+112,121.3,"Caicedo, Moises",M,05rb8
+113,121.36,"Donnarumma, Gianluigi",G,070hs
+114,121.51,"Gómez, Diego",M,06r5b
+115,122.12,"Angulo, Nilson",F,072zs
+116,122.79,"Maeda, Daizen",F,0784x
+117,123.16,"Moreira de Oliveira, Savio",F,06mvz
+118,123.38,"Cash, Matty",D,05o4b
+119,123.92,"Tzolis, Christos",F,05uox
+120,125.09,"Dalot Teixeira, Jose Diogo",D,04qfz
+121,126.07,"Maguire, Harry",D,03gu4
+122,126.81,"Wharton, Adam",M,06jgs
+123,127.9,"Gomes Betuncal, Norberto Bercique",F,06fvn
+124,128.68,"Hincapié, Piero",D,070hq
+125,130.25,"Okafor, Noah",F,070cj
+126,132.22,"Kadioglu, Ferdi",D,06phe
+127,133.31,"Ait-Nouri, Rayan",D,05os4
+128,133.97,"Mitchell, Tyrick",D,05akv
+129,135.32,"Branthwaite, Jarrad",D,05l27
+130,139.32,"Roefs, Robin",G,06znb
+131,139.99,"Wood, Chris",F,02m5b
+132,140.32,"Kroupi, Eli",F,06xza
+133,140.62,"Ampadu, Ethan",D,04lav
+134,140.84,"Marmoush, Omar Khaled Mohamed Abd Elsala",F,06rf9
+135,141.35,"Struijk, Pascal",D,05mzz
+136,141.4,"Bobb, Oscar",M,05ye7
+137,141.85,"Pickford, Jordan",G,032f9
+138,143.98,"Wright, Haji",F,076da
+139,146.59,"Palestra, Marco",D,0784b
+140,147.57,"Kelleher, Caoimhin",G,045ob
+141,154.21,"Hackney, Hayden",M,0784p
+142,157.68,"Maatsen, Ian",D,052cb
+143,158.39,"Madueke, Noni",F,068n8
+144,162.81,"Colwill, Levi",D,062p5
+145,163.13,"Santos Lopes de Macedo, Kevin",F,070hj
+146,163.84,"de Andrade, Richarlison",F,04io4
+147,164.97,"Martinez, Emiliano",G,02lz0
+148,166.36,"Collins, Nathan",D,05u1m
+149,166.58,"Fatawu, Abdul",F,06mgd
+150,171.26,"Garnacho Ferreyra, Alejandro",F,060wh
+151,171.52,"Alderete, Omar",D,0700t
+152,172.06,"Ayari, Yasin",M,068yc
+153,172.28,"Lammens, Senne",G,070hl
+154,174.15,"Hume, Trai",D,06v0g
+155,174.65,"Araujo, Ronald",D,078i7
+156,174.85,"Muniz Carvalho, Rodrigo",F,061vn
+157,176.13,"Davis, Leif",D,05nil
+158,176.45,"Spence, Djed",D,062ts
+159,177.38,"Hinshelwood, Jack",M,067ys
+160,178.95,"Petrovic, Djordje",G,06fuw
+161,179.33,"De Cuyper, Maxim",D,06y9m
+162,180.84,"Aina, Ola",D,03frx
+163,181.27,"Mainoo, Kobbie",M,0666p
+164,182.48,"Milenkovic, Nikola",D,06mw0
+165,185.24,"Elanga, Anthony",F,05ogb
+166,186.99,"Saliba, William",D,0558w
+167,187.83,"Hutchinson, Omari",F,05ubv
+168,188.69,"Rutter, Georginio",F,0689w
+169,188.95,"Thomas, Bobby",D,05l2z
+170,189.17,"Robertson, Andrew",D,03gu5
+171,190.44,"Muharemovic, Tarik",D,0784y
+172,192.71,"Ramses Becker, Alisson",G,04sjt
+173,194.09,"Kulusevski, Dejan",M,05ylx
+174,195.22,"Belloumi, Mohamed",F,076dq
+175,196.68,"Henderson, Dean",G,03yww
+176,197.66,"Welbeck, Danny",F,02lnx
+177,198.6,"Trafford, James",G,05oz3
+178,199.05,"Jacquet, Jeremy",D,0784z
+179,199.63,"van de Ven, Micky",D,06ezb
+180,200.4,"Reijnders, Tijjani",M,06v06
+181,202.29,"Hudson-Odoi, Callum",F,04mi4
+182,202.54,"Hernandez Cascante, Rodrigo",M,0524k
+183,202.83,"Gato Alves Dias, Ruben Santos",D,05omu
+184,203.34,"Touré, Bazoumana",F,0785d
+185,204.7,"Martinelli Silva, Gabriel Teodoro",F,052h5
+186,205.01,"Jensen, Mathias",M,05tr9
+187,207.17,"Gomes da Silva, Joao Victor",M,068yd
+188,208.75,"Mosquera, Cristhian",D,06zbm
+189,209.34,"Sangaré, Mamadou",M,07877
+190,211.79,"Ekitiké, Hugo",F,06zbz
+191,215.19,"Santiago Costa dos Santos, Murillo",D,06fwz
+192,216.06,"Philogene-Bidace, Jaden",F,05rff
+193,218.23,"Justin, James",D,0521z
+194,219.36,"Bijol, Jaka",D,06v51
+195,221.08,"Shaw, Luke",D,02oq6
+196,223.81,"Mingueza, Oscar",D,0784o
+197,224.8,"Lewis-Potter, Keane",F,062p3
+198,225.16,"Rudoni, Jack",M,076d3
+199,226.55,"Strand Larsen, Jorgen",F,06mow
+200,229.06,"Pope, Nick",G,044ei
+201,230.11,"Sels, Matz",G,04f6h
+202,230.5,"Khusanov, Abdukodir",D,06r9w
+203,230.77,"Kamara, Boubacar",M,061va
+204,232.37,"Verbruggen, Bart",G,06cmu
+205,232.63,"Aaronson, Brenden",M,061vp
+206,234.32,"Miley, Lewis",M,06ab3
+207,235.06,"Pereira de Albuquerque Tavares da Silva, Antonio Joao",D,0787y
+208,235.2,"Nascimento dos Santos, Andrey",M,068a0
+209,235.51,"Tcherno Quenda, Geovany",M,076kf
+210,235.7,"Ndoye, Dan",F,06zna
+211,237.73,"White, Ben",D,04e1e
+212,237.83,"Diomande, Ousmane",D,078j4
+213,238.15,"O'Brien, Jake",D,062oh
+214,240.01,"Gallagher, Conor",M,051k8
+215,240.19,"Hamer, Gustavo",M,06fg0
+216,242.49,"Torp, Victor",M,076d7
+217,242.88,"van den Berg, Sepp",D,05220
+218,243.0,"Konsa, Ezri",D,052ca
+219,244.44,"Hato, Jorrel",D,06zqq
+220,245.8,"Mykolenko, Vitalii",D,05ybq
+221,246.35,"Apolinario de Lira, Joelinton Cassio",M,0554i
+222,247.98,"Andersen, Joachim",D,05os8
+223,248.92,"Kinsky, Antonin",G,06r6s
+224,249.11,"Zubimendi, Martin",M,06y9z
+225,250.83,"Mason-Clark, Ephron",F,076d9
+226,250.94,"Merino, Mikel",M,04hk9
+227,251.84,"van Ewijk, Milan",D,076d0
+228,251.86,"Murphy, Jacob",M,03am7
+229,252.09,"Chavarría, Pep",D,078le
+230,252.55,"Johnson, Brennan",F,061ya
+231,252.69,"Gusto, Malo",D,06clz
+232,254.25,"Barry, Thierno",F,06ybp
+233,254.26,"McNeil, Dwight",F,04p0d
+234,254.75,"Ramsey, Jacob",M,051k3
+235,256.69,"Sanchez, Robert",G,04yme
+236,257.55,"Kostoulas, Charalampos",F,06xzd
+237,258.23,"Canvot, Jaydee",D,070hb
+238,259.77,"Correia da Silva, Emersonn",F,0784w
+239,260.55,"Tete, Kenny",D,05oeh
+240,261.61,"Leno, Bernd",G,04qor
+241,262.15,"Norgaard, Christian",M,05tr8
+242,263.42,"Martinez, Lisandro",D,062pl
+243,263.62,"Lukic, Sasa",M,068yt
+244,266.11,"Romero, Cristian",D,05uoc
+245,266.81,"Adams, Tyler",M,062h7
+246,266.91,"Grimes, Matt",M,03mfe
+247,267.17,"Burn, Dan",D,02lsa
+248,267.65,"Barco, Valentin",M,06j20
+249,268.72,"Keane, Michael",D,0327r
+250,268.99,"Lewis-Skelly, Myles",D,066sd
+251,269.03,"Livramento, Valentino",D,05s08
+252,270.35,"Dowman, Max",M,06zbp
+253,270.62,"Rushworth, Carl",G,062ct
+254,271.26,"Smith Rowe, Emile",M,04sat
+255,271.92,"Sessegnon, Ryan",M,04qfm
+256,272.85,"Röhl, Merlin",M,070hi
+257,273.06,"Udogie, Iyenoma Destiny",D,063y7
+258,273.43,"Kitching, Liam",D,076cz
+259,274.04,"Mudryk, Mykhailo",M,068a1
+260,274.34,"Bogle, Jayden",D,05o8o
+261,276.28,"Dunk, Lewis",D,04e1c
+262,276.28,"Madjo, Brian",F,072mq
+263,276.56,"Yirenkyi, Caleb",M,078g4
+264,276.63,"Rodríguez, Alvaro",F,07849
+265,276.88,"O'Shea, Dara",D,04gpx
+266,276.94,"Tchaouna, Loum",F,06y27
+267,278.34,"Hornícek, Lukas",G,0788g
+268,278.78,"Emegha, Emmanuel",F,076kg
+269,279.21,"Nmecha, Lukas",F,04lnu
+270,280.08,"George, Tyrique",F,06l4i
+271,280.22,"Sánchez, Juanlu",M,078ei
+272,280.39,"Janelt, Vitaly",M,05tre
+273,280.42,"Palacios, Cesar",M,07897
+274,280.71,"Delap, Liam",F,05oig
+275,280.8,"Steur, Sean",M,0785a
+276,281.07,"Sakamoto, Tatsuhiro",M,076d4
+277,281.41,"Bassey, Calvin",D,0554g
+278,281.46,"Rodon, Joe",D,03yqz
+279,281.49,"Perri, Lucas Estella",G,04ym7
+280,281.61,"Bamba, Aladji",M,07859
+281,281.74,"Barkley, Ross",M,02lpf
+282,282.13,"Giles, Ryan",D,04sjv
+283,282.15,"Yoro, Leny",D,06mx0
+284,282.48,"Kamada, Daichi",M,06mnc
+285,282.52,"Mount, Mason",M,052cd
+286,283.17,"Berge, Sander",M,05gcs
+287,283.17,"de Ligt, Matthijs",D,06p4k
+288,283.18,"Sadiki, Noah",M,06y59
+289,283.61,"Diarra, Habib",M,06y29
+290,283.89,"Gittens, Jamie",F,06y9n
+291,283.97,"Tomiyasu, Takehiro",D,05w9r
+292,284.41,"Clarke, Jack",F,05244
+293,284.49,"O'Riley, Matt",M,04qfq
+294,284.7,"Torres, Pau",D,06crm
+295,284.71,"Hirst, George",F,05m47
+296,285.07,"Simms, Ellis",F,05m9r
+297,285.49,"Doak, Ben",F,066nn
+298,285.69,"Núñez, Marcelino",M,076dv
+299,285.7,"Butland, Jack",G,032aa
+300,285.73,"Schlager, Xaver",M,0785g
+301,285.74,"Walton, Christian",G,04fjz
+302,286.05,"Baleba, Carlos",M,06fwi
+303,286.06,"Fofana, Wesley",D,05opl
+304,286.06,"Simons, Xavi",M,070fa
+305,286.37,"Greaves, Jacob",D,06msc
+306,286.5,"Schuster, Jannik",D,076kc
+307,286.54,"Bradley, Conor",D,05uhj
+308,286.76,"Bentancur, Rodrigo",M,05ylw
+309,286.86,"Adli, Amine",F,070ci
+310,286.86,"Yarmolyuk, Ehor",M,066r9
+311,286.88,"King, Joshua",M,06jh3
+312,286.89,"Abraham, Tammy",F,0410j
+313,286.9,"Curd, Ted",G,06jb3
+314,286.92,"Hughes, Charlie",D,076dh
+315,287.02,"Nketiah, Eddie",F,04ge9
+316,287.17,"Alcaraz, Carlos",M,0687c
+317,287.33,"Heaven, Ayden",D,06kqy
+318,287.36,"Longstaff, Sean",M,04ug0
+319,287.41,"Cook, Lewis",M,043qy
+320,287.45,"Lavia, Romeo",M,05unu
+321,287.63,"Guessand, Evann",F,06zwj
+322,287.65,"Bailey, Leon",F,05uns
+323,287.67,"Tzolakis, Konstantinos",G,078az
+324,287.68,"Slater, Regan",M,05o2p
+325,287.71,"González, Nico",M,06rm7
+326,287.76,"Gabriel, Joseph",F,07856
+327,287.83,"Mazraoui, Noussair",D,06p4j
+328,287.93,"Jones, Curtis",M,04o82
+329,287.93,"Subuloye, Olutayo",D,0784c
+330,287.94,"Thomas-Asante, Brandon",F,076db
+331,288.06,"Boscagli, Olivier",D,06y26
+332,288.06,"Christie, Ryan",M,061ve
+333,288.06,"Diop, Issa",D,04qos
+334,288.18,"Isnard Mandava, Reinildo",D,06yb9
+335,288.22,"Schar, Fabian",D,04tig
+336,288.24,"Talbi, Chemsdine",F,06ybq
+337,288.26,"Bergvall, Lucas",M,06mn7
+338,288.28,"Meunier, Thomas",D,0785j
+339,288.33,"Bah, Juma",D,07853
+340,288.38,"James, Daniel",M,03yr0
+341,288.54,"Mamardashvili, Giorgi",G,06xzg
+342,288.56,"Lo-Tutala, Thimothee",G,0784q
+343,288.87,"Vicario, Guglielmo",G,06cmb
+344,288.97,"Mahady, Rory",G,06yxc
+345,288.97,"Sarr, Pape",M,05w7t
+346,289.06,"Abe, Joshua",F,07851
+347,289.11,"Sangare, Ibrahim",M,06fxu
+348,289.17,"Heskey, Jaden",F,06nbw
+349,289.18,"Heaton, Tom",G,03dwz
+350,289.24,"Whitworth, Joseph",G,062pa
+351,289.26,"Diakite, Calvin",D,0784d
+352,289.26,"Onyeka, Frank",M,05ue7
+353,289.34,"Trialist, X",G,07867
+354,289.35,"Castagne, Timothy",D,05o4c
+355,289.36,"Scanlon, Callum",D,06do2
+356,289.39,"Penders, Mike",G,06uzt
+357,289.5,"Akpom, Chuba",F,0326x
+358,289.53,"Esse, Romain",M,06r9h
+359,289.58,"Darlow, Karl",G,03pif
+360,289.65,"Mehmeti, Anis",M,076dw
+361,289.66,"Ellborg, Melker",G,072zp
+362,289.68,"Gelhardt, Joe",F,05n3u
+363,289.69,"Acheampong, Josh",D,06kwp
+364,289.69,"Millar, Liam",F,052h1
+365,289.73,"Bizot, Marco",G,06ymt
+366,289.79,"Tanaka, Ao",M,06uzy
+367,289.82,"de Jesus, Gabriel Fernando",F,045c8
+368,289.93,"Button, David",G,02t13
+369,290.01,"Zambrano, Oscar",M,0784t
+370,290.05,"Hjertø-Dahl, Jens",M,078fz
+371,290.06,"McAteer, Kasey",M,05y55
+372,290.09,"Bindon, Tyler",D,06xzi
+373,290.1,"Ombang, Darryl",G,0788a
+374,290.15,"Lewis, Rico",D,062x7
+375,290.15,"Vieira, Fabio Daniel",M,061z3
+376,290.2,"Kovacic, Mateo",M,04u41
+377,290.21,"Arrizabalaga, Kepa",G,04u40
+378,290.23,"Mcatee, James",M,05uhs
+379,290.32,"Diakité, Bafode",D,0700u
+380,290.35,"Kavuma-McQueen, Ryan",F,072b6
+381,290.39,"Slonina, Gabriel",G,063c2
+382,290.41,"Miley, Mason",M,0785c
+383,290.43,"Kusi-Asare, Jonah",F,070hr
+384,290.45,"Sharman-Lowe, Teddy",G,05xtr
+385,290.49,"Gudmundsson, Gabriel",D,06yb7
+386,290.49,"Yohanna, Zadok",F,076ke
+387,290.5,"Guiu, Marc",F,06mnm
+388,290.54,"Wint, Jack",G,0785w
+389,290.58,"Adingra, Simon",F,0626q
+390,290.6,"Julienne, Theo",M,0786b
+391,290.6,"Mee, Dermot",G,06ews
+392,290.6,"Satpaev, Dastan",F,0784g
+393,290.64,"Benetton, Lucca",G,0784l
+394,290.64,"Riad, Chadi",D,06mnn
+395,290.67,"McNair, Patrick",D,03jlw
+396,290.72,"Hughes, Will",M,04f6o
+397,290.73,"Dominguez, Nicolas",M,06fy7
+398,290.77,"O'Nien, Luke",M,06v0m
+399,290.78,"Tzimas, Stefanos",F,06xzc
+400,290.78,"Zirkzee, Joshua",F,06mve
+401,290.82,"Lacey, Shea",F,06v0c
+402,290.85,"Wilson, Callum",F,03r8x
+403,290.89,"Wright, Will",F,06zrt
+404,290.91,"Isidor, Wilson",F,06v0t
+405,290.92,"Egeli, Sindre",F,076dx
+406,290.93,"Egan, John",D,02m5l
+407,290.94,"Awoniyi, Taiwo",F,04rzl
+408,290.96,"Maciel Furtado, John Victor",G,070gt
+409,290.97,"Henderson, Jordan",M,02lk5
+410,290.98,"Badiashile, Benoit",D,06804
+411,291.01,"King, Tom",G,06cmt
+412,291.02,"Henry, Rico",D,05tqz
+413,291.05,"Ajer, Kristoffer",D,05uel
+414,291.06,"Harris, Aidan",G,06h1g
+415,291.07,"Williams-Barnett, Luca",M,06qq9
+416,291.13,"Mings, Tyrone",D,03rec
+417,291.16,"Netz, Luca",D,072zr
+418,291.18,"Dovin, Oliver",G,076cw
+419,291.18,"Scherpen, Kjell",G,05uds
+420,291.27,"Bakwa, Dilane",F,070hn
+421,291.31,"Leoni, Giovanni",D,0701y
+422,291.34,"Gray, Archie",M,05y7c
+423,291.36,"Paula da Cunha Filho, Jair",D,06ygm
+424,291.57,"Dibling, Tyler",M,06195
+425,291.67,"Crooks, Matt",M,076dn
+426,291.7,"Lerma, Jefferson",M,04tzt
+427,291.95,"Monga, Jeremy",F,06rmv
+428,292.09,"Iroegbunam, Tim",M,05t6z
+429,292.12,"da Rocha dos Santos, Alysson Edward Franco",F,072j3
+430,292.15,"Chiesa, Federico",F,06phw
+431,292.19,"Emenalo, Landon",M,06shp
+432,292.21,"Smith, Adam",D,02lp5
+433,292.29,"Rigg, Chris",M,06v0l

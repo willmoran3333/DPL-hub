@@ -242,6 +242,7 @@
           <th data-sort="num" class="p-hide-sm">Per 90</th>
           <th data-sort="num">Last 5</th>
           <th data-sort="num">Pts</th>
+          <th data-sort="num" data-first="asc" title="Fantrax EPL average draft position, 2026/27 preseason">ADP</th>
         </tr>
       </thead>
       <tbody>
@@ -293,6 +294,9 @@
             </span>
           </td>
           <td class="p-pts" data-val="{{ p.pts }}">{{ "%.1f"|format(p.pts) }}</td>
+          <td data-val="{{ p.adp if p.adp is not none else 9999 }}">
+            {%- if p.adp is not none %}{{ "%.1f"|format(p.adp) }}{% else %}<span style="color: var(--c-ink-light);">—</span>{% endif -%}
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -425,7 +429,8 @@
 
   ths.forEach((th, idx) => {
     th.addEventListener('click', () => {
-      const dir = (curCol === idx) ? curDir * -1 : (th.dataset.sort === 'num' ? -1 : 1);
+      const first = th.dataset.first === 'asc' ? 1 : (th.dataset.sort === 'num' ? -1 : 1);
+      const dir = (curCol === idx) ? curDir * -1 : first;
       sortByColumn(idx, dir);
     });
   });

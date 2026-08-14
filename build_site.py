@@ -348,6 +348,82 @@ def load_proposed_scoring() -> dict | None:
         return None
 
 
+FANTRAX_ADP_PATH = HERE / "data" / "fantrax_adp_epl_2026-27.csv"
+
+
+# Letters NFKD can't decompose to ASCII (Ødegaard, Groß, …)
+_TRANSLIT = str.maketrans({
+    "ø": "o", "Ø": "O", "đ": "d", "Đ": "D", "ł": "l", "Ł": "L",
+    "æ": "ae", "Æ": "Ae", "ß": "ss", "þ": "th", "Þ": "Th", "ð": "d", "Ð": "D",
+})
+
+
+def _name_tokens(s: str) -> frozenset[str]:
+    """Lowercase, accent-strip and tokenize a player name."""
+    import re
+    import unicodedata
+    s = unicodedata.normalize("NFKD", s.translate(_TRANSLIT))
+    s = s.encode("ascii", "ignore").decode()
+    return frozenset(t for t in re.split(r"[^a-z]+", s.lower()) if t)
+
+
+def attach_fantrax_adp(players: list[dict]) -> None:
+    """
+    Join Fantrax ADP (2026/27 preseason) onto Sleeper players by name.
+    Fantrax uses full legal names ("Santos Carneiro Da Cunha, Matheus"),
+    Sleeper uses display names ("Matheus Cunha"), so match on token subset
+    with position as tiebreak. Unmatched players get adp=None.
+    """
+    import csv
+    for pl in players:
+        pl["adp"] = None
+    try:
+        with open(FANTRAX_ADP_PATH, newline="") as f:
+            entries = [
+                {
+                    "adp": float(r["adp"]),
+                    "pos": {"G": "GK"}.get(r["pos"], r["pos"]),
+                    "tokens": _name_tokens(r["name"]),
+                    "taken": False,
+                }
+                for r in csv.DictReader(f)
+            ]
+    except OSError:
+        return
+
+    # Specific (multi-token) names first, then bigger seasons first, so the
+    # obvious stars claim their entries before loose single-token names.
+    order = sorted(players, key=lambda p: (-len(_name_tokens(p["full_name"] or "")),
+                                           -(p["pts"] or 0)))
+    for pl in order:
+        s = _name_tokens(pl["full_name"] or "")
+        if not s:
+            continue
+        avail = [e for e in entries if not e["taken"]]
+        cands = [e for e in avail if s <= e["tokens"]]
+        if not cands and len(s) > 1:
+            cands = [e for e in avail if e["tokens"] <= s]
+        if not cands and len(s) > 1:
+            # Last resort: every token pairs up on a shared 3-letter prefix,
+            # which bridges nicknames (Danny/Daniel, Oli/Oliver).
+            cands = [
+                e for e in avail
+                if all(any(t[:3] == ft[:3] for ft in e["tokens"]) for t in s)
+                and e["pos"] == pl["position_primary"]
+            ]
+        if len(s) == 1:
+            # Mononyms ("Neto", "Igor") are too loose without a position check
+            cands = [e for e in cands if e["pos"] == pl["position_primary"]]
+        if len(cands) > 1:
+            same_pos = [e for e in cands if e["pos"] == pl["position_primary"]]
+            cands = same_pos or cands
+        if len(cands) > 1:
+            cands.sort(key=lambda e: (len(e["tokens"]), e["adp"]))
+        if cands:
+            cands[0]["taken"] = True
+            pl["adp"] = cands[0]["adp"]
+
+
 def get_rostered_players(conn) -> list[dict]:
     """Legacy shim kept for backward compatibility; now returns all active players."""
     return get_all_active_players(conn)
@@ -466,6 +542,7 @@ def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
         pl["owner_label"] = pl["owner"] or "(free agent)"
         pl["is_free"]     = pl["owner"] is None
 
+    attach_fantrax_adp(players)
     return players
 
 
