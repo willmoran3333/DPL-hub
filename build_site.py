@@ -669,6 +669,14 @@ def get_draft_lab_data(conn) -> dict:
     min_idx = stat_keys.index("min")
     players = [pl for pl in by_player.values() if pl["s"][min_idx] > 0]
 
+    # Fantrax ADP join — same matcher as the Players page (minutes stand in
+    # for points when ordering who claims ambiguous name matches first).
+    shim = [{"full_name": pl["n"], "position_primary": pl["p"], "pts": pl["s"][min_idx]}
+            for pl in players]
+    attach_fantrax_adp(shim)
+    for pl, sh in zip(players, shim):
+        pl["adp"] = sh["adp"]
+
     return {
         "stats":   [{"key": k, "label": l, "abbr": a} for k, l, a in DRAFT_LAB_STATS],
         "weights": weights,

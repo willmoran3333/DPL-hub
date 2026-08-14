@@ -281,6 +281,8 @@ const LAB = {{ lab|tojson }};
     { label: 'Δ', title: 'Change vs actual 2025/26 scoring', num: true, get: p => p._d, fmt: fmt1 },
     { label: 'PPG',    title: 'Points per game',   num: true, get: p => p._ppg, fmt: fmt1 },
     { label: 'P/90',   title: 'Points per 90 min', num: true, get: p => p._p90, fmt: fmt1 },
+    { label: 'ADP',    title: 'Fantrax EPL average draft position, 2026/27 preseason',
+      num: true, asc: true, get: p => p.adp ?? 9999, fmt: v => v >= 9999 ? '—' : fmt1(v) },
     ...STATS.map((st, i) => ({
       label: st.abbr, title: st.label + ' (' + st.key + ')',
       num: true, get: p => p.s[i], fmt: fmt0,
@@ -394,7 +396,7 @@ const LAB = {{ lab|tojson }};
     const th = e.target.closest('th');
     if (!th) return;
     const col = +th.dataset.col;
-    sortDir = (col === sortCol) ? -sortDir : (COLS[col].num ? -1 : 1);
+    sortDir = (col === sortCol) ? -sortDir : (COLS[col].asc ? 1 : (COLS[col].num ? -1 : 1));
     sortCol = col;
     update();
   });
@@ -434,6 +436,7 @@ const LAB = {{ lab|tojson }};
         '<td class="' + dCls + '">' + dTxt + '</td>' +
         '<td>' + fmt1(pl._ppg) + '</td>' +
         '<td>' + fmt1(pl._p90) + '</td>' +
+        '<td>' + (pl.adp != null ? fmt1(pl.adp) : '—') + '</td>' +
         pl.s.map(v => '<td>' + fmt0(v) + '</td>').join('') +
         '</tr>';
     }).join('');
