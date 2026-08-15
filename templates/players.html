@@ -157,7 +157,7 @@
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">2025/26 Season · Scored with the proposed 2026/27 rules</div>
+    <div class="page-header__eyebrow"><span id="p-season-label">2025/26</span> Season · Scored with the proposed 2026/27 rules</div>
     <h1 class="page-header__title">Players</h1>
   </header>
 
@@ -201,6 +201,10 @@
       {% endfor %}
       {% for o in owners|sort %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
     </select>
+    <select id="p-season" title="Season the stats are from — both are scored with the proposed 2026/27 rules">
+      <option value="2025" selected>2025/26 season</option>
+      <option value="2024">2024/25 season</option>
+    </select>
   </div>
 
   <div class="filter-row-b">
@@ -221,7 +225,7 @@
   </div>
 
   <div class="result-count">
-    Showing <strong id="p-count">{{ players|length }}</strong> of {{ players|length }} players
+    Showing <strong id="p-count">0</strong> of <span id="p-total">0</span> players
   </div>
 
   <div class="standings-table-wrap">
@@ -249,6 +253,7 @@
         {% for p in players %}
         {# Compute max last5 value for bar scaling on client-side via data attribute #}
         <tr class="player-row"
+            data-season="{{ p.season }}"
             data-name="{{ (p.full_name or '')|lower }}"
             data-pos="{{ p.position_primary or '' }}"
             data-club="{{ p.team_abbr or '' }}"
@@ -320,6 +325,7 @@
     pos:     document.getElementById('p-pos'),
     club:    document.getElementById('p-club'),
     owner:   document.getElementById('p-owner'),
+    season:  document.getElementById('p-season'),
     noinj:   document.getElementById('p-noinjury'),
     mins:    document.getElementById('p-minutes'),
     games:   document.getElementById('p-games'),
@@ -327,24 +333,29 @@
   };
   const minsOut  = document.getElementById('p-minutes-out');
   const gamesOut = document.getElementById('p-games-out');
+  const totalEl  = document.getElementById('p-total');
+  const seasonLabel = document.getElementById('p-season-label');
 
   function applyFilters() {
     const s       = f.search.value.toLowerCase().trim();
     const pos     = f.pos.value;
     const club    = f.club.value;
     const owner   = f.owner.value;
+    const season  = f.season.value;
     const noinj   = f.noinj.checked;
     const minMins = parseInt(f.mins.value,  10) || 0;
     const minGms  = parseInt(f.games.value, 10) || 0;
 
     minsOut.value  = minMins;
     gamesOut.value = minGms;
+    seasonLabel.textContent = season === '2024' ? '2024/25' : '2025/26';
 
-    let shown = 0;
+    let shown = 0, total = 0;
     rows.forEach(r => {
       const d = r.dataset;
-      let ok = true;
-      if (s && !d.name.includes(s)) ok = false;
+      let ok = d.season === season;
+      if (ok) total++;
+      if (ok && s && !d.name.includes(s)) ok = false;
       if (ok && pos  && d.pos  !== pos) ok = false;
       if (ok && club && d.club !== club) ok = false;
       if (ok && owner) {
@@ -359,11 +370,12 @@
       if (ok) shown++;
     });
     count.textContent = shown;
+    totalEl.textContent = total;
   }
 
-  [f.search, f.pos, f.club, f.owner, f.noinj, f.mins, f.games]
+  [f.search, f.pos, f.club, f.owner, f.season, f.noinj, f.mins, f.games]
     .forEach(el => el.addEventListener('input',  applyFilters));
-  [f.search, f.pos, f.club, f.owner, f.noinj, f.mins, f.games]
+  [f.search, f.pos, f.club, f.owner, f.season, f.noinj, f.mins, f.games]
     .forEach(el => el.addEventListener('change', applyFilters));
 
   f.reset.addEventListener('click', () => {
@@ -371,6 +383,7 @@
     f.pos.value    = '';
     f.club.value   = '';
     f.owner.value  = '';
+    f.season.value = '2025';
     f.noinj.checked = false;
     f.mins.value   = 0;
     f.games.value  = 0;

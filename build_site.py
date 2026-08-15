@@ -429,11 +429,13 @@ def get_rostered_players(conn) -> list[dict]:
     return get_all_active_players(conn)
 
 
-def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
+def get_all_active_players(conn, current_week: int | None = None,
+                           season: str = SEASON) -> list[dict]:
     """
     Return every player who has played at least one minute or scored any
-    points this season, rostered or not. Each row includes rich aggregate
-    stats + a `last5` list for the form sparkline.
+    points in `season`, rostered or not. Each row includes rich aggregate
+    stats + a `last5` list for the form sparkline. Ownership is always the
+    current league's rosters, whichever season's stats are requested.
     """
     # Pull per-player season aggregates
     rows = q(conn, """
@@ -477,7 +479,7 @@ def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
         LEFT JOIN roster_lookup rl ON rl.player_id = p.player_id
         WHERE COALESCE(a.mins, 0) > 0 OR COALESCE(a.pts, 0) != 0
         ORDER BY a.pts DESC
-    """, (SEASON, LEAGUE_ID))
+    """, (season, LEAGUE_ID))
     players = [dict(r) for r in rows]
 
     # Re-score this table (and only this table) with the proposed 2026/27
@@ -491,7 +493,7 @@ def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
             SELECT player_id, week, stat_key, stat_value
             FROM player_stats
             WHERE season = ? AND stat_key LIKE 'pos_%' AND stat_value IS NOT NULL
-        """, (SEASON,)):
+        """, (season,)):
             w = proposed.get(r["stat_key"], 0) or 0
             if w:
                 pts = r["stat_value"] * w
@@ -509,7 +511,7 @@ def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
         SELECT DISTINCT week FROM player_stats
         WHERE season=? AND stat_key='pts_std'
         ORDER BY week DESC LIMIT 5
-    """, (SEASON,))
+    """, (season,))
     window_weeks = sorted([r["week"] for r in last_weeks])
 
     # Pull all pts_std rows in the window
@@ -518,7 +520,7 @@ def get_all_active_players(conn, current_week: int | None = None) -> list[dict]:
         FROM player_stats
         WHERE season = ? AND stat_key = 'pts_std'
           AND week IN ({','.join('?' * len(window_weeks)) or '0'})
-    """, (SEASON, *window_weeks)) if window_weeks else []
+    """, (season, *window_weeks)) if window_weeks else []
     recent_map: dict[str, dict[int, float]] = {}
     for r in pts_rows:
         recent_map.setdefault(r["player_id"], {})[r["week"]] = r["pts"] or 0
@@ -1540,9 +1542,15 @@ def build(open_after: bool = False):
            current_week=current_week,
            team_map=team_map)
 
+    players_now  = get_all_active_players(conn, season="2025")
+    players_prev = get_all_active_players(conn, season="2024")
+    for p in players_now:
+        p["season"] = "2025"
+    for p in players_prev:
+        p["season"] = "2024"
     render(env0, "players.html", DIST_DIR / "players.html",
            active_nav="players",
-           players=get_rostered_players(conn),
+           players=players_now + players_prev,
            team_map=team_map)
 
     render(env0, "fixtures.html", DIST_DIR / "fixtures.html",
