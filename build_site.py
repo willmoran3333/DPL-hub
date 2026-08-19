@@ -1191,6 +1191,207 @@ def get_epl_fixtures(conn, week: int) -> list[dict]:
 
 
 # ────────────────────────────────────────────────────────────────────
+# Manager stats — careers, and draft alpha
+# ────────────────────────────────────────────────────────────────────
+
+# Alpha damping: a single monster pick shouldn't carry a manager's whole
+# number, so residuals are clipped at ±ALPHA_CAP standard deviations before
+# they're summed. At 1σ the top pick's share of a leading manager's alpha
+# drops from ~28% to ~13% without reordering anyone. Reported per gameweek
+# (÷38) because raw season totals run to ±700 and mean nothing at a glance.
+ALPHA_CAP = 1.0
+ALPHA_GWS = 38
+
+
+def _season_league_points(conn, season: str, league_id: str) -> dict:
+    """Every player's season total under that season's own scoring rules."""
+    weights = get_league_scoring(conn, league_id)
+    pts: dict[str, float] = {}
+    for r in q(conn, """
+        SELECT player_id, stat_key, SUM(stat_value) AS v
+        FROM player_stats
+        WHERE season = ? AND stat_key LIKE 'pos_%' AND stat_value IS NOT NULL
+        GROUP BY player_id, stat_key
+    """, (season,)):
+        m = weights.get(r["stat_key"], 0) or 0
+        if m:
+            pts[r["player_id"]] = pts.get(r["player_id"], 0.0) + r["v"] * m
+    return pts
+
+
+def compute_draft_alpha(conn, season: str, league_id: str) -> list[dict] | None:
+    """
+    Points above what the draft slot implied. Expected points are fitted
+    against log(pick_no) across all 204 picks — the market's own view — and
+    each pick's residual is what the manager got over that line.
+
+    This is a RETROSPECTIVE measure. It does not persist year to year
+    (2024/25 -> 2025/26 correlation is -0.13, and within a single draft the
+    odd/even-round split-half is negative), so treat it as an award, not a
+    skill rating.
+    """
+    import math
+
+    pts = _season_league_points(conn, season, league_id)
+    if not pts:
+        return None
+
+    picks = []
+    for r in q(conn, """
+        SELECT d.pick_no, d.player_id, u.display_name, p.full_name,
+               p.position_primary, p.team_abbr
+        FROM draft_picks d
+        JOIN rosters rs      ON rs.league_id = d.league_id AND rs.roster_id = d.roster_id
+        JOIN league_users u  ON u.league_id = rs.league_id AND u.user_id = rs.owner_id
+        LEFT JOIN players p  ON p.player_id = d.player_id
+        WHERE d.league_id = ?
+        ORDER BY d.pick_no
+    """, (league_id,)):
+        picks.append({
+            "pick_no": r["pick_no"], "player_id": r["player_id"],
+            "manager": r["display_name"],
+            "full_name": r["full_name"] or r["player_id"],
+            "position": r["position_primary"] or "",
+            "club": r["team_abbr"] or "",
+            "pts": pts.get(r["player_id"], 0.0),
+        })
+    if len(picks) < 24:
+        return None
+
+    xs = [math.log(p["pick_no"]) for p in picks]
+    ys = [p["pts"] for p in picks]
+    n = len(xs)
+    mx, my = sum(xs) / n, sum(ys) / n
+    denom = sum((x - mx) ** 2 for x in xs)
+    slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / denom if denom else 0.0
+    intercept = my - slope * mx
+    for p in picks:
+        p["expected"] = intercept + slope * math.log(p["pick_no"])
+        p["resid"] = p["pts"] - p["expected"]
+
+    resids = [p["resid"] for p in picks]
+    mean_r = sum(resids) / len(resids)
+    sd = math.sqrt(sum((x - mean_r) ** 2 for x in resids) / len(resids)) or 1.0
+    cap = ALPHA_CAP * sd
+    for p in picks:
+        p["adj"] = max(-cap, min(cap, p["resid"]))
+    return picks
+
+
+def get_manager_stats(conn, histories: list[dict], team_map: dict) -> dict:
+    """Career records + per-season draft alpha, keyed by Sleeper display name."""
+    seasons = []           # newest first: {season, label, league_id}
+    for h in histories:
+        seasons.append({"season": h["season"], "label": h["label"],
+                        "league_id": h["league_id"], "standings": h["standings"]})
+
+    mgrs: dict[str, dict] = {}
+
+    def slot(name):
+        return mgrs.setdefault(name, {
+            "display_name": name, "seasons": [], "alpha": {},
+            "picks": [], "career": {"wins": 0, "losses": 0, "pts_for": 0.0,
+                                     "pts_against": 0.0, "titles": 0,
+                                     "best_finish": None, "seasons_played": 0},
+            "current": None,
+        })
+
+    # ── Completed seasons: records and finishing position ──
+    for sn in seasons:
+        for i, t in enumerate(sn["standings"], start=1):
+            m = slot(t["display_name"])
+            m["seasons"].append({
+                "season": sn["season"], "label": sn["label"], "position": i,
+                "wins": t["wins"], "losses": t["losses"],
+                "pts_for": t["pts_for"], "pts_against": t["pts_against"],
+            })
+            cr = m["career"]
+            cr["wins"] += t["wins"]; cr["losses"] += t["losses"]
+            cr["pts_for"] += t["pts_for"]; cr["pts_against"] += t["pts_against"]
+            cr["seasons_played"] += 1
+            if i == 1:
+                cr["titles"] += 1
+            if cr["best_finish"] is None or i < cr["best_finish"]:
+                cr["best_finish"] = i
+
+    # ── Draft alpha, per completed season ──
+    for sn in seasons:
+        picks = compute_draft_alpha(conn, sn["season"], sn["league_id"])
+        if not picks:
+            continue
+        by_mgr: dict[str, list] = {}
+        for p in picks:
+            by_mgr.setdefault(p["manager"], []).append(p)
+        for name, ps in by_mgr.items():
+            m = slot(name)
+            m["alpha"][sn["season"]] = round(sum(x["adj"] for x in ps) / ALPHA_GWS, 1)
+            for x in ps:
+                x["season_label"] = sn["label"]
+            m["picks"].extend(ps)
+
+    # ── This season: draft slot and opening pick ──
+    for r in q(conn, """
+        SELECT d.roster_id, u.display_name, MIN(d.pick_no) AS first_pick,
+               MIN(d.draft_slot) AS slot
+        FROM draft_picks d
+        JOIN rosters rs     ON rs.league_id = d.league_id AND rs.roster_id = d.roster_id
+        JOIN league_users u ON u.league_id = rs.league_id AND u.user_id = rs.owner_id
+        WHERE d.league_id = ? AND d.season = ?
+        GROUP BY d.roster_id, u.display_name
+    """, (LEAGUE_ID, SEASON)):
+        first = q1(conn, """
+            SELECT p.full_name FROM draft_picks d
+            LEFT JOIN players p ON p.player_id = d.player_id
+            WHERE d.league_id = ? AND d.roster_id = ? ORDER BY d.pick_no LIMIT 1
+        """, (LEAGUE_ID, r["roster_id"]))
+        m = slot(r["display_name"])
+        m["current"] = {
+            "roster_id": r["roster_id"], "slot": r["slot"],
+            "first_pick_no": r["first_pick"],
+            "first_pick": first["full_name"] if first else None,
+        }
+
+    out = []
+    for m in mgrs.values():
+        cr = m["career"]
+        games = cr["wins"] + cr["losses"]
+        cr["win_pct"] = round(cr["wins"] / games, 3) if games else None
+        cr["pts_for"] = round(cr["pts_for"], 1)
+        cr["pts_against"] = round(cr["pts_against"], 1)
+        cr["ppg"] = round(cr["pts_for"] / games, 1) if games else None
+        vals = list(m["alpha"].values())
+        m["alpha_career"] = round(sum(vals) / len(vals), 1) if vals else None
+        # Headline picks use the RAW residual — damping ties several picks at
+        # the cap, which would hide the actual story (Igor Thiago, #71).
+        if m["picks"]:
+            m["best_pick"] = max(m["picks"], key=lambda x: x["resid"])
+            m["worst_pick"] = min(m["picks"], key=lambda x: x["resid"])
+        else:
+            m["best_pick"] = m["worst_pick"] = None
+        m["is_active"] = m["current"] is not None
+        m["seasons"].sort(key=lambda x: x["season"], reverse=True)
+        m.pop("picks", None)
+        out.append(m)
+
+    out.sort(key=lambda m: (not m["is_active"], -(m["career"]["win_pct"] or 0)))
+
+    # League-wide leaderboards for the alpha section
+    alpha_rows = []
+    for sn in seasons:
+        picks = compute_draft_alpha(conn, sn["season"], sn["league_id"])
+        if not picks:
+            continue
+        for p in sorted(picks, key=lambda x: -x["resid"])[:5]:
+            alpha_rows.append({**p, "season_label": sn["label"]})
+
+    return {
+        "managers": out,
+        "seasons": [{"season": s["season"], "label": s["label"]} for s in seasons],
+        "top_hits": sorted(alpha_rows, key=lambda x: -x["resid"])[:10],
+    }
+
+
+# ────────────────────────────────────────────────────────────────────
 # Draft board (real picks, from the Sleeper draft)
 # ────────────────────────────────────────────────────────────────────
 
@@ -1650,6 +1851,7 @@ def make_env(relative_depth: int = 0) -> Environment:
                 "stats":     f"{prefix}stats.html",
                 "draft":     f"{prefix}draft.html",
                 "draftlab":  f"{prefix}draftlab.html",
+                "managers":  f"{prefix}managers.html",
                 "history":   f"{prefix}history.html",
                 "subscribe": f"{prefix}subscribe.html",
             }
@@ -1795,6 +1997,11 @@ def build(open_after: bool = False):
     render(env0, "draftlab.html", DIST_DIR / "draftlab.html",
            active_nav="draftlab",
            lab=get_draft_lab_data(conn),
+           team_map=team_map)
+
+    render(env0, "managers.html", DIST_DIR / "managers.html",
+           active_nav="managers",
+           mgr=get_manager_stats(conn, histories, team_map),
            team_map=team_map)
 
     render(env0, "history.html", DIST_DIR / "history.html",
