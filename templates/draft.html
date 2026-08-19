@@ -127,8 +127,9 @@
       <div class="award-card__title">Best Value vs ADP</div>
       <div class="award-card__value">{{ board.best_value.full_name }}</div>
       <div class="award-card__meta">
-        <strong>{{ board.best_value.manager }}</strong> · pick {{ board.best_value.pick_no }},
-        ADP {{ "%.1f"|format(board.best_value.adp) }} ({{ board.best_value.adp_delta }} later)
+        <strong>{{ board.best_value.manager }}</strong> · went at {{ board.best_value.pick_no }},
+        ADP {{ "%.1f"|format(board.best_value.adp) }} — lasted
+        {{ "%.0f"|format(board.best_value.adp_delta) }} picks longer than the market
       </div>
     </div>
     {% endif %}
@@ -137,8 +138,9 @@
       <div class="award-card__title">Biggest Reach vs ADP</div>
       <div class="award-card__value">{{ board.biggest_reach.full_name }}</div>
       <div class="award-card__meta">
-        <strong>{{ board.biggest_reach.manager }}</strong> · pick {{ board.biggest_reach.pick_no }},
-        ADP {{ "%.1f"|format(board.biggest_reach.adp) }} ({{ -board.biggest_reach.adp_delta }} early)
+        <strong>{{ board.biggest_reach.manager }}</strong> · went at {{ board.biggest_reach.pick_no }},
+        ADP {{ "%.1f"|format(board.biggest_reach.adp) }} — taken
+        {{ "%.0f"|format(-board.biggest_reach.adp_delta) }} picks ahead of the market
       </div>
     </div>
     {% endif %}

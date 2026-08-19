@@ -1480,8 +1480,10 @@ def get_draft_board(conn) -> dict | None:
     attach_fantrax_adp(shim)
     for r, sh in zip(rows, shim):
         r["adp"] = sh["adp"]
-        # Positive = drafted later than ADP (value); negative = a reach.
-        r["adp_delta"] = round(sh["adp"] - r["pick_no"], 1) if sh["adp"] else None
+        # pick_no - adp, so the sign reads the way people talk about drafts:
+        #   POSITIVE = he lasted longer than the market expected -> value
+        #   NEGATIVE = taken ahead of the market -> a reach
+        r["adp_delta"] = round(r["pick_no"] - sh["adp"], 1) if sh["adp"] else None
 
     # Board grid: one row per round, columns ordered by draft slot. Snake
     # order means odd rounds run 1→12 and even rounds 12→1; laying the board
@@ -1513,6 +1515,9 @@ def get_draft_board(conn) -> dict | None:
     scored = [r for r in rows if r["adp_delta"] is not None]
     best_value = max(scored, key=lambda r: r["adp_delta"]) if scored else None
     biggest_reach = min(scored, key=lambda r: r["adp_delta"]) if scored else None
+    # Fantrax ADP runs on a slightly longer board than our 204 picks, so a
+    # player's ADP sits ~12 picks later than the equivalent DPL slot on
+    # average. That offset is tiny next to the extremes reported here.
 
     return {
         "picks":    rows,
