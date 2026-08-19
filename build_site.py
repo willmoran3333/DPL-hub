@@ -1816,6 +1816,7 @@ def build(open_after: bool = False):
         "SELECT 1 FROM v_matchup_legs WHERE league_id=? AND season=? AND week=? LIMIT 1",
         (LEAGUE_ID, SEASON, upcoming_week)))
     range_end = upcoming_week if has_upcoming else max_week
+    gw_written = set()
     for w in range(1, range_end + 1):
         gw     = get_gw_detail(conn, w, team_map, standings_map)
         weekly = compute_weekly_awards(conn, w, team_map, standings)
@@ -1823,6 +1824,18 @@ def build(open_after: bool = False):
                active_nav="gameweeks",
                gw=gw, current_week=current_week, team_map=team_map,
                stats=stats_data, weekly=weekly)
+        gw_written.add(f"{w}.html")
+
+    # Gameweek pages from a previous season are orphaned once the season
+    # rolls over — the Gameweeks index only lists the current season, and
+    # past results live on the History page.
+    gw_dir = DIST_DIR / "gameweek"
+    if gw_dir.exists():
+        stale_gw = [f for f in gw_dir.glob("*.html") if f.name not in gw_written]
+        for f in stale_gw:
+            f.unlink()
+        if stale_gw:
+            print(f"  removed {len(stale_gw)} stale gameweek pages")
 
     # Per-club pages
     opp_owner_map = {t["roster_id"]: t["display_name"] for t in standings}
@@ -1836,6 +1849,7 @@ def build(open_after: bool = False):
     # Per-player pages (rostered only)
     rostered_ids = get_all_rostered_player_ids(conn)
     print(f"  generating {len(rostered_ids)} player pages…")
+    written = set()
     for pid in rostered_ids:
         detail = get_player_detail(conn, pid)
         if not detail:
@@ -1843,6 +1857,17 @@ def build(open_after: bool = False):
         render(env1, "player_detail.html", DIST_DIR / "players" / f"{pid}.html",
                active_nav="players",
                detail=detail, team_map=team_map)
+        written.add(f"{pid}.html")
+
+    # Drop player pages left over from a previous season's rosters — they
+    # carry stale ownership and never get refreshed otherwise.
+    players_dir = DIST_DIR / "players"
+    if players_dir.exists():
+        stale = [f for f in players_dir.glob("*.html") if f.name not in written]
+        for f in stale:
+            f.unlink()
+        if stale:
+            print(f"  removed {len(stale)} stale player pages")
 
     conn.close()
     print(f"\nBuild complete → {DIST_DIR}/")

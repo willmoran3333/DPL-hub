@@ -1,6 +1,6 @@
 # Dallas Premier League — Site & Pipeline
 
-A static site + email digest for the **Dallas Premier League** (DPL), a 12-team Sleeper EPL fantasy league.
+A static site + email digest for the **Dallas Premier League** (DPL), a 12-team Sleeper EPL redraft fantasy league.
 
 The site is generated from a local SQLite database (`dpl.db`) populated by `ingest.py` from the Sleeper public API + GraphQL endpoint. Templates render to `dist/`, which is what gets deployed to GitHub Pages.
 
