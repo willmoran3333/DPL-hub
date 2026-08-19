@@ -359,23 +359,89 @@ def ingest_draft(conn: sqlite3.Connection):
                 jdump(pk.get("metadata")), now_iso(),
             ),
         )
+    # Any drafted player the players dump can't supply (id collisions with
+    # club records, mid-window transfers) gets a minimal row built from the
+    # pick's own metadata, so rosters and the board never show a blank.
+    backfilled = 0
+    for pk in picks:
+        pid = pk.get("player_id")
+        if not pid:
+            continue
+        row = conn.execute(
+            "SELECT full_name FROM players WHERE player_id = ?", (pid,)
+        ).fetchone()
+        if row and row[0]:
+            continue
+        m = pk.get("metadata") or {}
+        name = " ".join(x for x in (m.get("first_name"), m.get("last_name")) if x).strip()
+        if not name:
+            continue
+        conn.execute(
+            """
+            INSERT INTO players (player_id, full_name, first_name, last_name,
+                                 team_abbr, position_primary, fantasy_positions,
+                                 status, active, injury_status, metadata, fetched_at)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+            ON CONFLICT(player_id) DO UPDATE SET
+                full_name=excluded.full_name, first_name=excluded.first_name,
+                last_name=excluded.last_name, team_abbr=excluded.team_abbr,
+                position_primary=excluded.position_primary,
+                fantasy_positions=excluded.fantasy_positions,
+                fetched_at=excluded.fetched_at
+            """,
+            (
+                pid, name, m.get("first_name"), m.get("last_name"),
+                m.get("team_abbr"), m.get("position"),
+                jdump([m["position"]] if m.get("position") else []),
+                m.get("status"), 1, m.get("injury_status") or None,
+                jdump(m), now_iso(),
+            ),
+        )
+        backfilled += 1
+
     conn.commit()
     print(f"  draft {draft_id}: {len(picks)} picks ({draft.get('type')}, "
           f"{(draft.get('settings') or {}).get('rounds')} rounds, "
-          f"status={draft.get('status')})")
+          f"status={draft.get('status')})"
+          + (f"  [backfilled {backfilled} player(s) from pick metadata]" if backfilled else ""))
 
 
 # --------------------------------------------------------------------
 # Ingest: players
 # --------------------------------------------------------------------
 
+def _is_club_record(p: dict) -> bool:
+    """True for the club entities Sleeper mixes into the player dump."""
+    return (
+        (p.get("fantasy_positions") or []) == ["DEF"]
+        and not p.get("team_abbr")
+        and p.get("player_id") == p.get("team")
+    )
+
+
 def ingest_players(conn: sqlite3.Connection):
     players = fetch_json(f"{API_BASE}/v1/players/{SPORT}") or {}
+
+    # Clean out club rows written by earlier runs, before the reload.
+    purged = conn.execute(
+        "DELETE FROM players WHERE position_primary = 'DEF' AND team_abbr IS NULL"
+    ).rowcount
+    if purged:
+        print(f"  purged {purged} club records mis-stored as players")
 
     # Team lookup by abbr (set up by fixtures ingest)
     team_by_abbr = dict(conn.execute("SELECT abbr, team_id FROM teams").fetchall())
 
+    # Sleeper's player dump also contains ~27 CLUB entities (Arsenal, Forest, …)
+    # carrying position "DEF", no team_abbr, and player_id == team. Their ids
+    # live in the same numeric space as real players, so letting them through
+    # clobbers whoever shares the id — Nottingham Forest (1031) overwrote James
+    # Trafford, wiping a drafted goalkeeper. Clubs belong in `teams`, not here.
+    skipped_clubs = 0
     for pid, p in players.items():
+        if _is_club_record(p):
+            skipped_clubs += 1
+            continue
         md = p.get("metadata") or {}
         full = md.get("full_name") or p.get("full_name")
         fpos = p.get("fantasy_positions") or []
@@ -416,7 +482,8 @@ def ingest_players(conn: sqlite3.Connection):
             ),
         )
     conn.commit()
-    print(f"  players: {len(players)}")
+    print(f"  players: {len(players) - skipped_clubs}"
+          + (f"  (skipped {skipped_clubs} club records)" if skipped_clubs else ""))
 
 
 def _int(v):
