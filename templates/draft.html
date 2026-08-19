@@ -50,7 +50,6 @@
   .board-pick__name { font-weight: 600; color: var(--c-ink); }
   .board-pick__meta { color: var(--c-ink-light); font-size: 0.6875rem; margin-top: 1px; }
   .board-pick__no { color: var(--c-ink-light); font-size: 0.625rem; }
-  .board-mine { background: var(--c-bg-alt, rgba(0,0,0,0.03)); }
 </style>
 {% endblock %}
 
@@ -108,7 +107,7 @@
         <tr>
           <td class="rd">{{ row.round }}</td>
           {% for cell in row.cells %}
-          <td{% if cell and cell.roster_id == 1 %} class="board-mine"{% endif %}>
+          <td>
             {% if cell %}
             <div class="board-pick__name">{{ cell.full_name }}</div>
             <div class="board-pick__meta">{{ cell.position_primary }} · {{ cell.club }} <span class="board-pick__no">#{{ cell.pick_no }}</span></div>
