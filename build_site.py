@@ -48,6 +48,7 @@ HISTORY_2024_PATH   = HERE / "history_2024.json"   # legacy alias
 FEATURED_PATH       = HERE / "featured_team.yml"
 FEATURED_MATCHES_PATH = HERE / "featured_matches.yml"
 DRAFT_PATH          = HERE / "draft_data.yml"
+WELCOME_PATH        = HERE / "welcome.yml"
 
 LEAGUE_ID     = "1385458928208343040"   # DPL 2026/27
 SEASON        = "2026"
@@ -98,9 +99,13 @@ def load_team_mapping() -> dict:
 
 
 def load_featured() -> dict:
+    """Featured-manager block. `show: false` hides it without deleting the copy."""
     if FEATURED_PATH.exists():
         with open(FEATURED_PATH) as f:
-            return yaml.safe_load(f)
+            data = yaml.safe_load(f) or {}
+        if not data.get("show", True):
+            return {}
+        return data
     return {}
 
 
@@ -131,6 +136,20 @@ def load_history_2024() -> dict:
         with open(HISTORY_2024_PATH) as f:
             return json.load(f)
     return {}
+
+
+def load_welcome() -> dict:
+    """Commissioner's note for the home page. Split into paragraphs here so
+    the template stays dumb. Absent file or `show: false` hides the block."""
+    if not WELCOME_PATH.exists():
+        return {}
+    with open(WELCOME_PATH) as f:
+        w = yaml.safe_load(f) or {}
+    if not w.get("show", True):
+        return {}
+    w["paragraphs"] = [para.strip() for para in (w.get("body") or "").split("\n\n")
+                       if para.strip()]
+    return w
 
 
 def load_featured_matches() -> dict:
@@ -1900,6 +1919,7 @@ def build(open_after: bool = False):
     preseason     = current_week < 1
     season_start  = get_season_start(conn)
     draft_summary = get_draft_summary(conn)
+    welcome       = load_welcome()
     upcoming_week = current_week + 1
     upcoming      = get_upcoming_matchups(conn, upcoming_week, team_map, standings)
     epl_fixtures  = get_epl_fixtures(conn, upcoming_week)
@@ -1932,6 +1952,7 @@ def build(open_after: bool = False):
            current_week=current_week,
            last_gw=last_gw,
            featured=featured,
+           welcome=welcome,
            season_high=stats_data["season_high"],
            preseason=preseason,
            season_start=season_start,

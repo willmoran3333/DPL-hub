@@ -2,6 +2,9 @@
 # FEATURED MANAGER  — update this each week before running `python3 build_site.py`
 # ─────────────────────────────────────────────────────────────────────────────
 
+# Set show: false to hide the featured-manager block on the home page.
+show: false
+
 roster_id: 11
 gw: 0
 headline: "A new name in the twelve"

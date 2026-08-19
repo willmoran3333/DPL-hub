@@ -10,6 +10,18 @@
     <p class="page-header__subtitle">12-team Sleeper EPL redraft league</p>
   </header>
 
+  {# ── Commissioner's note (welcome.yml) ── #}
+  {% if welcome %}
+  <section class="welcome">
+    {% if welcome.eyebrow %}<div class="welcome__eyebrow">{{ welcome.eyebrow }}</div>{% endif %}
+    {% if welcome.headline %}<h2 class="welcome__headline">{{ welcome.headline }}</h2>{% endif %}
+    {% for para in welcome.paragraphs %}
+    <p class="welcome__para">{{ para }}</p>
+    {% endfor %}
+    {% if welcome.signoff %}<p class="welcome__signoff">{{ welcome.signoff }}</p>{% endif %}
+  </section>
+  {% endif %}
+
   {# ── Featured Team ── #}
   {% if featured %}
   {% set ft = featured %}

@@ -1,0 +1,12 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# WELCOME NOTE  — the message at the top of the home page.
+# Add paragraphs under `body` (blank line between them) whenever you want to
+# say something; leave it empty for just the headline.
+# Set `show: false` to drop the block entirely.
+# ─────────────────────────────────────────────────────────────────────────────
+
+show: true
+eyebrow: ""
+headline: "Welcome back for the 2026/27 season"
+signoff: ""
+body: ""

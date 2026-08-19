@@ -934,3 +934,52 @@ a > .match-card { display: block; text-decoration: none; color: inherit; }
   }
   .standings-table .col-hide-sm { display: none; }
 }
+
+
+/* ── Commissioner's note (home page) ───────────────────────────────── */
+.welcome {
+  border-top: 2px solid var(--c-rule);
+  border-bottom: 1px solid var(--c-border-mid);
+  padding: 22px 0 26px;
+  margin-bottom: 40px;
+}
+
+.welcome__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-gold-deep);
+  margin-bottom: 10px;
+}
+
+.welcome__headline {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--c-ink);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.welcome__para {
+  max-width: 68ch;
+  color: var(--c-ink-mid);
+  line-height: 1.75;
+  /* Needs to clear the line-height, or paragraphs read as one block. */
+  margin-bottom: 1.4em;
+}
+
+.welcome__para:last-of-type { margin-bottom: 0; }
+
+.welcome__signoff {
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+@media (max-width: 600px) {
+  .welcome__headline { font-size: 1.375rem; }
+}
