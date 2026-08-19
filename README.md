@@ -191,6 +191,29 @@ The push triggers `pages.yml`, which:
 
 ---
 
+## Power rankings (simulate.py)
+
+`simulate.py` runs a correlated Monte Carlo over the real 38-week schedule and
+ranks managers by title probability (best H2H record; there are no playoffs).
+
+```bash
+python3 simulate.py --sims 20000 --write   # writes power_rankings.json
+python3 build_site.py                      # Rankings tab picks it up
+```
+
+The site build reads `power_rankings.json` and never imports numpy, so CI stays
+light. Re-run the simulator whenever rosters change and commit the JSON.
+
+Useful flags: `--projections` prints the per-player inputs, `--refresh-fpl`
+re-pulls the FPL bootstrap into `data/fpl_bootstrap.json`.
+
+Key assumptions live at the top of the file — `AVAIL_PERSIST`,
+`REVERSION_BY_SEASON_END`, `PRICE_AVAIL_WEIGHT`, `CLUB_SHOCK`, `SHRINK_MINUTES`.
+The leading group is stable across plausible settings; mid-table order is not,
+so present tiers rather than a strict 1-12.
+
+---
+
 ## Rolling over to a new season
 
 Past seasons stay in `dpl.db` alongside the current one — nothing gets wiped.

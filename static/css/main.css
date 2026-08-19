@@ -983,3 +983,38 @@ a > .match-card { display: block; text-decoration: none; color: inherit; }
 @media (max-width: 600px) {
   .welcome__headline { font-size: 1.375rem; }
 }
+
+/* ── Sortable table headers ────────────────────────────────────────── */
+th.is-sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: 16px;
+}
+
+th.is-sortable:hover { color: var(--c-ink); }
+
+th.is-sortable::after {
+  content: '';
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid currentColor;
+  opacity: 0.25;
+}
+
+th.is-sortable.sort-asc::after {
+  border-top: none;
+  border-bottom: 4px solid currentColor;
+  opacity: 1;
+}
+
+th.is-sortable.sort-desc::after { opacity: 1; }
+
+th.is-sortable:focus-visible {
+  outline: 2px solid var(--c-gold-deep);
+  outline-offset: -2px;
+}

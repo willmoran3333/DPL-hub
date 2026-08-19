@@ -1,0 +1,98 @@
+{% extends "_base.html" %}
+{% block title %}Power Rankings{% endblock %}
+{% block description %}Title probability for every DPL manager, from {{ "{:,}".format(rk.sims) }} simulated seasons.{% endblock %}
+
+{% block extra_head %}
+<style>
+  .prob-bar { display: block; height: 6px; background: var(--c-border); margin-top: 5px; }
+  .prob-bar > span { display: block; height: 100%; background: var(--c-gold-deep); }
+  .method { font-size: 0.8125rem; color: var(--c-ink-mid); line-height: 1.7;
+            max-width: 700px; margin-bottom: 30px; }
+  .tier-head td { padding-top: 18px !important; font-size: 0.6875rem; font-weight: 700;
+                  letter-spacing: 0.14em; text-transform: uppercase;
+                  color: var(--c-gold-deep); border-bottom: 1px solid var(--c-ink) !important; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">
+      {{ SEASON_LABEL }} · {{ "{:,}".format(rk.sims) }} simulated seasons
+    </div>
+    <h1 class="page-header__title">Power Rankings</h1>
+    <p class="page-header__subtitle">
+      Ranked by how often each manager finishes with the best head-to-head record.
+    </p>
+  </header>
+
+  <div class="section-label">Title Probability</div>
+  <div class="standings-table-wrap mb-8">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th class="col-pos">#</th>
+          <th class="col-team">Manager</th>
+          <th>Title</th>
+          <th class="col-hide-sm">Top 3</th>
+          <th class="col-hide-sm">Last</th>
+          <th>E[W]</th>
+          <th class="col-hide-sm">E[PF]</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in rk.managers %}
+        <tr>
+          <td class="col-pos">{{ m.rank }}</td>
+          <td class="col-team">
+            <a href="{{ url_club(m.roster_id) }}" class="team-cell">
+              <div class="team-cell__fantasy">{{ m.manager }}</div>
+              {% if m.team_name %}<div class="team-cell__owner">{{ m.team_name }}</div>{% endif %}
+            </a>
+          </td>
+          <td class="col-pts" data-val="{{ m.title_pct }}">
+            {{ "%.1f"|format(100 * m.title_pct) }}%
+            <span class="prob-bar"><span style="width: {{ (100 * m.title_pct / rk.managers[0].title_pct)|round(1) }}%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="{{ m.top3_pct }}">{{ "%.0f"|format(100 * m.top3_pct) }}%</td>
+          <td class="col-hide-sm" data-val="{{ m.last_pct }}">{{ "%.0f"|format(100 * m.last_pct) }}%</td>
+          <td class="col-pts">{{ "%.1f"|format(m.exp_wins) }}</td>
+          <td class="col-hide-sm">{{ "%.0f"|format(m.exp_pf) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">How this is built</div>
+  <p class="method">
+    Every roster is simulated through the real 38-week schedule
+    {{ "{:,}".format(rk.sims) }} times. Each week a player is first drawn as
+    available or not; the manager then picks the best legal eleven from whoever
+    is fit — on expected points, never on what actually happens, so nobody gets
+    hindsight — and those eleven score. Expected points blend this league's own
+    2025/26 per-90 rates, re-scored under the current rules, with the FPL price
+    of each player, since price carries this-season information that last
+    season's numbers cannot see. Teammates share a weekly club shock, so a
+    stacked roster booms and blanks together.
+  </p>
+  <p class="method">
+    Rosters are not frozen. Waivers and trades are modelled as drift: by the
+    final week each team has closed
+    {{ (100 * rk.params.reversion_by_season_end)|round|int }}% of its opening gap
+    to the league average. Availability is regressed hard toward baseline
+    (persistence {{ rk.params.avail_persist }}) — a player who missed half of
+    last season is not permanently fragile, and taking last year's fitness at
+    face value ranks managers on luck rather than squads.
+  </p>
+  <p class="method">
+    <strong>Read the tiers, not the ordering.</strong> The leading group is
+    stable across every plausible setting of the model's assumptions; positions
+    in the middle of the table move around freely when those assumptions are
+    nudged. Treat a two-point gap in the middle as noise, and note that the
+    club-stacking penalty people expect turns out to be almost nothing — across
+    eleven starters, one club's swing washes out.
+  </p>
+
+</div>
+{% endblock %}

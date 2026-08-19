@@ -47,7 +47,10 @@ FLEX_COMBOS = [(0,1,2),(0,2,1),(0,3,0),(1,0,2),(1,1,1),(1,2,0),(2,0,1),(2,1,0)]
 POS_CV = {"GK": 1.03, "D": 0.88, "M": 0.84, "F": 0.85}
 POS_MEAN90 = {"GK": 6.5, "D": 6.7, "M": 7.5, "F": 8.6}
 CLUB_SHOCK = 0.30      # sd of the shared per-club, per-week log shock
-SHRINK_MINUTES = 900   # minutes at which a player's own rate gets half weight
+SHRINK_MINUTES = 2000  # minutes at which a player's own rate gets half weight.
+                       # Raised from 900 to lean harder on the FPL price anchor:
+                       # price embeds this-season expectation (transfers, role
+                       # changes, fitness) that last season's rate cannot see.
 
 # Availability persists far less year-to-year than scoring rate does: a player
 # who missed half of last season is not permanently 65% likely to feature.
@@ -55,6 +58,16 @@ SHRINK_MINUTES = 900   # minutes at which a player's own rate gets half weight
 # on whose picks happened to stay fit last year, which is close to noise.
 # Regress it hard toward the rostered-player baseline.
 AVAIL_PERSIST = 0.45
+
+# Price also carries information about MINUTES, not just quality — clubs and
+# the market price expected starters up. Blend a price-implied availability in
+# alongside the (regressed) minutes history.
+PRICE_AVAIL_WEIGHT = 0.35
+
+# Waivers and trades: nobody sits on the roster they drafted for 38 weeks.
+# Teams drift toward the league mean as the season runs. This is the fraction
+# of a roster's initial gap to average that has closed by the final week.
+REVERSION_BY_SEASON_END = 0.35
 
 
 # ── name matching ────────────────────────────────────────────────────
@@ -171,6 +184,16 @@ def build_projections(conn) -> list[dict]:
         else:
             price_model[pos] = (POS_MEAN90[pos], 0.0)
 
+    # Cost percentile within position, over the whole FPL pool
+    pos_cost_rank: dict[str, dict[float, float]] = {}
+    for pos in POS_CV:
+        costs = sorted(e["cost"] for e in elements if e["pos"] == pos)
+        if costs:
+            pos_cost_rank[pos] = {
+                round(c, 1): i / max(len(costs) - 1, 1)
+                for i, c in enumerate(costs)
+            }
+
     # Baseline availability = what a typical rostered player manages
     shares = [min(p["minutes_prior"] / (38 * 90), 1.0) for p in prelim if p["minutes_prior"]]
     avail_base = float(np.clip(0.15 + 0.9 * np.mean(shares), 0.35, 0.85)) if shares else 0.62
@@ -199,6 +222,13 @@ def build_projections(conn) -> list[dict]:
         else:
             own = float(np.clip(0.15 + 0.9 * share, 0.12, 0.95))
             p_play = AVAIL_PERSIST * own + (1 - AVAIL_PERSIST) * avail_base
+        # Price-implied availability: rank within position, mapped to a band.
+        if p["fpl"] and pos_cost_rank.get(pos):
+            ranks = pos_cost_rank[pos]
+            pct = ranks.get(round(cost, 1), 0.5)
+            p_price = 0.55 + 0.35 * pct
+            p_play = (1 - PRICE_AVAIL_WEIGHT) * p_play + PRICE_AVAIL_WEIGHT * p_price
+
         if p["fpl"]:
             st = p["fpl"]["status"]
             if st in ("i", "s", "u"):            # injured / suspended / unavailable
@@ -250,11 +280,46 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
             }
         packs[rid] = pack
 
+    # Mean reversion: a roster's expected level drifts toward the league
+    # average across the season, standing in for waivers and trades. Strength
+    # is measured on the best legal XI by expected points, not the whole squad.
+    def xi_strength(rid):
+        grp = defaultdict(list)
+        for p in by_roster[rid]:
+            grp[p["pos"]].append(p["exp_week"])
+        for k in grp:
+            grp[k].sort(reverse=True)
+        total = sum(sum(grp[pos][:n]) for pos, n in BASE_SLOTS.items())
+        used = {pos: min(n, len(grp[pos])) for pos, n in BASE_SLOTS.items()}
+        best = 0.0
+        for fa, mb, dc in FLEX_COMBOS:
+            got = 0.0; ok = True
+            for pos, extra in (("F", fa), ("M", mb), ("D", dc)):
+                lo, hi = used[pos], used[pos] + extra
+                if hi > len(grp[pos]):
+                    ok = False; break
+                got += sum(grp[pos][lo:hi])
+            if ok:
+                best = max(best, got)
+        return total + best
+
+    strength = {rid: xi_strength(rid) for rid in rosters}
+    league_mean = sum(strength.values()) / len(strength)
+
     wins = np.zeros((len(rosters), n_sims))
     pf = np.zeros((len(rosters), n_sims))
     ridx = {rid: i for i, rid in enumerate(rosters)}
 
+    n_weeks = max(weeks) if weeks else 1
     for wk in weeks:
+        # fraction of the initial gap to average that has closed by this week
+        closed = REVERSION_BY_SEASON_END * (wk - 1) / max(n_weeks - 1, 1)
+        revert = {}
+        for rid in rosters:
+            s0 = strength[rid]
+            target = league_mean + (s0 - league_mean) * (1 - closed)
+            revert[rid] = (target / s0) if s0 > 0 else 1.0
+
         shock = rng.normal(0.0, CLUB_SHOCK, size=(n_sims, len(clubs)))
         shock = np.exp(shock - CLUB_SHOCK**2 / 2)     # mean-preserving
 
@@ -268,7 +333,7 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
                     expected[pos] = np.zeros((n_sims, 0))
                     continue
                 a = rng.random((n_sims, g["n"])) < g["pplay"]
-                mu = g["exp"][None, :] * shock[:, g["club"]]
+                mu = g["exp"][None, :] * shock[:, g["club"]] * revert[rid]
                 k = 1.0 / g["cv"][None, :] ** 2
                 draw = rng.gamma(shape=np.broadcast_to(k, mu.shape),
                                  scale=mu / k)
@@ -349,6 +414,8 @@ def main():
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--projections", action="store_true", help="show inputs and exit")
     ap.add_argument("--refresh-fpl", action="store_true", help="re-pull FPL bootstrap")
+    ap.add_argument("--write", action="store_true",
+                    help="write power_rankings.json for the site build")
     a = ap.parse_args()
 
     conn = sqlite3.connect(DB_PATH)
@@ -376,6 +443,22 @@ def main():
               f"{100*r['last_pct']:>8.1f}%{r['exp_wins']:>9.1f}{r['exp_pf']:>9.0f}")
     spread = res[0]["title_pct"] - res[-1]["title_pct"]
     print(f"\nbest-to-worst title spread: {100*spread:.1f} points")
+
+    if a.write:
+        out = HERE / "power_rankings.json"
+        out.write_text(json.dumps({
+            "season": SEASON,
+            "sims": a.sims,
+            "params": {
+                "avail_persist": AVAIL_PERSIST,
+                "price_avail_weight": PRICE_AVAIL_WEIGHT,
+                "reversion_by_season_end": REVERSION_BY_SEASON_END,
+                "club_shock": CLUB_SHOCK,
+                "shrink_minutes": SHRINK_MINUTES,
+            },
+            "managers": res,
+        }, indent=2) + "\n")
+        print(f"wrote {out.name}")
 
 
 if __name__ == "__main__":

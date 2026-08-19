@@ -49,6 +49,7 @@ FEATURED_PATH       = HERE / "featured_team.yml"
 FEATURED_MATCHES_PATH = HERE / "featured_matches.yml"
 DRAFT_PATH          = HERE / "draft_data.yml"
 WELCOME_PATH        = HERE / "welcome.yml"
+RANKINGS_PATH       = HERE / "power_rankings.json"
 
 LEAGUE_ID     = "1385458928208343040"   # DPL 2026/27
 SEASON        = "2026"
@@ -136,6 +137,25 @@ def load_history_2024() -> dict:
         with open(HISTORY_2024_PATH) as f:
             return json.load(f)
     return {}
+
+
+def load_power_rankings(team_map: dict, standings: list[dict]) -> dict:
+    """Simulator output (power_rankings.json), written by `simulate.py --write`.
+    Kept as a file so the site build stays free of numpy."""
+    if not RANKINGS_PATH.exists():
+        return {}
+    with open(RANKINGS_PATH) as f:
+        data = json.load(f)
+    live = {t["roster_id"]: t for t in standings}
+    for m in data.get("managers", []):
+        t = live.get(m["roster_id"], {})
+        m["team_name"] = t.get("team_name", "")
+        m["actual_wins"] = t.get("wins")
+        m["actual_pos"] = t.get("position")
+    data["managers"].sort(key=lambda m: -m["title_pct"])
+    for i, m in enumerate(data["managers"], start=1):
+        m["rank"] = i
+    return data
 
 
 def load_welcome() -> dict:
@@ -1870,6 +1890,7 @@ def make_env(relative_depth: int = 0) -> Environment:
                 "stats":     f"{prefix}stats.html",
                 "draft":     f"{prefix}draft.html",
                 "draftlab":  f"{prefix}draftlab.html",
+                "rankings":  f"{prefix}rankings.html",
                 "managers":  f"{prefix}managers.html",
                 "history":   f"{prefix}history.html",
                 "subscribe": f"{prefix}subscribe.html",
@@ -2019,6 +2040,15 @@ def build(open_after: bool = False):
            active_nav="draftlab",
            lab=get_draft_lab_data(conn),
            team_map=team_map)
+
+    rankings = load_power_rankings(team_map, standings)
+    if rankings:
+        render(env0, "rankings.html", DIST_DIR / "rankings.html",
+               active_nav="rankings",
+               rk=rankings,
+               current_week=current_week,
+               preseason=preseason,
+               team_map=team_map)
 
     render(env0, "managers.html", DIST_DIR / "managers.html",
            active_nav="managers",

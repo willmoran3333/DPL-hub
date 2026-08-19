@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Power Rankings — Dallas Premier League</title>
+  <meta name="description" content="Title probability for every DPL manager, from 20,000 simulated seasons.">
+  <meta property="og:title" content="Power Rankings — Dallas Premier League">
+  <meta property="og:description" content="Title probability for every DPL manager, from 20,000 simulated seasons.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="static/img/dpl_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/main.css">
+  
+<style>
+  .prob-bar { display: block; height: 6px; background: var(--c-border); margin-top: 5px; }
+  .prob-bar > span { display: block; height: 100%; background: var(--c-gold-deep); }
+  .method { font-size: 0.8125rem; color: var(--c-ink-mid); line-height: 1.7;
+            max-width: 700px; margin-bottom: 30px; }
+  .tier-head td { padding-top: 18px !important; font-size: 0.6875rem; font-weight: 700;
+                  letter-spacing: 0.14em; text-transform: uppercase;
+                  color: var(--c-gold-deep); border-bottom: 1px solid var(--c-ink) !important; }
+</style>
+
+</head>
+<body>
+
+<nav class="site-nav" role="navigation" aria-label="Main">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <img src="static/img/dpl_logo.png" alt="DPL crest">
+      <div class="nav-brand__text">
+        <strong>DPL</strong>
+        <span>Dallas Premier League</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="table.html">Table</a></li>
+      <li><a href="gameweeks.html">Gameweek</a></li>
+      <li><a href="fixtures.html">Fixtures</a></li>
+      <li><a href="clubs.html">Clubs</a></li>
+      <li><a href="players.html">Players</a></li>
+      <li><a href="stats.html">Stats</a></li>
+      <li><a href="draft.html">Draft</a></li>
+      <li><a href="draftlab.html">Draft&nbsp;Lab</a></li>
+      <li><a href="rankings.html" class="active">Rankings</a></li>
+      <li><a href="managers.html">Managers</a></li>
+      <li><a href="history.html">History</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__eyebrow">
+      2026/27 · 20,000 simulated seasons
+    </div>
+    <h1 class="page-header__title">Power Rankings</h1>
+    <p class="page-header__subtitle">
+      Ranked by how often each manager finishes with the best head-to-head record.
+    </p>
+  </header>
+
+  <div class="section-label">Title Probability</div>
+  <div class="standings-table-wrap mb-8">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th class="col-pos">#</th>
+          <th class="col-team">Manager</th>
+          <th>Title</th>
+          <th class="col-hide-sm">Top 3</th>
+          <th class="col-hide-sm">Last</th>
+          <th>E[W]</th>
+          <th class="col-hide-sm">E[PF]</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="col-pos">1</td>
+          <td class="col-team">
+            <a href="clubs/6.html" class="team-cell">
+              <div class="team-cell__fantasy">bjennings28</div>
+              <div class="team-cell__owner">Smith-Rowe v Wade</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.2976">
+            29.8%
+            <span class="prob-bar"><span style="width: 100.0%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.6255999999999999">63%</td>
+          <td class="col-hide-sm" data-val="0.00375">0%</td>
+          <td class="col-pts">22.3</td>
+          <td class="col-hide-sm">3719</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">2</td>
+          <td class="col-team">
+            <a href="clubs/7.html" class="team-cell">
+              <div class="team-cell__fantasy">rmeernst</div>
+              <div class="team-cell__owner">Ben White, Black Now</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.1669">
+            16.7%
+            <span class="prob-bar"><span style="width: 56.1%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.4658">47%</td>
+          <td class="col-hide-sm" data-val="0.0106">1%</td>
+          <td class="col-pts">21.2</td>
+          <td class="col-hide-sm">3606</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">3</td>
+          <td class="col-team">
+            <a href="clubs/5.html" class="team-cell">
+              <div class="team-cell__fantasy">brendog2814</div>
+              <div class="team-cell__owner">Kamada Harris</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.16415">
+            16.4%
+            <span class="prob-bar"><span style="width: 55.2%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.45935000000000004">46%</td>
+          <td class="col-hide-sm" data-val="0.0108">1%</td>
+          <td class="col-pts">21.1</td>
+          <td class="col-hide-sm">3602</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">4</td>
+          <td class="col-team">
+            <a href="clubs/1.html" class="team-cell">
+              <div class="team-cell__fantasy">willmoran</div>
+              <div class="team-cell__owner">Derby County</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.12645">
+            12.6%
+            <span class="prob-bar"><span style="width: 42.5%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.39180000000000004">39%</td>
+          <td class="col-hide-sm" data-val="0.0155">2%</td>
+          <td class="col-pts">20.6</td>
+          <td class="col-hide-sm">3562</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">5</td>
+          <td class="col-team">
+            <a href="clubs/8.html" class="team-cell">
+              <div class="team-cell__fantasy">cstoney20</div>
+              <div class="team-cell__owner">My Crouch Solanke </div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.087">
+            8.7%
+            <span class="prob-bar"><span style="width: 29.2%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.3028">30%</td>
+          <td class="col-hide-sm" data-val="0.0261">3%</td>
+          <td class="col-pts">19.9</td>
+          <td class="col-hide-sm">3519</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">6</td>
+          <td class="col-team">
+            <a href="clubs/4.html" class="team-cell">
+              <div class="team-cell__fantasy">benditlikebergvall</div>
+              <div class="team-cell__owner">Me, Myself, Ndiaye</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.0687">
+            6.9%
+            <span class="prob-bar"><span style="width: 23.1%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.2706">27%</td>
+          <td class="col-hide-sm" data-val="0.03005">3%</td>
+          <td class="col-pts">19.7</td>
+          <td class="col-hide-sm">3470</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">7</td>
+          <td class="col-team">
+            <a href="clubs/10.html" class="team-cell">
+              <div class="team-cell__fantasy">erozier</div>
+              <div class="team-cell__owner">Starboy’s Swimmers</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.0234">
+            2.3%
+            <span class="prob-bar"><span style="width: 7.9%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.11934999999999998">12%</td>
+          <td class="col-hide-sm" data-val="0.0939">9%</td>
+          <td class="col-pts">18.0</td>
+          <td class="col-hide-sm">3322</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">8</td>
+          <td class="col-team">
+            <a href="clubs/11.html" class="team-cell">
+              <div class="team-cell__fantasy">mdropkin</div>
+              <div class="team-cell__owner">Kurt Zouma’s Kittens</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.0206">
+            2.1%
+            <span class="prob-bar"><span style="width: 6.9%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.1047">10%</td>
+          <td class="col-hide-sm" data-val="0.10665">11%</td>
+          <td class="col-pts">17.7</td>
+          <td class="col-hide-sm">3307</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">9</td>
+          <td class="col-team">
+            <a href="clubs/2.html" class="team-cell">
+              <div class="team-cell__fantasy">skoeiboy</div>
+              <div class="team-cell__owner">Ice man</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.01845">
+            1.8%
+            <span class="prob-bar"><span style="width: 6.2%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.0959">10%</td>
+          <td class="col-hide-sm" data-val="0.108">11%</td>
+          <td class="col-pts">17.7</td>
+          <td class="col-hide-sm">3287</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">10</td>
+          <td class="col-team">
+            <a href="clubs/3.html" class="team-cell">
+              <div class="team-cell__fantasy">Flabiano9</div>
+              <div class="team-cell__owner">Aura FC</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.01515">
+            1.5%
+            <span class="prob-bar"><span style="width: 5.1%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.08515">9%</td>
+          <td class="col-hide-sm" data-val="0.1248">12%</td>
+          <td class="col-pts">17.4</td>
+          <td class="col-hide-sm">3279</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">11</td>
+          <td class="col-team">
+            <a href="clubs/9.html" class="team-cell">
+              <div class="team-cell__fantasy">JordiCarb</div>
+              <div class="team-cell__owner">Goo Goo Kaka FC</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.0065">
+            0.7%
+            <span class="prob-bar"><span style="width: 2.2%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.045649999999999996">5%</td>
+          <td class="col-hide-sm" data-val="0.2047">20%</td>
+          <td class="col-pts">16.5</td>
+          <td class="col-hide-sm">3179</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">12</td>
+          <td class="col-team">
+            <a href="clubs/12.html" class="team-cell">
+              <div class="team-cell__fantasy">Noahvillasana17</div>
+              <div class="team-cell__owner">Welcome to the show</div>
+            </a>
+          </td>
+          <td class="col-pts" data-val="0.0051">
+            0.5%
+            <span class="prob-bar"><span style="width: 1.7%"></span></span>
+          </td>
+          <td class="col-hide-sm" data-val="0.033299999999999996">3%</td>
+          <td class="col-hide-sm" data-val="0.26515">27%</td>
+          <td class="col-pts">16.0</td>
+          <td class="col-hide-sm">3134</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">How this is built</div>
+  <p class="method">
+    Every roster is simulated through the real 38-week schedule
+    20,000 times. Each week a player is first drawn as
+    available or not; the manager then picks the best legal eleven from whoever
+    is fit — on expected points, never on what actually happens, so nobody gets
+    hindsight — and those eleven score. Expected points blend this league's own
+    2025/26 per-90 rates, re-scored under the current rules, with the FPL price
+    of each player, since price carries this-season information that last
+    season's numbers cannot see. Teammates share a weekly club shock, so a
+    stacked roster booms and blanks together.
+  </p>
+  <p class="method">
+    Rosters are not frozen. Waivers and trades are modelled as drift: by the
+    final week each team has closed
+    35% of its opening gap
+    to the league average. Availability is regressed hard toward baseline
+    (persistence 0.45) — a player who missed half of
+    last season is not permanently fragile, and taking last year's fitness at
+    face value ranks managers on luck rather than squads.
+  </p>
+  <p class="method">
+    <strong>Read the tiers, not the ordering.</strong> The leading group is
+    stable across every plausible setting of the model's assumptions; positions
+    in the middle of the table move around freely when those assumptions are
+    nudged. Treat a two-point gap in the middle as noise, and note that the
+    club-stacking penalty people expect turns out to be almost nothing — across
+    eleven starters, one club's swing washes out.
+  </p>
+
+</div>
+
+
+<script>
+(function () {
+  var active = document.querySelector('.nav-links a.active');
+  if (active && active.scrollIntoView) {
+    active.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }
+})();
+</script>
+
+<script src="static/js/sortable.js"></script>
+
+
+<footer class="site-footer">
+  Dallas Premier League · 2026/27 · Powered by <a href="https://sleeper.com" target="_blank" rel="noopener">Sleeper</a> · <a href="subscribe.html">Subscribe to weekly digest</a>
+</footer>
+
+</body>
+</html>

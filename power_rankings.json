@@ -1,0 +1,121 @@
+{
+  "season": "2026",
+  "sims": 20000,
+  "params": {
+    "avail_persist": 0.45,
+    "price_avail_weight": 0.35,
+    "reversion_by_season_end": 0.35,
+    "club_shock": 0.3,
+    "shrink_minutes": 2000
+  },
+  "managers": [
+    {
+      "roster_id": 6,
+      "manager": "bjennings28",
+      "title_pct": 0.2976,
+      "exp_wins": 22.28635,
+      "exp_pf": 3719.443552504851,
+      "top3_pct": 0.6255999999999999,
+      "last_pct": 0.00375
+    },
+    {
+      "roster_id": 7,
+      "manager": "rmeernst",
+      "title_pct": 0.1669,
+      "exp_wins": 21.15465,
+      "exp_pf": 3606.4998284715475,
+      "top3_pct": 0.4658,
+      "last_pct": 0.0106
+    },
+    {
+      "roster_id": 5,
+      "manager": "brendog2814",
+      "title_pct": 0.16415,
+      "exp_wins": 21.1077,
+      "exp_pf": 3601.569170223927,
+      "top3_pct": 0.45935000000000004,
+      "last_pct": 0.0108
+    },
+    {
+      "roster_id": 1,
+      "manager": "willmoran",
+      "title_pct": 0.12645,
+      "exp_wins": 20.6416,
+      "exp_pf": 3562.2687643049157,
+      "top3_pct": 0.39180000000000004,
+      "last_pct": 0.0155
+    },
+    {
+      "roster_id": 8,
+      "manager": "cstoney20",
+      "title_pct": 0.087,
+      "exp_wins": 19.9008,
+      "exp_pf": 3518.8324824210963,
+      "top3_pct": 0.3028,
+      "last_pct": 0.0261
+    },
+    {
+      "roster_id": 4,
+      "manager": "benditlikebergvall",
+      "title_pct": 0.0687,
+      "exp_wins": 19.67635,
+      "exp_pf": 3470.0746150814966,
+      "top3_pct": 0.2706,
+      "last_pct": 0.03005
+    },
+    {
+      "roster_id": 10,
+      "manager": "erozier",
+      "title_pct": 0.0234,
+      "exp_wins": 17.9747,
+      "exp_pf": 3322.157645100661,
+      "top3_pct": 0.11934999999999998,
+      "last_pct": 0.0939
+    },
+    {
+      "roster_id": 11,
+      "manager": "mdropkin",
+      "title_pct": 0.0206,
+      "exp_wins": 17.70245,
+      "exp_pf": 3307.3983638516625,
+      "top3_pct": 0.1047,
+      "last_pct": 0.10665
+    },
+    {
+      "roster_id": 2,
+      "manager": "skoeiboy",
+      "title_pct": 0.01845,
+      "exp_wins": 17.6613,
+      "exp_pf": 3287.0848907030777,
+      "top3_pct": 0.0959,
+      "last_pct": 0.108
+    },
+    {
+      "roster_id": 3,
+      "manager": "Flabiano9",
+      "title_pct": 0.01515,
+      "exp_wins": 17.39725,
+      "exp_pf": 3279.1004069731107,
+      "top3_pct": 0.08515,
+      "last_pct": 0.1248
+    },
+    {
+      "roster_id": 9,
+      "manager": "JordiCarb",
+      "title_pct": 0.0065,
+      "exp_wins": 16.49615,
+      "exp_pf": 3179.047820962418,
+      "top3_pct": 0.045649999999999996,
+      "last_pct": 0.2047
+    },
+    {
+      "roster_id": 12,
+      "manager": "Noahvillasana17",
+      "title_pct": 0.0051,
+      "exp_wins": 16.0007,
+      "exp_pf": 3133.5464061055104,
+      "top3_pct": 0.033299999999999996,
+      "last_pct": 0.26515
+    }
+  ]
+}
