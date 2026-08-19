@@ -23,16 +23,150 @@
     border-top: 5px solid currentColor;
     opacity: 1;
   }
+
+  /* Draft board grid */
+  .board-wrap { overflow-x: auto; margin-bottom: 48px; }
+  table.board { border-collapse: collapse; width: 100%; min-width: 1100px; font-size: 0.75rem; }
+  table.board th, table.board td {
+    border: 1px solid var(--c-border);
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.board thead th {
+    border-bottom: 2px solid var(--c-ink);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-ink-light);
+    white-space: nowrap;
+  }
+  table.board td.rd {
+    text-align: center;
+    font-weight: 700;
+    color: var(--c-ink-light);
+    white-space: nowrap;
+  }
+  .board-pick__name { font-weight: 600; color: var(--c-ink); }
+  .board-pick__meta { color: var(--c-ink-light); font-size: 0.6875rem; margin-top: 1px; }
+  .board-pick__no { color: var(--c-ink-light); font-size: 0.625rem; }
+  .board-mine { background: var(--c-bg-alt, rgba(0,0,0,0.03)); }
 </style>
 {% endblock %}
 
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">{{ draft.season }} · Pre-Season Power Rankings</div>
+    <div class="page-header__eyebrow">{{ SEASON_LABEL }} Season{% if board %} · {{ board.total }} picks, {{ board.rounds }} rounds{% endif %}</div>
     <h1 class="page-header__title">Draft</h1>
   </header>
 
+  {% if board %}
+  <div class="section-label">Round 1</div>
+  <div class="standings-table-wrap mb-8">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th class="col-pos">Pick</th>
+          <th class="col-team">Manager</th>
+          <th>Player</th>
+          <th>Pos</th>
+          <th class="col-hide-sm">Club</th>
+          <th class="col-hide-sm">ADP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in board.first_round %}
+        <tr>
+          <td class="col-pos">{{ p.pick_no }}</td>
+          <td class="col-team">
+            <a href="{{ url_club(p.roster_id) }}" class="team-cell">
+              <div class="team-cell__fantasy">{{ p.manager }}</div>
+            </a>
+          </td>
+          <td><a href="{{ url_player(p.player_id) }}">{{ p.full_name }}</a></td>
+          <td>{{ p.position_primary }}</td>
+          <td class="col-hide-sm">{{ p.club }}</td>
+          <td class="col-hide-sm">{% if p.adp %}{{ "%.1f"|format(p.adp) }}{% else %}—{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Full Board</div>
+  <div class="board-wrap">
+    <table class="board">
+      <thead>
+        <tr>
+          <th>Rd</th>
+          {% for c in board.columns %}<th>{{ c.manager }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in board.board %}
+        <tr>
+          <td class="rd">{{ row.round }}</td>
+          {% for cell in row.cells %}
+          <td{% if cell and cell.roster_id == 1 %} class="board-mine"{% endif %}>
+            {% if cell %}
+            <div class="board-pick__name">{{ cell.full_name }}</div>
+            <div class="board-pick__meta">{{ cell.position_primary }} · {{ cell.club }} <span class="board-pick__no">#{{ cell.pick_no }}</span></div>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Draft Notes</div>
+  <div class="awards-grid">
+    {% if board.best_value %}
+    <div class="award-card">
+      <div class="award-card__title">Best Value vs ADP</div>
+      <div class="award-card__value">{{ board.best_value.full_name }}</div>
+      <div class="award-card__meta">
+        <strong>{{ board.best_value.manager }}</strong> · pick {{ board.best_value.pick_no }},
+        ADP {{ "%.1f"|format(board.best_value.adp) }} ({{ board.best_value.adp_delta }} later)
+      </div>
+    </div>
+    {% endif %}
+    {% if board.biggest_reach %}
+    <div class="award-card">
+      <div class="award-card__title">Biggest Reach vs ADP</div>
+      <div class="award-card__value">{{ board.biggest_reach.full_name }}</div>
+      <div class="award-card__meta">
+        <strong>{{ board.biggest_reach.manager }}</strong> · pick {{ board.biggest_reach.pick_no }},
+        ADP {{ "%.1f"|format(board.biggest_reach.adp) }} ({{ -board.biggest_reach.adp_delta }} early)
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="section-label">Haul by Manager</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:16px; margin-bottom:48px;">
+    {% for m in board.managers %}
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="{{ url_club(m.roster_id) }}">{{ m.manager }}</a> · slot {{ m.slot }}
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        {% for pos in ['GK','D','M','F'] %}{% if m.pos_counts.get(pos) %}{{ m.pos_counts.get(pos) }}{{ pos }}{% if not loop.last %} · {% endif %}{% endif %}{% endfor %}
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        {% for p in m.picks %}
+        <li><a href="{{ url_player(p.player_id) }}">{{ p.full_name }}</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">{{ p.position_primary }} · {{ p.club }} · #{{ p.pick_no }}</span></li>
+        {% endfor %}
+      </ol>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if draft and draft.managers and draft.season == SEASON_LABEL %}
   <div class="section-label">Pre-Season Power Rankings</div>
   <div class="standings-table-wrap mb-8">
     <table class="standings-table sortable" id="draft-table">
@@ -112,6 +246,7 @@
       <div class="award-card__meta">League-wide mean</div>
     </div>
   </div>
+  {% endif %}
 
 </div>
 {% endblock %}

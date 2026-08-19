@@ -88,7 +88,7 @@
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">2025/26 Season · GW{{ current_week }}</div>
+    <div class="page-header__eyebrow">{{ SEASON_LABEL }} Season{% if current_week >= 1 %} · GW{{ current_week }}{% endif %}</div>
     <h1 class="page-header__title">League Table</h1>
   </header>
 
@@ -162,7 +162,7 @@
   {% endif %}
 
   {# ── Standings table ── #}
-  <div class="section-label">Standings Through GW{{ current_week }}</div>
+  <div class="section-label">{% if current_week >= 1 %}Standings Through GW{{ current_week }}{% else %}Standings — Season Not Started{% endif %}</div>
   <div class="standings-table-wrap">
     <table class="standings-table">
       <thead>

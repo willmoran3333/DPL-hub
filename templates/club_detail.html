@@ -59,19 +59,25 @@
         </thead>
         <tbody>
           {% for w in club.weekly %}
-          {% set won = (w.points or 0) > (w.opp_points or 0) %}
+          {# points are NULL until the gameweek is scored — show it as upcoming #}
+          {% set played = w.points is not none and w.opp_points is not none %}
+          {% set won = played and w.points > w.opp_points %}
           <tr>
             <td style="text-align:left;">
               <a href="{{ url_gw(w.week) }}" style="color:var(--c-primary); font-weight:700;">GW{{ w.week }}</a>
             </td>
-            <td class="col-pts">{{ "%.1f"|format(w.points or 0) }}</td>
+            <td class="col-pts">{% if played %}{{ "%.1f"|format(w.points) }}{% else %}—{% endif %}</td>
             <td>
               {% set opp = opp_owner_map.get(w.opp_roster_id, 'Team ' ~ w.opp_roster_id) %}
               <a href="{{ url_club(w.opp_roster_id) }}" style="color:var(--c-ink);">{{ opp }}</a>
-              <span style="color:var(--c-ink-light); font-size:0.75rem;">({{ "%.1f"|format(w.opp_points or 0) }})</span>
+              {% if played %}<span style="color:var(--c-ink-light); font-size:0.75rem;">({{ "%.1f"|format(w.opp_points) }})</span>{% endif %}
             </td>
             <td>
+              {% if played %}
               <span class="badge {{ 'badge--win' if won else 'badge--loss' }}">{{ 'W' if won else 'L' }}</span>
+              {% else %}
+              <span style="color:var(--c-ink-light); font-size:0.75rem;">Upcoming</span>
+              {% endif %}
             </td>
           </tr>
           {% endfor %}

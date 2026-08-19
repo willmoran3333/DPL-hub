@@ -9,8 +9,9 @@ Usage:
     python3 ingest.py                # full refresh (current season + all weeks up to current)
     python3 ingest.py --week 30      # only (re)ingest a single week's stats/projections
     python3 ingest.py --skip-weekly  # only refresh league/players/fixtures/rosters
+    python3 ingest.py --season 2025  # re-ingest a past season (see PAST_SEASONS)
 
-Config at top: SPORT, LEAGUE_ID, SEASON. User-level lookup uses USERNAME.
+Config at top: SPORT, LEAGUE_ID, SEASON, PAST_SEASONS. User lookup uses USERNAME.
 """
 from __future__ import annotations
 
@@ -43,9 +44,15 @@ GRAPHQL_URL = "https://api.sleeper.app/graphql"
 
 SPORT = "clubsoccer:epl"
 USERNAME = "willmoran"
-LEAGUE_ID = "1244790289042776064"
-SEASON = "2025"          # EPL 2025/26 season
+LEAGUE_ID = "1385458928208343040"   # DPL 2026/27
+SEASON = "2026"                     # EPL 2026/27 season
 SEASON_TYPE = "regular"
+
+# Prior seasons, kept in the DB for history pages. Ingest one with
+#   python3 ingest.py --league <id> --season <yyyy>
+PAST_SEASONS = {
+    "2025": "1244790289042776064",  # DPL 2025/26 (erozier champion)
+}
 
 API_BASE = "https://api.sleeper.app"
 # Note: /schedule is at root, not under /v1
@@ -133,9 +140,27 @@ def open_db() -> sqlite3.Connection:
 
 
 def init_schema(conn: sqlite3.Connection):
+    # Migrations run first: schema.sql creates indexes over columns that older
+    # DBs don't have yet, so the ALTERs must land before the script executes.
+    migrate(conn)
     sql = SCHEMA_PATH.read_text()
     conn.executescript(sql)
     conn.commit()
+
+
+def migrate(conn: sqlite3.Connection):
+    """Additive migrations for DBs created before a column existed."""
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(fixtures)")}
+    if cols and "season" not in cols:
+        conn.execute("ALTER TABLE fixtures ADD COLUMN season TEXT")
+        # Everything already in the table predates multi-season support and
+        # belongs to the 2025/26 schedule.
+        conn.execute("UPDATE fixtures SET season = '2025' WHERE season IS NULL")
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_fixtures_season_week "
+            "ON fixtures(season, week)"
+        )
+        print("  migrated: fixtures.season added (existing rows -> 2025)")
 
 
 # --------------------------------------------------------------------
@@ -274,12 +299,12 @@ def ingest_fixtures(conn: sqlite3.Connection):
         conn.execute(
             """
             INSERT OR REPLACE INTO fixtures (
-                game_id, week, date, status, home_team_id, home_abbr, home_name,
+                game_id, season, week, date, status, home_team_id, home_abbr, home_name,
                 away_team_id, away_abbr, away_name, fetched_at
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?)
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
             """,
             (
-                f.get("game_id"), f.get("week"), f.get("date"), f.get("status"),
+                f.get("game_id"), SEASON, f.get("week"), f.get("date"), f.get("status"),
                 home.get("team"), home.get("abbr"), home.get("name"),
                 away.get("team"), away.get("abbr"), away.get("name"),
                 now_iso(),
@@ -292,6 +317,52 @@ def ingest_fixtures(conn: sqlite3.Connection):
         )
     conn.commit()
     print(f"  fixtures: {len(sched)}  teams: {len(team_map)}")
+
+
+# --------------------------------------------------------------------
+# Ingest: draft picks
+# --------------------------------------------------------------------
+
+def ingest_draft(conn: sqlite3.Connection):
+    """Pull the league's draft board. No-op if the draft hasn't happened."""
+    row = conn.execute(
+        "SELECT draft_id FROM league WHERE league_id = ?", (LEAGUE_ID,)
+    ).fetchone()
+    draft_id = row[0] if row else None
+    if not draft_id:
+        print("  draft: no draft_id on league, skipping")
+        return
+
+    draft = fetch_json(f"{API_BASE}/v1/draft/{draft_id}") or {}
+    picks = fetch_json(f"{API_BASE}/v1/draft/{draft_id}/picks") or []
+    if not picks:
+        print(f"  draft {draft_id}: status={draft.get('status')} — no picks yet")
+        return
+
+    slot_to_roster = {
+        int(k): v for k, v in (draft.get("slot_to_roster_id") or {}).items()
+    }
+    for pk in picks:
+        slot = pk.get("draft_slot")
+        roster_id = pk.get("roster_id") or slot_to_roster.get(slot)
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO draft_picks (
+                draft_id, pick_no, league_id, season, round, draft_slot,
+                roster_id, picked_by, player_id, is_keeper, metadata, fetched_at
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+            """,
+            (
+                draft_id, pk.get("pick_no"), LEAGUE_ID, SEASON,
+                pk.get("round"), slot, roster_id, pk.get("picked_by"),
+                pk.get("player_id"), 1 if pk.get("is_keeper") else 0,
+                jdump(pk.get("metadata")), now_iso(),
+            ),
+        )
+    conn.commit()
+    print(f"  draft {draft_id}: {len(picks)} picks ({draft.get('type')}, "
+          f"{(draft.get('settings') or {}).get('rounds')} rounds, "
+          f"status={draft.get('status')})")
 
 
 # --------------------------------------------------------------------
@@ -477,13 +548,25 @@ def ingest_matchups(conn: sqlite3.Connection, week: int):
 # --------------------------------------------------------------------
 
 def main():
+    global LEAGUE_ID, SEASON
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--week", type=int, help="only (re)ingest one week of stats/proj")
     ap.add_argument("--skip-weekly", action="store_true",
                     help="skip per-week stats/projections and transactions")
     ap.add_argument("--max-week", type=int,
                     help="override max week for weekly loop (default: current week)")
+    ap.add_argument("--league", help="league_id override (default: current season's)")
+    ap.add_argument("--season", help="season override, e.g. 2025 (default: current)")
     args = ap.parse_args()
+
+    if args.season and not args.league:
+        # Convenience: `--season 2025` resolves the league from PAST_SEASONS.
+        args.league = PAST_SEASONS.get(args.season, LEAGUE_ID)
+    if args.league:
+        LEAGUE_ID = args.league
+    if args.season:
+        SEASON = args.season
 
     print(f"DB:    {DB_PATH}")
     print(f"Sport: {SPORT}  Season: {SEASON}  League: {LEAGUE_ID}")
@@ -513,6 +596,9 @@ def main():
 
         print("[4/6] players")
         ingest_players(conn)
+
+        print("[4b/6] draft picks")
+        ingest_draft(conn)
 
         if args.skip_weekly:
             print("[5/7] skipped weekly stats/projections")

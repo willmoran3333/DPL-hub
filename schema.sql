@@ -123,6 +123,7 @@ CREATE INDEX IF NOT EXISTS idx_players_position ON players(position_primary);
 
 CREATE TABLE IF NOT EXISTS fixtures (
     game_id       TEXT PRIMARY KEY,
+    season        TEXT,
     week          INTEGER,
     date          TEXT,
     status        TEXT,
@@ -137,6 +138,7 @@ CREATE TABLE IF NOT EXISTS fixtures (
 
 CREATE INDEX IF NOT EXISTS idx_fixtures_week ON fixtures(week);
 CREATE INDEX IF NOT EXISTS idx_fixtures_date ON fixtures(date);
+CREATE INDEX IF NOT EXISTS idx_fixtures_season_week ON fixtures(season, week);
 
 -- ====================================================================
 -- Per-week per-player stats (normalized long form, easy to aggregate)
@@ -214,6 +216,30 @@ CREATE TABLE IF NOT EXISTS matchup_legs (
 
 CREATE INDEX IF NOT EXISTS idx_matchup_week ON matchup_legs(league_id, season, week);
 CREATE INDEX IF NOT EXISTS idx_matchup_id ON matchup_legs(league_id, season, week, matchup_id);
+
+-- ====================================================================
+-- Draft picks (one row per pick, from /v1/draft/{draft_id}/picks)
+-- ====================================================================
+
+CREATE TABLE IF NOT EXISTS draft_picks (
+    draft_id      TEXT NOT NULL,
+    pick_no       INTEGER NOT NULL,
+    league_id     TEXT,
+    season        TEXT,
+    round         INTEGER,
+    draft_slot    INTEGER,
+    roster_id     INTEGER,
+    picked_by     TEXT,
+    player_id     TEXT,
+    is_keeper     INTEGER,
+    metadata      TEXT,          -- JSON blob (name, position, team at time of pick)
+    fetched_at    TEXT NOT NULL,
+    PRIMARY KEY (draft_id, pick_no)
+);
+
+CREATE INDEX IF NOT EXISTS idx_draft_picks_league ON draft_picks(league_id, season);
+CREATE INDEX IF NOT EXISTS idx_draft_picks_roster ON draft_picks(league_id, roster_id);
+CREATE INDEX IF NOT EXISTS idx_draft_picks_player ON draft_picks(player_id);
 
 -- ====================================================================
 -- Bookkeeping

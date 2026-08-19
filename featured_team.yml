@@ -2,26 +2,27 @@
 # FEATURED MANAGER  — update this each week before running `python3 build_site.py`
 # ─────────────────────────────────────────────────────────────────────────────
 
-roster_id: 10
-gw: 38
-headline: "erozier wins the 2025/26 DPL title"
-subheadline: "Wire-to-wire champion finishes 25-13 with the league's best offense"
+roster_id: 11
+gw: 0
+headline: "A new name in the twelve"
+subheadline: "mdropkin takes over slot 11 and drafts Kurt Zouma's Kittens from scratch"
 body: >
-  After 38 weeks, the DPL crown belongs to erozier. He took the top of the
-  table early, defended it through every challenger that emerged, and
-  finished three games clear of JordiCarb in second place. The road wasn't
-  perfect — bjennings28 stunned him in GW33, and Flabiano9 spoiled the
-  victory lap with a 52.5 to 31.75 finale upset in GW38 — but the cushion
-  he built across the spring made the math academic for weeks. He led the
-  league in points-for (3,492.50) and finished with the largest scoring
-  margin of any manager. The 2025/26 DPL champion.
+  The only change to the DPL roll call for 2026/27 is at slot 11, where
+  mdropkin replaces jacklynch213 and inherits nothing — no keepers, no
+  carry-over, just the ninth pick and seventeen rounds to build with. He
+  spent that first pick on João Pedro and doubled back for Declan Rice at
+  16, then went heavy on Arsenal: Havertz, Tzolis and David Raya all landed
+  on the same roster, with Raya the eighth-round answer in goal. The shape
+  that came out of it is forward-loaded — seven up top, five at the back,
+  four in midfield — and it gets tested immediately. GW1 pairs him with
+  erozier, who won the thing last year.
 
 highlight_stats:
-  - label: "Final Record"
-    value: "25–13"
-  - label: "Points For"
-    value: "3,492.50"
-  - label: "Margin"
-    value: "+405 PF"
-  - label: "Title"
-    value: "Champion"
+  - label: "Draft Slot"
+    value: "9th"
+  - label: "First Pick"
+    value: "João Pedro"
+  - label: "Squad Shape"
+    value: "7F · 4M · 5D · 1GK"
+  - label: "GW1 Opponent"
+    value: "erozier"

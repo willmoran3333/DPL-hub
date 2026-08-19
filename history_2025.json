@@ -1,0 +1,160 @@
+{
+  "season": "2025",
+  "league_id": "1244790289042776064",
+  "standings": [
+    {
+      "roster_id": 10,
+      "display_name": "erozier",
+      "team_name": "Haalandcaust FC",
+      "wins": 25,
+      "losses": 12,
+      "ties": 0,
+      "pts_for": 3460.75,
+      "pts_against": 2861.75
+    },
+    {
+      "roster_id": 9,
+      "display_name": "JordiCarb",
+      "team_name": "Goo Goo Kaka FC",
+      "wins": 22,
+      "losses": 15,
+      "ties": 0,
+      "pts_for": 3044.0,
+      "pts_against": 3050.5
+    },
+    {
+      "roster_id": 12,
+      "display_name": "Noahvillasana17",
+      "team_name": "Welcome to the show",
+      "wins": 21,
+      "losses": 16,
+      "ties": 0,
+      "pts_for": 3016.5,
+      "pts_against": 2967.5
+    },
+    {
+      "roster_id": 5,
+      "display_name": "brendog2814",
+      "team_name": "",
+      "wins": 20,
+      "losses": 17,
+      "ties": 0,
+      "pts_for": 3216.5,
+      "pts_against": 3115.5
+    },
+    {
+      "roster_id": 6,
+      "display_name": "bjennings28",
+      "team_name": "Smith-Rowe v Wade",
+      "wins": 20,
+      "losses": 17,
+      "ties": 0,
+      "pts_for": 3054.75,
+      "pts_against": 2958.25
+    },
+    {
+      "roster_id": 1,
+      "display_name": "willmoran",
+      "team_name": "Derby County",
+      "wins": 18,
+      "losses": 19,
+      "ties": 0,
+      "pts_for": 2980.0,
+      "pts_against": 2908.0
+    },
+    {
+      "roster_id": 7,
+      "display_name": "rmeernst",
+      "team_name": "Xhaka Xhaka",
+      "wins": 17,
+      "losses": 20,
+      "ties": 0,
+      "pts_for": 2994.5,
+      "pts_against": 2985.75
+    },
+    {
+      "roster_id": 8,
+      "display_name": "cstoney20",
+      "team_name": "Next stop: The Londoner",
+      "wins": 16,
+      "losses": 21,
+      "ties": 0,
+      "pts_for": 3011.25,
+      "pts_against": 3073.0
+    },
+    {
+      "roster_id": 3,
+      "display_name": "Flabiano9",
+      "team_name": "Aura FC",
+      "wins": 16,
+      "losses": 21,
+      "ties": 0,
+      "pts_for": 2987.0,
+      "pts_against": 3048.25
+    },
+    {
+      "roster_id": 2,
+      "display_name": "skoeiboy",
+      "team_name": "Fantasy Soccer is Dumb FC",
+      "wins": 16,
+      "losses": 21,
+      "ties": 0,
+      "pts_for": 2972.0,
+      "pts_against": 3018.0
+    },
+    {
+      "roster_id": 4,
+      "display_name": "benditlikebergvall",
+      "team_name": "Return of the djedi",
+      "wins": 16,
+      "losses": 21,
+      "ties": 0,
+      "pts_for": 2925.75,
+      "pts_against": 3149.5
+    },
+    {
+      "roster_id": 11,
+      "display_name": "jacklynch213",
+      "team_name": "LPLLC",
+      "wins": 15,
+      "losses": 22,
+      "ties": 0,
+      "pts_for": 2364.5,
+      "pts_against": 2891.5
+    }
+  ],
+  "awards": {
+    "champion": {
+      "display_name": "erozier",
+      "team_name": "Haalandcaust FC",
+      "record": "25–12",
+      "pts": 3460.75
+    },
+    "runner_up": {
+      "display_name": "JordiCarb",
+      "team_name": "Goo Goo Kaka FC",
+      "record": "22–15",
+      "pts": 3044.0
+    },
+    "high_score": {
+      "pts": 155.25,
+      "display_name": "willmoran",
+      "week": 33
+    },
+    "low_score": {
+      "pts": 20.75,
+      "display_name": "jacklynch213",
+      "week": 17
+    },
+    "most_wins": {
+      "display_name": "erozier",
+      "wins": 25
+    },
+    "highest_pf": {
+      "display_name": "erozier",
+      "pts": 3460.75
+    }
+  },
+  "weeks_played": 38,
+  "notes": "erozier's Haalandcaust FC led the league in points from start to finish and took the title by three games."
+}

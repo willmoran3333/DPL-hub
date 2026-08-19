@@ -4,11 +4,19 @@
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">2025/26 Season · Through GW{{ current_week }}</div>
+    <div class="page-header__eyebrow">{{ SEASON_LABEL }} Season{% if current_week >= 1 %} · Through GW{{ current_week }}{% endif %}</div>
     <h1 class="page-header__title">Stats & Awards</h1>
     <p class="page-header__subtitle">Season trackers, weekly milestones, and positional leaders</p>
   </header>
 
+  {% if not stats.season_high %}
+  <div class="section-label">Season Trackers</div>
+  <p style="color:var(--c-ink-mid); line-height:1.7; max-width:640px; margin-bottom:40px;">
+    Nothing scored yet — trackers fill in from GW1. Until then, last season's
+    numbers live on the <a href="{{ url_for('page', 'history') }}">History</a> page and the
+    <a href="{{ url_for('page', 'draftlab') }}">Draft Lab</a>.
+  </p>
+  {% else %}
   {# Season trackers #}
   <div class="section-label">Season Trackers</div>
   <div class="awards-grid">
@@ -17,21 +25,27 @@
       <div class="award-card__value">{{ "%.2f"|format(stats.season_high.points) }}</div>
       <div class="award-card__meta"><strong>{{ stats.season_high.display_name }}</strong> · GW{{ stats.season_high.week }}</div>
     </div>
+    {% if stats.season_low %}
     <div class="award-card">
       <div class="award-card__title">Lowest Score</div>
       <div class="award-card__value">{{ "%.2f"|format(stats.season_low.points) }}</div>
       <div class="award-card__meta"><strong>{{ stats.season_low.display_name }}</strong> · GW{{ stats.season_low.week }}</div>
     </div>
+    {% endif %}
+    {% if stats.biggest_blowout %}
     <div class="award-card">
       <div class="award-card__title">Biggest Blowout</div>
       <div class="award-card__value">{{ "%.2f"|format(stats.biggest_blowout.diff) }}</div>
       <div class="award-card__meta"><strong>{{ stats.biggest_blowout.winner_name }}</strong> def. {{ stats.biggest_blowout.loser_name }} · GW{{ stats.biggest_blowout.week }}</div>
     </div>
+    {% endif %}
+    {% if stats.closest_game %}
     <div class="award-card">
       <div class="award-card__title">Closest Game</div>
       <div class="award-card__value">{{ "%.2f"|format(stats.closest_game.diff) }}</div>
       <div class="award-card__meta"><strong>{{ stats.closest_game.winner_name }}</strong> over {{ stats.closest_game.loser_name }} · GW{{ stats.closest_game.week }}</div>
     </div>
+    {% endif %}
     <div class="award-card">
       <div class="award-card__title">Longest Win Streak</div>
       <div class="award-card__value">{{ stats.longest_win_streak.length }}</div>
@@ -142,6 +156,7 @@
       </tbody>
     </table>
   </div>
+  {% endif %}
 
 </div>
 {% endblock %}

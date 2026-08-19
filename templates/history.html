@@ -4,12 +4,17 @@
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">Past Season</div>
-    <h1 class="page-header__title">2024/25 Season</h1>
-    <p class="page-header__subtitle">{{ hist.weeks_played }}-week regular season · 12 teams</p>
+    <div class="page-header__eyebrow">Past Seasons</div>
+    <h1 class="page-header__title">History</h1>
+    <p class="page-header__subtitle">Final tables and honours from every completed DPL season.</p>
   </header>
 
+  {% for hist in histories %}
   {% set a = hist.awards %}
+  <div class="section-label">{{ hist.label }} · {{ hist.weeks_played }} gameweeks</div>
+
+  {% if hist.notes %}<p class="page-header__subtitle">{{ hist.notes }}</p>{% endif %}
+
   <div class="awards-grid">
     <div class="award-card">
       <div class="award-card__title">Champion</div>
@@ -21,11 +26,13 @@
       <div class="award-card__value">{{ a.runner_up.display_name }}</div>
       <div class="award-card__meta">{{ a.runner_up.record }}</div>
     </div>
+    {% if a.high_score %}
     <div class="award-card">
       <div class="award-card__title">Season High Score</div>
       <div class="award-card__value">{{ a.high_score.pts }}</div>
       <div class="award-card__meta"><strong>{{ a.high_score.display_name }}</strong> · GW{{ a.high_score.week }}</div>
     </div>
+    {% endif %}
     <div class="award-card">
       <div class="award-card__title">Most Wins</div>
       <div class="award-card__value">{{ a.most_wins.wins }}</div>
@@ -33,7 +40,6 @@
     </div>
   </div>
 
-  <div class="section-label">Final Standings</div>
   <div class="standings-table-wrap">
     <table class="standings-table">
       <thead>
@@ -53,6 +59,7 @@
           <td class="col-team">
             <div class="team-cell">
               <div class="team-cell__fantasy">{{ t.display_name }}</div>
+              {% if t.team_name %}<div class="team-cell__owner">{{ t.team_name }}</div>{% endif %}
             </div>
           </td>
           <td class="col-pts">{{ t.wins }}</td>
@@ -64,6 +71,7 @@
       </tbody>
     </table>
   </div>
+  {% endfor %}
 
 </div>
 {% endblock %}

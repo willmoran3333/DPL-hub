@@ -157,7 +157,7 @@
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow"><span id="p-season-label">2025/26</span> Season · Scored with the proposed 2026/27 rules</div>
+    <div class="page-header__eyebrow"><span id="p-season-label">{{ player_seasons[0].label if player_seasons else '' }}</span> Season · Scored with the current 2026/27 rules</div>
     <h1 class="page-header__title">Players</h1>
   </header>
 
@@ -201,9 +201,10 @@
       {% endfor %}
       {% for o in owners|sort %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
     </select>
-    <select id="p-season" title="Season the stats are from — both are scored with the proposed 2026/27 rules">
-      <option value="2025" selected>2025/26 season</option>
-      <option value="2024">2024/25 season</option>
+    <select id="p-season" title="Season the stats are from — every season is scored with the current 2026/27 rules">
+      {% for ps in player_seasons %}
+      <option value="{{ ps.season }}"{% if loop.first %} selected{% endif %}>{{ ps.label }} season</option>
+      {% endfor %}
     </select>
   </div>
 
@@ -335,6 +336,8 @@
   const gamesOut = document.getElementById('p-games-out');
   const totalEl  = document.getElementById('p-total');
   const seasonLabel = document.getElementById('p-season-label');
+  const SEASON_LABELS = {{ season_labels | tojson }};
+  const DEFAULT_SEASON = {{ (player_seasons[0].season if player_seasons else '') | tojson }};
 
   function applyFilters() {
     const s       = f.search.value.toLowerCase().trim();
@@ -348,7 +351,7 @@
 
     minsOut.value  = minMins;
     gamesOut.value = minGms;
-    seasonLabel.textContent = season === '2024' ? '2024/25' : '2025/26';
+    seasonLabel.textContent = SEASON_LABELS[season] || season;
 
     let shown = 0, total = 0;
     rows.forEach(r => {
@@ -383,7 +386,7 @@
     f.pos.value    = '';
     f.club.value   = '';
     f.owner.value  = '';
-    f.season.value = '2025';
+    f.season.value = DEFAULT_SEASON;
     f.noinj.checked = false;
     f.mins.value   = 0;
     f.games.value  = 0;

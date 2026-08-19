@@ -35,6 +35,34 @@
     border-top: 5px solid currentColor;
     opacity: 1;
   }
+
+  /* Draft board grid */
+  .board-wrap { overflow-x: auto; margin-bottom: 48px; }
+  table.board { border-collapse: collapse; width: 100%; min-width: 1100px; font-size: 0.75rem; }
+  table.board th, table.board td {
+    border: 1px solid var(--c-border);
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.board thead th {
+    border-bottom: 2px solid var(--c-ink);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-ink-light);
+    white-space: nowrap;
+  }
+  table.board td.rd {
+    text-align: center;
+    font-weight: 700;
+    color: var(--c-ink-light);
+    white-space: nowrap;
+  }
+  .board-pick__name { font-weight: 600; color: var(--c-ink); }
+  .board-pick__meta { color: var(--c-ink-light); font-size: 0.6875rem; margin-top: 1px; }
+  .board-pick__no { color: var(--c-ink-light); font-size: 0.625rem; }
+  .board-mine { background: var(--c-bg-alt, rgba(0,0,0,0.03)); }
 </style>
 
 </head>
@@ -67,400 +95,2501 @@
 
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">2025/26 · Pre-Season Power Rankings</div>
+    <div class="page-header__eyebrow">2026/27 Season · 204 picks, 17 rounds</div>
     <h1 class="page-header__title">Draft</h1>
   </header>
 
-  <div class="section-label">Pre-Season Power Rankings</div>
+  
+  <div class="section-label">Round 1</div>
   <div class="standings-table-wrap mb-8">
-    <table class="standings-table sortable" id="draft-table">
+    <table class="standings-table">
       <thead>
         <tr>
-          <th class="col-pos" data-sort="num">Power Rank</th>
-          <th class="col-team" data-sort="str">Manager</th>
-          <th data-sort="num">Draft Strength</th>
-          <th data-sort="num">Draft Rank</th>
-          <th data-sort="str">Concentration</th>
-          <th data-sort="str">Best Pos</th>
-          <th data-sort="num">Final Pos</th>
+          <th class="col-pos">Pick</th>
+          <th class="col-team">Manager</th>
+          <th>Player</th>
+          <th>Pos</th>
+          <th class="col-hide-sm">Club</th>
+          <th class="col-hide-sm">ADP</th>
         </tr>
       </thead>
       <tbody>
         
-        
         <tr>
-          <td class="col-pos" data-val="1">1</td>
-          <td class="col-team" data-val="flabiano9">
-            <a href="clubs/3.html" class="team-cell">
-              <div class="team-cell__fantasy">Flabiano9</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.6751">0.6751</td>
-          <td data-val="1">1</td>
-          <td data-val="NEW-4">NEW-4</td>
-          <td data-val="Forward · 0.84">Forward · 0.84</td>
-          <td data-val="9">
-            <span style="font-weight:700;">9</span>
-            
-            <span class="color-loss" style="font-size:0.75rem; margin-left:6px;">↓8</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="2">2</td>
-          <td class="col-team" data-val="cstoney20">
-            <a href="clubs/8.html" class="team-cell">
-              <div class="team-cell__fantasy">cstoney20</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.6547">0.6547</td>
-          <td data-val="2">2</td>
-          <td data-val="BRF-3">BRF-3</td>
-          <td data-val="Forward · 0.77">Forward · 0.77</td>
-          <td data-val="10">
-            <span style="font-weight:700;">10</span>
-            
-            <span class="color-loss" style="font-size:0.75rem; margin-left:6px;">↓8</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="3">3</td>
-          <td class="col-team" data-val="brendog2814">
-            <a href="clubs/5.html" class="team-cell">
-              <div class="team-cell__fantasy">brendog2814</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.629">0.6290</td>
-          <td data-val="4">4</td>
-          <td data-val="CHE-2">CHE-2</td>
-          <td data-val="Forward · 0.83">Forward · 0.83</td>
-          <td data-val="5">
-            <span style="font-weight:700;">5</span>
-            
-            <span class="color-loss" style="font-size:0.75rem; margin-left:6px;">↓2</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="4">4</td>
-          <td class="col-team" data-val="bjennings28">
+          <td class="col-pos">1</td>
+          <td class="col-team">
             <a href="clubs/6.html" class="team-cell">
               <div class="team-cell__fantasy">bjennings28</div>
             </a>
           </td>
-          <td class="col-pts" data-val="0.6224">0.6224</td>
-          <td data-val="6">6</td>
-          <td data-val="NOT-2">NOT-2</td>
-          <td data-val="Forward · 0.78">Forward · 0.78</td>
-          <td data-val="4">
-            <span style="font-weight:700;">4</span>
-            
-          </td>
+          <td><a href="players/1213.html">Bruno Fernandes</a></td>
+          <td>M</td>
+          <td class="col-hide-sm">MUN</td>
+          <td class="col-hide-sm">1.8</td>
         </tr>
         
-        
         <tr>
-          <td class="col-pos" data-val="5">5</td>
-          <td class="col-team" data-val="rmeernst">
-            <a href="clubs/7.html" class="team-cell">
-              <div class="team-cell__fantasy">rmeernst</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.6326">0.6326</td>
-          <td data-val="3">3</td>
-          <td data-val="LIV-2">LIV-2</td>
-          <td data-val="Forward · 0.83">Forward · 0.83</td>
-          <td data-val="7">
-            <span style="font-weight:700;">7</span>
-            
-            <span class="color-loss" style="font-size:0.75rem; margin-left:6px;">↓2</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="6">6</td>
-          <td class="col-team" data-val="willmoran">
-            <a href="clubs/1.html" class="team-cell">
-              <div class="team-cell__fantasy">willmoran</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.5929">0.5929</td>
-          <td data-val="9">9</td>
-          <td data-val="NOT-3">NOT-3</td>
-          <td data-val="Midfield · 0.62">Midfield · 0.62</td>
-          <td data-val="6">
-            <span style="font-weight:700;">6</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="7">7</td>
-          <td class="col-team" data-val="noahvillasana17">
-            <a href="clubs/12.html" class="team-cell">
-              <div class="team-cell__fantasy">Noahvillasana17</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.5814">0.5814</td>
-          <td data-val="10">10</td>
-          <td data-val="WHU-2">WHU-2</td>
-          <td data-val="Midfield · 0.65">Midfield · 0.65</td>
-          <td data-val="3">
-            <span style="font-weight:700;">3</span>
-            
-            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑4</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="8">8</td>
-          <td class="col-team" data-val="jacklynch213">
-            <a href="clubs/11.html" class="team-cell">
-              <div class="team-cell__fantasy">jacklynch213</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.6138">0.6138</td>
-          <td data-val="7">7</td>
-          <td data-val="CRY-4">CRY-4</td>
-          <td data-val="Forward · 0.65">Forward · 0.65</td>
-          <td data-val="12">
-            <span style="font-weight:700;">12</span>
-            
-            <span class="color-loss" style="font-size:0.75rem; margin-left:6px;">↓4</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="9">9</td>
-          <td class="col-team" data-val="erozier">
-            <a href="clubs/10.html" class="team-cell">
-              <div class="team-cell__fantasy">erozier</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.6106">0.6106</td>
-          <td data-val="8">8</td>
-          <td data-val="MCI-3">MCI-3</td>
-          <td data-val="Forward · 0.75">Forward · 0.75</td>
-          <td data-val="1">
-            <span style="font-weight:700;">1</span>
-            
-            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑8</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="10">10</td>
-          <td class="col-team" data-val="jordicarb">
-            <a href="clubs/9.html" class="team-cell">
-              <div class="team-cell__fantasy">JordiCarb</div>
-            </a>
-          </td>
-          <td class="col-pts" data-val="0.6259">0.6259</td>
-          <td data-val="5">5</td>
-          <td data-val="ARS-5">ARS-5</td>
-          <td data-val="Midfield · 0.72">Midfield · 0.72</td>
-          <td data-val="2">
-            <span style="font-weight:700;">2</span>
-            
-            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑8</span>
-            
-          </td>
-        </tr>
-        
-        
-        <tr>
-          <td class="col-pos" data-val="11">11</td>
-          <td class="col-team" data-val="benditlikebergvall">
+          <td class="col-pos">2</td>
+          <td class="col-team">
             <a href="clubs/4.html" class="team-cell">
               <div class="team-cell__fantasy">benditlikebergvall</div>
             </a>
           </td>
-          <td class="col-pts" data-val="0.5609">0.5609</td>
-          <td data-val="12">12</td>
-          <td data-val="CRY-3">CRY-3</td>
-          <td data-val="Midfield · 0.62">Midfield · 0.62</td>
-          <td data-val="11">
-            <span style="font-weight:700;">11</span>
-            
-          </td>
+          <td><a href="players/1721.html">Erling Haaland</a></td>
+          <td>F</td>
+          <td class="col-hide-sm">MCI</td>
+          <td class="col-hide-sm">1.5</td>
         </tr>
         
+        <tr>
+          <td class="col-pos">3</td>
+          <td class="col-team">
+            <a href="clubs/3.html" class="team-cell">
+              <div class="team-cell__fantasy">Flabiano9</div>
+            </a>
+          </td>
+          <td><a href="players/1823.html">Antoine Semenyo</a></td>
+          <td>F</td>
+          <td class="col-hide-sm">MCI</td>
+          <td class="col-hide-sm">5.3</td>
+        </tr>
         
         <tr>
-          <td class="col-pos" data-val="12">12</td>
-          <td class="col-team" data-val="skoeiboy">
+          <td class="col-pos">4</td>
+          <td class="col-team">
             <a href="clubs/2.html" class="team-cell">
               <div class="team-cell__fantasy">skoeiboy</div>
             </a>
           </td>
-          <td class="col-pts" data-val="0.5672">0.5672</td>
-          <td data-val="11">11</td>
-          <td data-val="WHU-3">WHU-3</td>
-          <td data-val="Midfield · 0.71">Midfield · 0.71</td>
-          <td data-val="8">
-            <span style="font-weight:700;">8</span>
-            
-            <span class="color-success" style="font-size:0.75rem; margin-left:6px;">↑4</span>
-            
+          <td><a href="players/1922.html">Cole Palmer</a></td>
+          <td>F</td>
+          <td class="col-hide-sm">CHE</td>
+          <td class="col-hide-sm">9.4</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">5</td>
+          <td class="col-team">
+            <a href="clubs/10.html" class="team-cell">
+              <div class="team-cell__fantasy">erozier</div>
+            </a>
           </td>
+          <td><a href="players/2410.html">Bukayo Saka</a></td>
+          <td>F</td>
+          <td class="col-hide-sm">ARS</td>
+          <td class="col-hide-sm">3.7</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">6</td>
+          <td class="col-team">
+            <a href="clubs/7.html" class="team-cell">
+              <div class="team-cell__fantasy">rmeernst</div>
+            </a>
+          </td>
+          <td><a href="players/2526.html">Matheus Cunha</a></td>
+          <td>F</td>
+          <td class="col-hide-sm">MUN</td>
+          <td class="col-hide-sm">12.6</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">7</td>
+          <td class="col-team">
+            <a href="clubs/9.html" class="team-cell">
+              <div class="team-cell__fantasy">JordiCarb</div>
+            </a>
+          </td>
+          <td><a href="players/1963.html">Bryan Mbeumo</a></td>
+          <td>F</td>
+          <td class="col-hide-sm">MUN</td>
+          <td class="col-hide-sm">19.4</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">8</td>
+          <td class="col-team">
+            <a href="clubs/8.html" class="team-cell">
+              <div class="team-cell__fantasy">cstoney20</div>
+            </a>
+          </td>
+          <td><a href="players/4864.html">Florian Wirtz</a></td>
+          <td>M</td>
+          <td class="col-hide-sm">LIV</td>
+          <td class="col-hide-sm">8.8</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">9</td>
+          <td class="col-team">
+            <a href="clubs/11.html" class="team-cell">
+              <div class="team-cell__fantasy">mdropkin</div>
+            </a>
+          </td>
+          <td><a href="players/2074.html">João Pedro</a></td>
+          <td>F</td>
+          <td class="col-hide-sm">CHE</td>
+          <td class="col-hide-sm">10.7</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">10</td>
+          <td class="col-team">
+            <a href="clubs/12.html" class="team-cell">
+              <div class="team-cell__fantasy">Noahvillasana17</div>
+            </a>
+          </td>
+          <td><a href="players/1806.html">Elliot Anderson</a></td>
+          <td>M</td>
+          <td class="col-hide-sm">MCI</td>
+          <td class="col-hide-sm">32.2</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">11</td>
+          <td class="col-team">
+            <a href="clubs/5.html" class="team-cell">
+              <div class="team-cell__fantasy">brendog2814</div>
+            </a>
+          </td>
+          <td><a href="players/1865.html">Dominik Szoboszlai</a></td>
+          <td>D</td>
+          <td class="col-hide-sm">LIV</td>
+          <td class="col-hide-sm">6.7</td>
+        </tr>
+        
+        <tr>
+          <td class="col-pos">12</td>
+          <td class="col-team">
+            <a href="clubs/1.html" class="team-cell">
+              <div class="team-cell__fantasy">willmoran</div>
+            </a>
+          </td>
+          <td><a href="players/1786.html">Alexander Isak</a></td>
+          <td>F</td>
+          <td class="col-hide-sm">LIV</td>
+          <td class="col-hide-sm">12.8</td>
         </tr>
         
       </tbody>
     </table>
   </div>
 
-  <div class="section-label">Pre-Season Scouting Notes</div>
-  <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(360px, 1fr)); gap:16px; margin-bottom:48px;">
+  <div class="section-label">Full Board</div>
+  <div class="board-wrap">
+    <table class="board">
+      <thead>
+        <tr>
+          <th>Rd</th>
+          <th>bjennings28</th><th>benditlikebergvall</th><th>Flabiano9</th><th>skoeiboy</th><th>erozier</th><th>rmeernst</th><th>JordiCarb</th><th>cstoney20</th><th>mdropkin</th><th>Noahvillasana17</th><th>brendog2814</th><th>willmoran</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="rd">1</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Bruno Fernandes</div>
+            <div class="board-pick__meta">M · MUN <span class="board-pick__no">#1</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Erling Haaland</div>
+            <div class="board-pick__meta">F · MCI <span class="board-pick__no">#2</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Antoine Semenyo</div>
+            <div class="board-pick__meta">F · MCI <span class="board-pick__no">#3</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Cole Palmer</div>
+            <div class="board-pick__meta">F · CHE <span class="board-pick__no">#4</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Bukayo Saka</div>
+            <div class="board-pick__meta">F · ARS <span class="board-pick__no">#5</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Matheus Cunha</div>
+            <div class="board-pick__meta">F · MUN <span class="board-pick__no">#6</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Bryan Mbeumo</div>
+            <div class="board-pick__meta">F · MUN <span class="board-pick__no">#7</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Florian Wirtz</div>
+            <div class="board-pick__meta">M · LIV <span class="board-pick__no">#8</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">João Pedro</div>
+            <div class="board-pick__meta">F · CHE <span class="board-pick__no">#9</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Elliot Anderson</div>
+            <div class="board-pick__meta">M · MCI <span class="board-pick__no">#10</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dominik Szoboszlai</div>
+            <div class="board-pick__meta">D · LIV <span class="board-pick__no">#11</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Alexander Isak</div>
+            <div class="board-pick__meta">F · LIV <span class="board-pick__no">#12</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">2</td>
+          
+          <td>
+            
+            <div class="board-pick__name">James Garner</div>
+            <div class="board-pick__meta">M · EVE <span class="board-pick__no">#24</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Iliman Ndiaye</div>
+            <div class="board-pick__meta">F · EVE <span class="board-pick__no">#23</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Rayan</div>
+            <div class="board-pick__meta">F · BOU <span class="board-pick__no">#22</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Virgil van Dijk</div>
+            <div class="board-pick__meta">D · LIV <span class="board-pick__no">#21</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Bruno Guimarães</div>
+            <div class="board-pick__meta">M · ARS <span class="board-pick__no">#20</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Morgan Gibbs-White</div>
+            <div class="board-pick__meta">M · NFO <span class="board-pick__no">#19</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Igor Thiago</div>
+            <div class="board-pick__meta">F · BRE <span class="board-pick__no">#18</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jérémy Doku</div>
+            <div class="board-pick__meta">F · MCI <span class="board-pick__no">#17</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Declan Rice</div>
+            <div class="board-pick__meta">M · ARS <span class="board-pick__no">#16</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Cody Gakpo</div>
+            <div class="board-pick__meta">F · LIV <span class="board-pick__no">#15</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Morgan Rogers</div>
+            <div class="board-pick__meta">M · CHE <span class="board-pick__no">#14</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Ollie Watkins</div>
+            <div class="board-pick__meta">F · AVL <span class="board-pick__no">#13</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">3</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Gabriel Magalhães</div>
+            <div class="board-pick__meta">D · ARS <span class="board-pick__no">#25</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">James Tarkowski</div>
+            <div class="board-pick__meta">D · EVE <span class="board-pick__no">#26</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Rayan Cherki</div>
+            <div class="board-pick__meta">M · MCI <span class="board-pick__no">#27</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Martin Ødegaard</div>
+            <div class="board-pick__meta">M · ARS <span class="board-pick__no">#28</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jean-Philippe Mateta</div>
+            <div class="board-pick__meta">F · CRY <span class="board-pick__no">#29</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Enzo Fernández</div>
+            <div class="board-pick__meta">M · CHE <span class="board-pick__no">#30</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Nick Woltemade</div>
+            <div class="board-pick__meta">F · NEW <span class="board-pick__no">#31</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Anton Stach</div>
+            <div class="board-pick__meta">M · LEE <span class="board-pick__no">#32</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Daniel Muñoz</div>
+            <div class="board-pick__meta">D · CRY <span class="board-pick__no">#33</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Gabriel Martinelli</div>
+            <div class="board-pick__meta">F · ARS <span class="board-pick__no">#34</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dominic Calvert-Lewin</div>
+            <div class="board-pick__meta">F · LEE <span class="board-pick__no">#35</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Phil Foden</div>
+            <div class="board-pick__meta">M · MCI <span class="board-pick__no">#36</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">4</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Enzo Le Fée</div>
+            <div class="board-pick__meta">M · SUN <span class="board-pick__no">#48</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Mikkel Damsgaard</div>
+            <div class="board-pick__meta">M · BRE <span class="board-pick__no">#47</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Youri Tielemans</div>
+            <div class="board-pick__meta">M · MUN <span class="board-pick__no">#46</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Viktor Gyökeres</div>
+            <div class="board-pick__meta">F · ARS <span class="board-pick__no">#45</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Emiliano Buendía</div>
+            <div class="board-pick__meta">M · AVL <span class="board-pick__no">#44</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Marcus Tavernier</div>
+            <div class="board-pick__meta">M · BOU <span class="board-pick__no">#43</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Kaoru Mitoma</div>
+            <div class="board-pick__meta">F · BHA <span class="board-pick__no">#42</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Pedro Porro</div>
+            <div class="board-pick__meta">D · TOT <span class="board-pick__no">#41</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Patrick Dorgu</div>
+            <div class="board-pick__meta">D · MUN <span class="board-pick__no">#40</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Benjamin Sesko</div>
+            <div class="board-pick__meta">F · MUN <span class="board-pick__no">#39</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Chris Wood</div>
+            <div class="board-pick__meta">F · NFO <span class="board-pick__no">#38</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">James Maddison</div>
+            <div class="board-pick__meta">M · TOT <span class="board-pick__no">#37</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">5</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Ismaïla Sarr</div>
+            <div class="board-pick__meta">F · CRY <span class="board-pick__no">#49</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Diego Gómez</div>
+            <div class="board-pick__meta">M · BHA <span class="board-pick__no">#50</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dango Ouattara</div>
+            <div class="board-pick__meta">F · BRE <span class="board-pick__no">#51</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Danny Welbeck</div>
+            <div class="board-pick__meta">F · CHE <span class="board-pick__no">#52</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Amad Diallo</div>
+            <div class="board-pick__meta">F · MUN <span class="board-pick__no">#53</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Alex Iwobi</div>
+            <div class="board-pick__meta">F · FUL <span class="board-pick__no">#54</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Pedro Neto</div>
+            <div class="board-pick__meta">F · CHE <span class="board-pick__no">#55</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Mohammed Kudus</div>
+            <div class="board-pick__meta">F · TOT <span class="board-pick__no">#56</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Yoane Wissa</div>
+            <div class="board-pick__meta">F · NEW <span class="board-pick__no">#57</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Mathys Tel</div>
+            <div class="board-pick__meta">F · TOT <span class="board-pick__no">#58</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Nico O&#39;Reilly</div>
+            <div class="board-pick__meta">D · MCI <span class="board-pick__no">#59</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Jurriën Timber</div>
+            <div class="board-pick__meta">D · ARS <span class="board-pick__no">#60</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">6</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Neco Williams</div>
+            <div class="board-pick__meta">D · NFO <span class="board-pick__no">#72</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Estêvão</div>
+            <div class="board-pick__meta">F · CHE <span class="board-pick__no">#71</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Johan Manzambi</div>
+            <div class="board-pick__meta">F · AVL <span class="board-pick__no">#70</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">John McGinn</div>
+            <div class="board-pick__meta">M · AVL <span class="board-pick__no">#69</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Junior Kroupi</div>
+            <div class="board-pick__meta">F · BOU <span class="board-pick__no">#68</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Piero Hincapié</div>
+            <div class="board-pick__meta">D · ARS <span class="board-pick__no">#67</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Mateus Fernandes</div>
+            <div class="board-pick__meta">M · TOT <span class="board-pick__no">#66</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Marc Guéhi</div>
+            <div class="board-pick__meta">D · MCI <span class="board-pick__no">#65</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Kai Havertz</div>
+            <div class="board-pick__meta">F · ARS <span class="board-pick__no">#64</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Reece James</div>
+            <div class="board-pick__meta">D · CHE <span class="board-pick__no">#63</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">James Hill</div>
+            <div class="board-pick__meta">D · BOU <span class="board-pick__no">#62</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Pascal Groß</div>
+            <div class="board-pick__meta">M · BHA <span class="board-pick__no">#61</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">7</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Adrien Truffert</div>
+            <div class="board-pick__meta">D · BOU <span class="board-pick__no">#73</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jan Paul van Hecke</div>
+            <div class="board-pick__meta">D · TOT <span class="board-pick__no">#74</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Brian Brobbey</div>
+            <div class="board-pick__meta">F · SUN <span class="board-pick__no">#75</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Micky van de Ven</div>
+            <div class="board-pick__meta">D · TOT <span class="board-pick__no">#76</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Sven Botman</div>
+            <div class="board-pick__meta">D · NEW <span class="board-pick__no">#77</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Beto</div>
+            <div class="board-pick__meta">F · EVE <span class="board-pick__no">#78</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Riccardo Calafiori</div>
+            <div class="board-pick__meta">D · ARS <span class="board-pick__no">#79</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Harry Wilson</div>
+            <div class="board-pick__meta">F · LEE <span class="board-pick__no">#80</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Christos Tzolis</div>
+            <div class="board-pick__meta">F · ARS <span class="board-pick__no">#81</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Antonee Robinson</div>
+            <div class="board-pick__meta">D · FUL <span class="board-pick__no">#82</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Richarlison</div>
+            <div class="board-pick__meta">F · TOT <span class="board-pick__no">#83</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Eberechi Eze</div>
+            <div class="board-pick__meta">M · ARS <span class="board-pick__no">#84</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">8</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Noah Okafor</div>
+            <div class="board-pick__meta">F · LEE <span class="board-pick__no">#96</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Boubacar Kamara</div>
+            <div class="board-pick__meta">M · AVL <span class="board-pick__no">#95</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Malick Thiaw</div>
+            <div class="board-pick__meta">D · NEW <span class="board-pick__no">#94</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Anthony Elanga</div>
+            <div class="board-pick__meta">F · NEW <span class="board-pick__no">#93</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Evanilson</div>
+            <div class="board-pick__meta">F · BOU <span class="board-pick__no">#92</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Tyrick Mitchell</div>
+            <div class="board-pick__meta">D · CRY <span class="board-pick__no">#91</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Ronald Araujo</div>
+            <div class="board-pick__meta">D · LIV <span class="board-pick__no">#90</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Chris Richards</div>
+            <div class="board-pick__meta">D · CRY <span class="board-pick__no">#89</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">David Raya</div>
+            <div class="board-pick__meta">GK · ARS <span class="board-pick__no">#88</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Ryan Gravenberch</div>
+            <div class="board-pick__meta">M · LIV <span class="board-pick__no">#87</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Kevin Schade</div>
+            <div class="board-pick__meta">F · BRE <span class="board-pick__no">#86</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Kiernan Dewsbury-Hall</div>
+            <div class="board-pick__meta">M · EVE <span class="board-pick__no">#85</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">9</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Matheus Nunes</div>
+            <div class="board-pick__meta">D · MCI <span class="board-pick__no">#97</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jeremie Frimpong</div>
+            <div class="board-pick__meta">D · LIV <span class="board-pick__no">#98</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Mats Wieffer</div>
+            <div class="board-pick__meta">D · BHA <span class="board-pick__no">#99</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Alexis Mac Allister</div>
+            <div class="board-pick__meta">M · LIV <span class="board-pick__no">#100</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Josko Gvardiol</div>
+            <div class="board-pick__meta">D · MCI <span class="board-pick__no">#101</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Maxence Lacroix</div>
+            <div class="board-pick__meta">D · CHE <span class="board-pick__no">#102</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Nordi Mukiele</div>
+            <div class="board-pick__meta">D · SUN <span class="board-pick__no">#103</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Harvey Barnes</div>
+            <div class="board-pick__meta">M · NEW <span class="board-pick__no">#104</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Yéremy Pino</div>
+            <div class="board-pick__meta">F · CRY <span class="board-pick__no">#105</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dan Ballard</div>
+            <div class="board-pick__meta">D · SUN <span class="board-pick__no">#106</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Marcos Senesi</div>
+            <div class="board-pick__meta">D · TOT <span class="board-pick__no">#107</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Trai Hume</div>
+            <div class="board-pick__meta">D · SUN <span class="board-pick__no">#108</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">10</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jack Hinshelwood</div>
+            <div class="board-pick__meta">M · BHA <span class="board-pick__no">#120</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dwight McNeil</div>
+            <div class="board-pick__meta">F · CRY <span class="board-pick__no">#119</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Lewis Hall</div>
+            <div class="board-pick__meta">D · NEW <span class="board-pick__no">#118</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Sandro Tonali</div>
+            <div class="board-pick__meta">M · TOT <span class="board-pick__no">#117</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Marcus Rashford</div>
+            <div class="board-pick__meta">F · MUN <span class="board-pick__no">#116</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Adam Wharton</div>
+            <div class="board-pick__meta">M · CRY <span class="board-pick__no">#115</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Emiliano Martínez</div>
+            <div class="board-pick__meta">GK · AVL <span class="board-pick__no">#114</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Gianluigi Donnarumma</div>
+            <div class="board-pick__meta">GK · MCI <span class="board-pick__no">#113</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Matty Cash</div>
+            <div class="board-pick__meta">D · AVL <span class="board-pick__no">#112</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Granit Xhaka</div>
+            <div class="board-pick__meta">M · SUN <span class="board-pick__no">#111</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Alex Scott</div>
+            <div class="board-pick__meta">M · BOU <span class="board-pick__no">#110</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Rúben Dias</div>
+            <div class="board-pick__meta">D · MCI <span class="board-pick__no">#109</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">11</td>
+          
+          <td>
+            
+            <div class="board-pick__name">William Osula</div>
+            <div class="board-pick__meta">F · NEW <span class="board-pick__no">#121</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Ousmane Diomande</div>
+            <div class="board-pick__meta">D · NFO <span class="board-pick__no">#122</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Tarik Muharemovic</div>
+            <div class="board-pick__meta">D · LEE <span class="board-pick__no">#123</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Ian Maatsen</div>
+            <div class="board-pick__meta">D · AVL <span class="board-pick__no">#124</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Diogo Dalot</div>
+            <div class="board-pick__meta">D · MUN <span class="board-pick__no">#125</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Omar Alderete</div>
+            <div class="board-pick__meta">D · SUN <span class="board-pick__no">#126</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Martín Zubimendi</div>
+            <div class="board-pick__meta">M · ARS <span class="board-pick__no">#127</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dominic Solanke</div>
+            <div class="board-pick__meta">F · TOT <span class="board-pick__no">#128</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Omari Hutchinson</div>
+            <div class="board-pick__meta">F · NFO <span class="board-pick__no">#129</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jordan Pickford</div>
+            <div class="board-pick__meta">GK · EVE <span class="board-pick__no">#130</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Djordje Petrovic</div>
+            <div class="board-pick__meta">GK · BOU <span class="board-pick__no">#131</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Georginio Rutter</div>
+            <div class="board-pick__meta">F · BHA <span class="board-pick__no">#132</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">12</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Gonzalo García</div>
+            <div class="board-pick__meta">F · FUL <span class="board-pick__no">#144</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Justin Kluivert</div>
+            <div class="board-pick__meta">F · BOU <span class="board-pick__no">#143</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Kobbie Mainoo</div>
+            <div class="board-pick__meta">M · MUN <span class="board-pick__no">#142</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Keane Lewis-Potter</div>
+            <div class="board-pick__meta">F · BRE <span class="board-pick__no">#141</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Abdukodir Khusanov</div>
+            <div class="board-pick__meta">D · MCI <span class="board-pick__no">#140</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Michael Kayode</div>
+            <div class="board-pick__meta">D · BRE <span class="board-pick__no">#139</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Moisés Caicedo</div>
+            <div class="board-pick__meta">M · CHE <span class="board-pick__no">#138</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Rayan Aït-Nouri</div>
+            <div class="board-pick__meta">D · MCI <span class="board-pick__no">#137</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Andy Robertson</div>
+            <div class="board-pick__meta">D · TOT <span class="board-pick__no">#136</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Tyler Adams</div>
+            <div class="board-pick__meta">M · BOU <span class="board-pick__no">#135</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Brenden Aaronson</div>
+            <div class="board-pick__meta">M · LEE <span class="board-pick__no">#134</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Luka Vuskovic</div>
+            <div class="board-pick__meta">D · BHA <span class="board-pick__no">#133</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">13</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Milos Kerkez</div>
+            <div class="board-pick__meta">D · LIV <span class="board-pick__no">#145</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Igor Jesus</div>
+            <div class="board-pick__meta">F · NFO <span class="board-pick__no">#146</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">William Saliba</div>
+            <div class="board-pick__meta">D · ARS <span class="board-pick__no">#147</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dan Burn</div>
+            <div class="board-pick__meta">D · NEW <span class="board-pick__no">#148</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jacob Ramsey</div>
+            <div class="board-pick__meta">M · NEW <span class="board-pick__no">#149</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Haji Wright</div>
+            <div class="board-pick__meta">F · COV <span class="board-pick__no">#150</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Mikel Merino</div>
+            <div class="board-pick__meta">F · ARS <span class="board-pick__no">#151</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Omar Marmoush</div>
+            <div class="board-pick__meta">F · MCI <span class="board-pick__no">#152</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jacob Murphy</div>
+            <div class="board-pick__meta">M · NEW <span class="board-pick__no">#153</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Joachim Andersen</div>
+            <div class="board-pick__meta">D · FUL <span class="board-pick__no">#154</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Mathias Jensen</div>
+            <div class="board-pick__meta">M · BRE <span class="board-pick__no">#155</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Jørgen Strand Larsen</div>
+            <div class="board-pick__meta">F · CRY <span class="board-pick__no">#156</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">14</td>
+          
+          <td>
+            
+            <div class="board-pick__name">James Trafford</div>
+            <div class="board-pick__meta">DEF · 1226 <span class="board-pick__no">#168</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Ferdi Kadioglu</div>
+            <div class="board-pick__meta">D · BHA <span class="board-pick__no">#167</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Alisson Becker</div>
+            <div class="board-pick__meta">GK · LIV <span class="board-pick__no">#166</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Bart Verbruggen</div>
+            <div class="board-pick__meta">GK · BHA <span class="board-pick__no">#165</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Robin Roefs</div>
+            <div class="board-pick__meta">GK · SUN <span class="board-pick__no">#164</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Ben White</div>
+            <div class="board-pick__meta">D · ARS <span class="board-pick__no">#163</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Óscar Mingueza</div>
+            <div class="board-pick__meta">D · CRY <span class="board-pick__no">#162</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Noni Madueke</div>
+            <div class="board-pick__meta">F · ARS <span class="board-pick__no">#161</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Sasa Lukic</div>
+            <div class="board-pick__meta">M · IPS <span class="board-pick__no">#160</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Rodri</div>
+            <div class="board-pick__meta">M · MCI <span class="board-pick__no">#159</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Rodrigo Muniz</div>
+            <div class="board-pick__meta">F · FUL <span class="board-pick__no">#158</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Nikola Milenkovic</div>
+            <div class="board-pick__meta">D · NFO <span class="board-pick__no">#157</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">15</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jérémy Jacquet</div>
+            <div class="board-pick__meta">D · LIV <span class="board-pick__no">#169</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">João Gomes</div>
+            <div class="board-pick__meta">M · AVL <span class="board-pick__no">#170</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Daizen Maeda</div>
+            <div class="board-pick__meta">F · IPS <span class="board-pick__no">#171</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Wilson Isidor</div>
+            <div class="board-pick__meta">F · SUN <span class="board-pick__no">#172</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Emile Smith Rowe</div>
+            <div class="board-pick__meta">M · FUL <span class="board-pick__no">#173</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Caoimhín Kelleher</div>
+            <div class="board-pick__meta">GK · BRE <span class="board-pick__no">#174</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Nicolas Jackson</div>
+            <div class="board-pick__meta">F · CHE <span class="board-pick__no">#175</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Harry Maguire</div>
+            <div class="board-pick__meta">D · MUN <span class="board-pick__no">#176</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Oscar Bobb</div>
+            <div class="board-pick__meta">F · FUL <span class="board-pick__no">#177</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Noah Sadiki</div>
+            <div class="board-pick__meta">M · SUN <span class="board-pick__no">#178</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jake O&#39;Brien</div>
+            <div class="board-pick__meta">D · EVE <span class="board-pick__no">#179</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Senne Lammens</div>
+            <div class="board-pick__meta">GK · MUN <span class="board-pick__no">#180</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">16</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Gustavo Hamer</div>
+            <div class="board-pick__meta">M · COV <span class="board-pick__no">#192</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Antonín Kinsky</div>
+            <div class="board-pick__meta">GK · TOT <span class="board-pick__no">#191</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Lisandro Martínez</div>
+            <div class="board-pick__meta">D · MUN <span class="board-pick__no">#190</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Xavi Simons</div>
+            <div class="board-pick__meta">M · TOT <span class="board-pick__no">#189</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Joelinton</div>
+            <div class="board-pick__meta">M · NEW <span class="board-pick__no">#188</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Joe Rodon</div>
+            <div class="board-pick__meta">D · LEE <span class="board-pick__no">#187</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Yankuba Minteh</div>
+            <div class="board-pick__meta">F · BHA <span class="board-pick__no">#186</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Rio Ngumoha</div>
+            <div class="board-pick__meta">F · LIV <span class="board-pick__no">#185</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dejan Kulusevski</div>
+            <div class="board-pick__meta">M · TOT <span class="board-pick__no">#184</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Bazoumana Touré</div>
+            <div class="board-pick__meta">F · NEW <span class="board-pick__no">#183</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Kenny Tete</div>
+            <div class="board-pick__meta">D · FUL <span class="board-pick__no">#182</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Nathan Collins</div>
+            <div class="board-pick__meta">D · BRE <span class="board-pick__no">#181</span></div>
+            
+          </td>
+          
+        </tr>
+        
+        <tr>
+          <td class="rd">17</td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jens Hjertø-Dahl</div>
+            <div class="board-pick__meta">M · HUL <span class="board-pick__no">#193</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Mamadou Sangaré</div>
+            <div class="board-pick__meta">M · BRE <span class="board-pick__no">#194</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Kevin</div>
+            <div class="board-pick__meta">F · FUL <span class="board-pick__no">#195</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Tijjani Reijnders</div>
+            <div class="board-pick__meta">M · MCI <span class="board-pick__no">#196</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Sepp van den Berg</div>
+            <div class="board-pick__meta">D · BRE <span class="board-pick__no">#197</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Alejandro Garnacho</div>
+            <div class="board-pick__meta">F · AVL <span class="board-pick__no">#198</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Dan Ndoye</div>
+            <div class="board-pick__meta">F · NFO <span class="board-pick__no">#199</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Jaidon Anthony</div>
+            <div class="board-pick__meta">F · BRE <span class="board-pick__no">#200</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Ezri Konsa</div>
+            <div class="board-pick__meta">D · AVL <span class="board-pick__no">#201</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Wesley Fofana</div>
+            <div class="board-pick__meta">D · CHE <span class="board-pick__no">#202</span></div>
+            
+          </td>
+          
+          <td>
+            
+            <div class="board-pick__name">Daichi Kamada</div>
+            <div class="board-pick__meta">M · CRY <span class="board-pick__no">#203</span></div>
+            
+          </td>
+          
+          <td class="board-mine">
+            
+            <div class="board-pick__name">Frank Onyeka</div>
+            <div class="board-pick__meta">M · COV <span class="board-pick__no">#204</span></div>
+            
+          </td>
+          
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Draft Notes</div>
+  <div class="awards-grid">
     
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#1 · Flabiano9</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Top of both boards — best draft strength in the league and the No. 1 power rank, built on a four-man Newcastle stack.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.675</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">NEW-4</strong> concentration</span>
+    <div class="award-card">
+      <div class="award-card__title">Best Value vs ADP</div>
+      <div class="award-card__value">Gabriel Martinelli</div>
+      <div class="award-card__meta">
+        <strong>Noahvillasana17</strong> · pick 34,
+        ADP 204.7 (170.7 later)
       </div>
     </div>
     
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#2 · cstoney20</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Second in draft strength in his first DPL season, leaning on a Brentford trio.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.655</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">BRF-3</strong> concentration</span>
-      </div>
-    </div>
     
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#3 · brendog2814</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Fourth-best draft with a strong forward line; power rank 3 on the strength of the attack.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.629</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">CHE-2</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#4 · bjennings28</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Mid-pack draft strength but ranked 4th — trusted to outperform the board.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.622</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">NOT-2</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#5 · rmeernst</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Third-strongest draft on paper, slotted 5th in the power rank.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.633</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">LIV-2</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#6 · willmoran</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Defending 31–7 champion ranked 6th despite the 9th-rated draft — reputation carrying the ranking.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.593</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">NOT-3</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#7 · Noahvillasana17</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Last season&#39;s runner-up gets rank 7 with only the 10th-rated draft.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.581</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">WHU-2</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#8 · jacklynch213</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Four Palace players and the 7th-rated draft.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.614</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">CRY-4</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#9 · erozier</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Ranked 9th pre-season with an 8th-rated draft built on a City core — then won the whole thing.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.611</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">MCI-3</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#10 · JordiCarb</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">The board&#39;s biggest snub — 5th-best draft strength but ranked 10th; heaviest single-club bet with five Arsenal players.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.626</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">ARS-5</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#11 · benditlikebergvall</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">Weakest draft strength in the league; ranked 11th.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.561</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">CRY-3</strong> concentration</span>
-      </div>
-    </div>
-    
-    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
-      <div class="award-card__title">#12 · skoeiboy</div>
-      <div style="font-size:0.875rem; color:var(--c-ink-mid); line-height:1.55; margin-top:8px;">11th in draft strength, 12th in the power rank.</div>
-      <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--c-border); font-size:0.75rem; color:var(--c-ink-light);">
-        <span><strong style="color:var(--c-ink); font-weight:700;">0.567</strong> strength</span>
-        <span><strong style="color:var(--c-ink); font-weight:700;">WHU-3</strong> concentration</span>
+    <div class="award-card">
+      <div class="award-card__title">Biggest Reach vs ADP</div>
+      <div class="award-card__value">Yankuba Minteh</div>
+      <div class="award-card__meta">
+        <strong>JordiCarb</strong> · pick 186,
+        ADP 46.1 (139.9 early)
       </div>
     </div>
     
   </div>
 
-  <div class="section-label">Draft Metrics</div>
-  <div class="awards-grid">
-    <div class="award-card">
-      <div class="award-card__title">Strongest Draft</div>
-      <div class="award-card__value">Flabiano9</div>
-      <div class="award-card__meta">0.6751 strength</div>
+  <div class="section-label">Haul by Manager</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:16px; margin-bottom:48px;">
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/6.html">bjennings28</a> · slot 1
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        6D · 6M · 4F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/1213.html">Bruno Fernandes</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · MUN · #1</span></li>
+        
+        <li><a href="players/1989.html">James Garner</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · EVE · #24</span></li>
+        
+        <li><a href="players/2408.html">Gabriel Magalhães</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · ARS · #25</span></li>
+        
+        <li><a href="players/10495.html">Enzo Le Fée</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · SUN · #48</span></li>
+        
+        <li><a href="players/3981.html">Ismaïla Sarr</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CRY · #49</span></li>
+        
+        <li><a href="players/1008.html">Neco Williams</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · NFO · #72</span></li>
+        
+        <li><a href="players/8738.html">Adrien Truffert</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · BOU · #73</span></li>
+        
+        <li><a href="players/5207.html">Noah Okafor</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · LEE · #96</span></li>
+        
+        <li><a href="players/1707.html">Matheus Nunes</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MCI · #97</span></li>
+        
+        <li><a href="players/2075.html">Jack Hinshelwood</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BHA · #120</span></li>
+        
+        <li><a href="players/1269.html">William Osula</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NEW · #121</span></li>
+        
+        <li><a href="players/2770.html">Gonzalo García</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · FUL · #144</span></li>
+        
+        <li><a href="players/1829.html">Milos Kerkez</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · LIV · #145</span></li>
+        
+        <li><a href="players/1031.html">James Trafford</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">DEF · 1226 · #168</span></li>
+        
+        <li><a href="players/8744.html">Jérémy Jacquet</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · LIV · #169</span></li>
+        
+        <li><a href="players/1260.html">Gustavo Hamer</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · COV · #192</span></li>
+        
+        <li><a href="players/16190.html">Jens Hjertø-Dahl</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · HUL · #193</span></li>
+        
+      </ol>
     </div>
-    <div class="award-card">
-      <div class="award-card__title">Weakest Draft</div>
-      <div class="award-card__value">benditlikebergvall</div>
-      <div class="award-card__meta">0.5609 strength</div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/4.html">benditlikebergvall</a> · slot 2
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 5D · 5M · 6F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/1721.html">Erling Haaland</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MCI · #2</span></li>
+        
+        <li><a href="players/3778.html">Iliman Ndiaye</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · EVE · #23</span></li>
+        
+        <li><a href="players/1993.html">James Tarkowski</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · EVE · #26</span></li>
+        
+        <li><a href="players/1962.html">Mikkel Damsgaard</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BRE · #47</span></li>
+        
+        <li><a href="players/1571.html">Diego Gómez</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BHA · #50</span></li>
+        
+        <li><a href="players/9438.html">Estêvão</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CHE · #71</span></li>
+        
+        <li><a href="players/2047.html">Jan Paul van Hecke</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · TOT · #74</span></li>
+        
+        <li><a href="players/1113.html">Boubacar Kamara</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · AVL · #95</span></li>
+        
+        <li><a href="players/4878.html">Jeremie Frimpong</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · LIV · #98</span></li>
+        
+        <li><a href="players/2003.html">Dwight McNeil</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CRY · #119</span></li>
+        
+        <li><a href="players/4891.html">Ousmane Diomande</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · NFO · #122</span></li>
+        
+        <li><a href="players/1816.html">Justin Kluivert</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BOU · #143</span></li>
+        
+        <li><a href="players/9139.html">Igor Jesus</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NFO · #146</span></li>
+        
+        <li><a href="players/4130.html">Ferdi Kadioglu</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · BHA · #167</span></li>
+        
+        <li><a href="players/2514.html">João Gomes</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · AVL · #170</span></li>
+        
+        <li><a href="players/5108.html">Antonín Kinsky</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · TOT · #191</span></li>
+        
+        <li><a href="players/11474.html">Mamadou Sangaré</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BRE · #194</span></li>
+        
+      </ol>
     </div>
-    <div class="award-card">
-      <div class="award-card__title">Most Concentrated</div>
-      <div class="award-card__value">ARS-5</div>
-      <div class="award-card__meta"><strong>JordiCarb</strong></div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/3.html">Flabiano9</a> · slot 3
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 6D · 3M · 7F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/1823.html">Antoine Semenyo</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MCI · #3</span></li>
+        
+        <li><a href="players/13386.html">Rayan</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BOU · #22</span></li>
+        
+        <li><a href="players/8339.html">Rayan Cherki</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · MCI · #27</span></li>
+        
+        <li><a href="players/1118.html">Youri Tielemans</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · MUN · #46</span></li>
+        
+        <li><a href="players/1834.html">Dango Ouattara</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BRE · #51</span></li>
+        
+        <li><a href="players/7590.html">Johan Manzambi</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · AVL · #70</span></li>
+        
+        <li><a href="players/11576.html">Brian Brobbey</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · SUN · #75</span></li>
+        
+        <li><a href="players/5210.html">Malick Thiaw</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · NEW · #94</span></li>
+        
+        <li><a href="players/3790.html">Mats Wieffer</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · BHA · #99</span></li>
+        
+        <li><a href="players/1789.html">Lewis Hall</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · NEW · #118</span></li>
+        
+        <li><a href="players/10755.html">Tarik Muharemovic</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · LEE · #123</span></li>
+        
+        <li><a href="players/1232.html">Kobbie Mainoo</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · MUN · #142</span></li>
+        
+        <li><a href="players/2402.html">William Saliba</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · ARS · #147</span></li>
+        
+        <li><a href="players/1850.html">Alisson Becker</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · LIV · #166</span></li>
+        
+        <li><a href="players/5979.html">Daizen Maeda</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · IPS · #171</span></li>
+        
+        <li><a href="players/1229.html">Lisandro Martínez</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MUN · #190</span></li>
+        
+        <li><a href="players/5693.html">Kevin</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · FUL · #195</span></li>
+        
+      </ol>
     </div>
-    <div class="award-card">
-      <div class="award-card__title">Avg Draft Strength</div>
-      <div class="award-card__value">0.6139</div>
-      <div class="award-card__meta">League-wide mean</div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/2.html">skoeiboy</a> · slot 4
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 4D · 6M · 6F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/1922.html">Cole Palmer</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CHE · #4</span></li>
+        
+        <li><a href="players/1874.html">Virgil van Dijk</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · LIV · #21</span></li>
+        
+        <li><a href="players/2415.html">Martin Ødegaard</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · ARS · #28</span></li>
+        
+        <li><a href="players/4901.html">Viktor Gyökeres</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · ARS · #45</span></li>
+        
+        <li><a href="players/2071.html">Danny Welbeck</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CHE · #52</span></li>
+        
+        <li><a href="players/1114.html">John McGinn</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · AVL · #69</span></li>
+        
+        <li><a href="players/1512.html">Micky van de Ven</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · TOT · #76</span></li>
+        
+        <li><a href="players/1012.html">Anthony Elanga</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NEW · #93</span></li>
+        
+        <li><a href="players/1863.html">Alexis Mac Allister</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · LIV · #100</span></li>
+        
+        <li><a href="players/1795.html">Sandro Tonali</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · TOT · #117</span></li>
+        
+        <li><a href="players/3512.html">Ian Maatsen</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · AVL · #124</span></li>
+        
+        <li><a href="players/1940.html">Keane Lewis-Potter</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BRE · #141</span></li>
+        
+        <li><a href="players/1779.html">Dan Burn</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · NEW · #148</span></li>
+        
+        <li><a href="players/2053.html">Bart Verbruggen</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · BHA · #165</span></li>
+        
+        <li><a href="players/10492.html">Wilson Isidor</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · SUN · #172</span></li>
+        
+        <li><a href="players/5240.html">Xavi Simons</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · TOT · #189</span></li>
+        
+        <li><a href="players/5191.html">Tijjani Reijnders</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · MCI · #196</span></li>
+        
+      </ol>
     </div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/10.html">erozier</a> · slot 5
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 5D · 5M · 6F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/2410.html">Bukayo Saka</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · ARS · #5</span></li>
+        
+        <li><a href="players/1781.html">Bruno Guimarães</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · ARS · #20</span></li>
+        
+        <li><a href="players/2193.html">Jean-Philippe Mateta</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CRY · #29</span></li>
+        
+        <li><a href="players/1120.html">Emiliano Buendía</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · AVL · #44</span></li>
+        
+        <li><a href="players/1235.html">Amad Diallo</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MUN · #53</span></li>
+        
+        <li><a href="players/10118.html">Junior Kroupi</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BOU · #68</span></li>
+        
+        <li><a href="players/1772.html">Sven Botman</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · NEW · #77</span></li>
+        
+        <li><a href="players/4049.html">Evanilson</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BOU · #92</span></li>
+        
+        <li><a href="players/1719.html">Josko Gvardiol</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MCI · #101</span></li>
+        
+        <li><a href="players/1217.html">Marcus Rashford</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MUN · #116</span></li>
+        
+        <li><a href="players/1211.html">Diogo Dalot</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MUN · #125</span></li>
+        
+        <li><a href="players/6910.html">Abdukodir Khusanov</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MCI · #140</span></li>
+        
+        <li><a href="players/1112.html">Jacob Ramsey</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · NEW · #149</span></li>
+        
+        <li><a href="players/11182.html">Robin Roefs</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · SUN · #164</span></li>
+        
+        <li><a href="players/2398.html">Emile Smith Rowe</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · FUL · #173</span></li>
+        
+        <li><a href="players/1802.html">Joelinton</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · NEW · #188</span></li>
+        
+        <li><a href="players/3516.html">Sepp van den Berg</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · BRE · #197</span></li>
+        
+      </ol>
+    </div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/7.html">rmeernst</a> · slot 6
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 7D · 4M · 5F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/2526.html">Matheus Cunha</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MUN · #6</span></li>
+        
+        <li><a href="players/1011.html">Morgan Gibbs-White</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · NFO · #19</span></li>
+        
+        <li><a href="players/1882.html">Enzo Fernández</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · CHE · #30</span></li>
+        
+        <li><a href="players/1830.html">Marcus Tavernier</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BOU · #43</span></li>
+        
+        <li><a href="players/1654.html">Alex Iwobi</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · FUL · #54</span></li>
+        
+        <li><a href="players/4867.html">Piero Hincapié</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · ARS · #67</span></li>
+        
+        <li><a href="players/2000.html">Beto</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · EVE · #78</span></li>
+        
+        <li><a href="players/2173.html">Tyrick Mitchell</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · CRY · #91</span></li>
+        
+        <li><a href="players/4143.html">Maxence Lacroix</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · CHE · #102</span></li>
+        
+        <li><a href="players/2186.html">Adam Wharton</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · CRY · #115</span></li>
+        
+        <li><a href="players/3153.html">Omar Alderete</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · SUN · #126</span></li>
+        
+        <li><a href="players/6960.html">Michael Kayode</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · BRE · #139</span></li>
+        
+        <li><a href="players/14910.html">Haji Wright</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · COV · #150</span></li>
+        
+        <li><a href="players/2417.html">Ben White</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · ARS · #163</span></li>
+        
+        <li><a href="players/1873.html">Caoimhín Kelleher</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · BRE · #174</span></li>
+        
+        <li><a href="players/2545.html">Joe Rodon</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · LEE · #187</span></li>
+        
+        <li><a href="players/1237.html">Alejandro Garnacho</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · AVL · #198</span></li>
+        
+      </ol>
+    </div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/9.html">JordiCarb</a> · slot 7
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 4D · 3M · 9F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/1963.html">Bryan Mbeumo</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MUN · #7</span></li>
+        
+        <li><a href="players/3667.html">Igor Thiago</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BRE · #18</span></li>
+        
+        <li><a href="players/4482.html">Nick Woltemade</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NEW · #31</span></li>
+        
+        <li><a href="players/2067.html">Kaoru Mitoma</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BHA · #42</span></li>
+        
+        <li><a href="players/2520.html">Pedro Neto</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CHE · #55</span></li>
+        
+        <li><a href="players/4055.html">Mateus Fernandes</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · TOT · #66</span></li>
+        
+        <li><a href="players/3950.html">Riccardo Calafiori</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · ARS · #79</span></li>
+        
+        <li><a href="players/2674.html">Ronald Araujo</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · LIV · #90</span></li>
+        
+        <li><a href="players/4884.html">Nordi Mukiele</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · SUN · #103</span></li>
+        
+        <li><a href="players/1097.html">Emiliano Martínez</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · AVL · #114</span></li>
+        
+        <li><a href="players/2700.html">Martín Zubimendi</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · ARS · #127</span></li>
+        
+        <li><a href="players/1886.html">Moisés Caicedo</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · CHE · #138</span></li>
+        
+        <li><a href="players/2707.html">Mikel Merino</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · ARS · #151</span></li>
+        
+        <li><a href="players/3330.html">Óscar Mingueza</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · CRY · #162</span></li>
+        
+        <li><a href="players/1909.html">Nicolas Jackson</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CHE · #175</span></li>
+        
+        <li><a href="players/3649.html">Yankuba Minteh</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BHA · #186</span></li>
+        
+        <li><a href="players/6197.html">Dan Ndoye</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NFO · #199</span></li>
+        
+      </ol>
+    </div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/8.html">cstoney20</a> · slot 8
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 5D · 3M · 8F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/4864.html">Florian Wirtz</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · LIV · #8</span></li>
+        
+        <li><a href="players/1716.html">Jérémy Doku</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MCI · #17</span></li>
+        
+        <li><a href="players/7571.html">Anton Stach</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · LEE · #32</span></li>
+        
+        <li><a href="players/1494.html">Pedro Porro</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · TOT · #41</span></li>
+        
+        <li><a href="players/2160.html">Mohammed Kudus</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · TOT · #56</span></li>
+        
+        <li><a href="players/2183.html">Marc Guéhi</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MCI · #65</span></li>
+        
+        <li><a href="players/1668.html">Harry Wilson</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · LEE · #80</span></li>
+        
+        <li><a href="players/2168.html">Chris Richards</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · CRY · #89</span></li>
+        
+        <li><a href="players/1766.html">Harvey Barnes</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · NEW · #104</span></li>
+        
+        <li><a href="players/4374.html">Gianluigi Donnarumma</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · MCI · #113</span></li>
+        
+        <li><a href="players/1836.html">Dominic Solanke</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · TOT · #128</span></li>
+        
+        <li><a href="players/2525.html">Rayan Aït-Nouri</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MCI · #137</span></li>
+        
+        <li><a href="players/6940.html">Omar Marmoush</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MCI · #152</span></li>
+        
+        <li><a href="players/1923.html">Noni Madueke</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · ARS · #161</span></li>
+        
+        <li><a href="players/1206.html">Harry Maguire</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MUN · #176</span></li>
+        
+        <li><a href="players/6624.html">Rio Ngumoha</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · LIV · #185</span></li>
+        
+        <li><a href="players/3653.html">Jaidon Anthony</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BRE · #200</span></li>
+        
+      </ol>
+    </div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/11.html">mdropkin</a> · slot 9
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 5D · 4M · 7F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/2074.html">João Pedro</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CHE · #9</span></li>
+        
+        <li><a href="players/2403.html">Declan Rice</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · ARS · #16</span></li>
+        
+        <li><a href="players/2164.html">Daniel Muñoz</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · CRY · #33</span></li>
+        
+        <li><a href="players/7093.html">Patrick Dorgu</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MUN · #40</span></li>
+        
+        <li><a href="players/1957.html">Yoane Wissa</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NEW · #57</span></li>
+        
+        <li><a href="players/2421.html">Kai Havertz</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · ARS · #64</span></li>
+        
+        <li><a href="players/4269.html">Christos Tzolis</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · ARS · #81</span></li>
+        
+        <li><a href="players/2399.html">David Raya</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · ARS · #88</span></li>
+        
+        <li><a href="players/3041.html">Yéremy Pino</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CRY · #105</span></li>
+        
+        <li><a href="players/1090.html">Matty Cash</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · AVL · #112</span></li>
+        
+        <li><a href="players/3387.html">Omari Hutchinson</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NFO · #129</span></li>
+        
+        <li><a href="players/1878.html">Andy Robertson</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · TOT · #136</span></li>
+        
+        <li><a href="players/1769.html">Jacob Murphy</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · NEW · #153</span></li>
+        
+        <li><a href="players/1664.html">Sasa Lukic</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · IPS · #160</span></li>
+        
+        <li><a href="players/1710.html">Oscar Bobb</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · FUL · #177</span></li>
+        
+        <li><a href="players/1511.html">Dejan Kulusevski</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · TOT · #184</span></li>
+        
+        <li><a href="players/1107.html">Ezri Konsa</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · AVL · #201</span></li>
+        
+      </ol>
+    </div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/12.html">Noahvillasana17</a> · slot 10
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 5D · 6M · 5F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/1806.html">Elliot Anderson</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · MCI · #10</span></li>
+        
+        <li><a href="players/1862.html">Cody Gakpo</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · LIV · #15</span></li>
+        
+        <li><a href="players/2406.html">Gabriel Martinelli</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · ARS · #34</span></li>
+        
+        <li><a href="players/5226.html">Benjamin Sesko</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · MUN · #39</span></li>
+        
+        <li><a href="players/5354.html">Mathys Tel</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · TOT · #58</span></li>
+        
+        <li><a href="players/1919.html">Reece James</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · CHE · #63</span></li>
+        
+        <li><a href="players/1663.html">Antonee Robinson</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · FUL · #82</span></li>
+        
+        <li><a href="players/1854.html">Ryan Gravenberch</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · LIV · #87</span></li>
+        
+        <li><a href="players/10511.html">Dan Ballard</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · SUN · #106</span></li>
+        
+        <li><a href="players/4870.html">Granit Xhaka</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · SUN · #111</span></li>
+        
+        <li><a href="players/2016.html">Jordan Pickford</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · EVE · #130</span></li>
+        
+        <li><a href="players/1821.html">Tyler Adams</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BOU · #135</span></li>
+        
+        <li><a href="players/2169.html">Joachim Andersen</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · FUL · #154</span></li>
+        
+        <li><a href="players/1727.html">Rodri</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · MCI · #159</span></li>
+        
+        <li><a href="players/6166.html">Noah Sadiki</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · SUN · #178</span></li>
+        
+        <li><a href="players/7573.html">Bazoumana Touré</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NEW · #183</span></li>
+        
+        <li><a href="players/1901.html">Wesley Fofana</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · CHE · #202</span></li>
+        
+      </ol>
+    </div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/5.html">brendog2814</a> · slot 11
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 6D · 5M · 5F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/1865.html">Dominik Szoboszlai</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · LIV · #11</span></li>
+        
+        <li><a href="players/1091.html">Morgan Rogers</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · CHE · #14</span></li>
+        
+        <li><a href="players/1994.html">Dominic Calvert-Lewin</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · LEE · #35</span></li>
+        
+        <li><a href="players/1024.html">Chris Wood</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · NFO · #38</span></li>
+        
+        <li><a href="players/3885.html">Nico O&#39;Reilly</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MCI · #59</span></li>
+        
+        <li><a href="players/1827.html">James Hill</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · BOU · #62</span></li>
+        
+        <li><a href="players/1507.html">Richarlison</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · TOT · #83</span></li>
+        
+        <li><a href="players/1930.html">Kevin Schade</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BRE · #86</span></li>
+        
+        <li><a href="players/1826.html">Marcos Senesi</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · TOT · #107</span></li>
+        
+        <li><a href="players/1838.html">Alex Scott</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BOU · #110</span></li>
+        
+        <li><a href="players/1911.html">Djordje Petrovic</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · BOU · #131</span></li>
+        
+        <li><a href="players/10528.html">Brenden Aaronson</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · LEE · #134</span></li>
+        
+        <li><a href="players/1960.html">Mathias Jensen</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BRE · #155</span></li>
+        
+        <li><a href="players/1657.html">Rodrigo Muniz</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · FUL · #158</span></li>
+        
+        <li><a href="players/3969.html">Jake O&#39;Brien</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · EVE · #179</span></li>
+        
+        <li><a href="players/1646.html">Kenny Tete</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · FUL · #182</span></li>
+        
+        <li><a href="players/3768.html">Daichi Kamada</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · CRY · #203</span></li>
+        
+      </ol>
+    </div>
+    
+    <div style="border-top:1px solid var(--c-border-mid); padding:14px 0 20px;">
+      <div class="award-card__title">
+        <a href="clubs/1.html">willmoran</a> · slot 12
+      </div>
+      <div style="font-size:0.75rem; color:var(--c-ink-light); margin-top:6px;">
+        1GK · 6D · 6M · 4F
+      </div>
+      <ol style="margin:10px 0 0; padding-left:20px; font-size:0.8125rem; color:var(--c-ink-mid); line-height:1.7;">
+        
+        <li><a href="players/1786.html">Alexander Isak</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · LIV · #12</span></li>
+        
+        <li><a href="players/1102.html">Ollie Watkins</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · AVL · #13</span></li>
+        
+        <li><a href="players/1712.html">Phil Foden</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · MCI · #36</span></li>
+        
+        <li><a href="players/1500.html">James Maddison</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · TOT · #37</span></li>
+        
+        <li><a href="players/2413.html">Jurriën Timber</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · ARS · #60</span></li>
+        
+        <li><a href="players/2051.html">Pascal Groß</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · BHA · #61</span></li>
+        
+        <li><a href="players/2165.html">Eberechi Eze</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · ARS · #84</span></li>
+        
+        <li><a href="players/3213.html">Kiernan Dewsbury-Hall</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · EVE · #85</span></li>
+        
+        <li><a href="players/10494.html">Trai Hume</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · SUN · #108</span></li>
+        
+        <li><a href="players/1705.html">Rúben Dias</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · MCI · #109</span></li>
+        
+        <li><a href="players/4057.html">Georginio Rutter</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · BHA · #132</span></li>
+        
+        <li><a href="players/9599.html">Luka Vuskovic</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · BHA · #133</span></li>
+        
+        <li><a href="players/3309.html">Jørgen Strand Larsen</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">F · CRY · #156</span></li>
+        
+        <li><a href="players/3843.html">Nikola Milenkovic</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · NFO · #157</span></li>
+        
+        <li><a href="players/11577.html">Senne Lammens</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">GK · MUN · #180</span></li>
+        
+        <li><a href="players/1958.html">Nathan Collins</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">D · BRE · #181</span></li>
+        
+        <li><a href="players/1934.html">Frank Onyeka</a>
+          <span style="color:var(--c-ink-light); font-size:0.75rem;">M · COV · #204</span></li>
+        
+      </ol>
+    </div>
+    
   </div>
+  
+
+  
 
 </div>
 
@@ -507,7 +2636,7 @@
 
 
 <footer class="site-footer">
-  Dallas Premier League · 2025/26 · Powered by <a href="https://sleeper.com" target="_blank" rel="noopener">Sleeper</a> · <a href="subscribe.html">Subscribe to weekly digest</a>
+  Dallas Premier League · 2026/27 · Powered by <a href="https://sleeper.com" target="_blank" rel="noopener">Sleeper</a> · <a href="subscribe.html">Subscribe to weekly digest</a>
 </footer>
 
 </body>

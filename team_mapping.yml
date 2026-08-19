@@ -1,6 +1,6 @@
 # DPL team → real PL club mapping
-# Provisional assignments based on most-rostered real-club players.
-# Edit before first deploy — ask each league member which club they want.
+# owner / team_name synced from Sleeper for the 2026/27 season.
+# pl_club assignments are ours and carry over year to year — edit freely.
 #
 # Fields:
 #   owner:        Sleeper display_name
@@ -22,7 +22,7 @@
 
 2:
   owner: skoeiboy
-  team_name: Fantasy Soccer is Dumb FC
+  team_name: "Ice man"
   pl_club: Everton
   pl_abbr: EVE
   color_primary: "#003399"
@@ -40,7 +40,7 @@
 
 4:
   owner: benditlikebergvall
-  team_name: Return of the Djedi
+  team_name: "Me, Myself, Ndiaye"
   pl_club: Newcastle United
   pl_abbr: NEW
   color_primary: "#241F20"
@@ -49,7 +49,7 @@
 
 5:
   owner: brendog2814
-  team_name: team brendog
+  team_name: "Kamada Harris"
   pl_club: Chelsea
   pl_abbr: CHE
   color_primary: "#034694"
@@ -67,7 +67,7 @@
 
 7:
   owner: rmeernst
-  team_name: Xhaka Xhaka
+  team_name: "Ben White, Black Now"
   pl_club: Brentford
   pl_abbr: BRE
   color_primary: "#E30613"
@@ -76,7 +76,7 @@
 
 8:
   owner: cstoney20
-  team_name: "Next Stop: The Londoner"
+  team_name: "My Crouch Solanke"
   pl_club: West Ham United
   pl_abbr: WHU
   color_primary: "#7A263A"
@@ -94,7 +94,7 @@
 
 10:
   owner: erozier
-  team_name: Haalandcaust FC
+  team_name: "Starboy’s Swimmers"
   pl_club: Aston Villa
   pl_abbr: AVL
   color_primary: "#670E36"
@@ -102,8 +102,8 @@
   color_text: "#FFFFFF"
 
 11:
-  owner: jacklynch213
-  team_name: LPLLC
+  owner: mdropkin
+  team_name: "Kurt Zouma’s Kittens"
   pl_club: Crystal Palace
   pl_abbr: CRY
   color_primary: "#1B458F"
@@ -112,7 +112,7 @@
 
 12:
   owner: Noahvillasana17
-  team_name: Welcome to the Show
+  team_name: "Welcome to the show"
   pl_club: Manchester United
   pl_abbr: MUN
   color_primary: "#DA291C"

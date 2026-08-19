@@ -4,12 +4,16 @@
 {% block body %}
 <div class="page-narrow">
   <header class="page-header">
-    <div class="page-header__eyebrow">2025/26 Season</div>
+    <div class="page-header__eyebrow">{{ SEASON_LABEL }} Season</div>
     <h1 class="page-header__title">Gameweek {{ gw.week }}</h1>
     <p class="page-header__subtitle">
+      {% if gw.high_score %}
       High <strong>{{ "%.1f"|format(gw.high_score) }}</strong> ·
       Low <strong>{{ "%.1f"|format(gw.low_score) }}</strong> ·
       Avg <strong>{{ "%.1f"|format(gw.avg_score) }}</strong>
+      {% else %}
+      Not yet played — pairings below
+      {% endif %}
     </p>
   </header>
 

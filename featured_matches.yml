@@ -1,11 +1,26 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # FEATURED MATCHES  — two actual GW pairings to spotlight
 # ─────────────────────────────────────────────────────────────────────────────
-# Season is over — no upcoming games. The build script won't find pairings
-# for gw=99, so the "Match to Watch" sections won't render on the site or
-# in the email digest. When the next season starts, change gw + matches
-# back to real values.
+# Set `gw` to the upcoming gameweek and give each match the two roster_ids
+# from that week's real pairings (the build script verifies them against
+# matchup_legs and flags any that don't line up). Rewrite the copy weekly.
 
-gw: 99
+gw: 1
 
-matches: []
+matches:
+  - home_roster_id: 10
+    away_roster_id: 11
+    headline: "The champion opens against the newcomer"
+    body: >
+      erozier begins the title defence against the one manager in the league
+      with no DPL history at all. He kept Saka with the fifth pick and built
+      out from there; mdropkin took João Pedro at nine and drafted a squad
+      that leans forward. First real read on both.
+
+  - home_roster_id: 1
+    away_roster_id: 7
+    headline: "Isak and Watkins against the Cunha plan"
+    body: >
+      willmoran used back-to-back picks at 12 and 13 on Isak and Watkins and
+      is starting both. rmeernst opened with Matheus Cunha and Morgan
+      Gibbs-White. Two very different shapes, week one, no form guide.

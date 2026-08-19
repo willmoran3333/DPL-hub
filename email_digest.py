@@ -358,7 +358,7 @@ def render_email_body(data: dict) -> str:
 
     parts.append(f"""
   <div class="footer">
-    Dallas Premier League · 2025/26 · <a href="{site_url}">View the site →</a>
+    Dallas Premier League · {bs.season_label(bs.SEASON)} · <a href="{site_url}">View the site →</a>
   </div>
 
 </div>

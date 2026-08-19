@@ -4,12 +4,12 @@
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">2025/26 Season</div>
+    <div class="page-header__eyebrow">{{ SEASON_LABEL }} Season</div>
     <h1 class="page-header__title">Fixtures</h1>
     {% if upcoming_matchups %}
     <p class="page-header__subtitle">GW{{ current_week + 1 }} — Upcoming matchups</p>
     {% else %}
-    <p class="page-header__subtitle">Season complete — final table is in. Fixtures return with the 2026/27 season.</p>
+    <p class="page-header__subtitle">Season complete — final table is in. Fixtures return next season.</p>
     {% endif %}
   </header>
 
@@ -86,7 +86,7 @@
   {% endif %}
 
   {% if not upcoming_matchups %}
-  <div class="section-label">2025/26 — Final Word</div>
+  <div class="section-label">{{ SEASON_LABEL }} — Final Word</div>
   <div style="max-width:680px; margin-bottom:40px;">
     <p style="color:var(--c-ink-mid); line-height:1.7;">
       All 38 gameweeks are in the books. Relive any week from the

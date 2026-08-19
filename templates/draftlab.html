@@ -1,6 +1,6 @@
 {% extends "_base.html" %}
 {% block title %}Draft Lab{% endblock %}
-{% block description %}Re-score the 2025/26 season with your own points-per-stat and see what would have happened.{% endblock %}
+{% block description %}Re-score the {{ LAB_SEASON_LABEL }} season with your own points-per-stat and see what would have happened.{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -177,9 +177,9 @@
     <summary>Scoring Editor</summary>
     <div class="score-body">
       <div class="score-toolbar">
-        <button class="filter-reset" id="w-proposal">Load 2026/27 proposal</button>
-        <button class="filter-reset" id="w-reset">Revert to 2025/26 scoring</button>
-        <span id="w-status">Showing the proposed 2026/27 scoring — Δ is the change vs last season.</span>
+        <button class="filter-reset" id="w-proposal">Load live {{ SEASON_LABEL }} scoring</button>
+        <button class="filter-reset" id="w-reset">Revert to {{ LAB_SEASON_LABEL }} scoring</button>
+        <span id="w-status">Showing the live {{ SEASON_LABEL }} scoring — Δ is the change vs {{ LAB_SEASON_LABEL }}.</span>
       </div>
       <div class="score-scroll">
         <table class="score-grid" id="score-grid">
@@ -240,8 +240,8 @@ const LAB = {{ lab|tojson }};
   const PLAYERS = LAB.players;             // [{id,n,p,sp,c,o,inj,s:[…]}]
   const POSCOLS = ['gk', 'd', 'm', 'f'];
 
-  // DEFAULTS = official 2025/26 scoring (the Δ baseline);
-  // PROPOSAL = proposed 2026/27 scoring — the page starts on it so the
+  // DEFAULTS = the scoring {{ LAB_SEASON_LABEL }} actually ran under (the Δ baseline);
+  // PROPOSAL = the live {{ SEASON_LABEL }} scoring — the page starts on it so the
   // changed weights and green/red point deltas show immediately.
   const DEFAULTS = STATS.map(st => ({...LAB.weights_2526[st.key]}));
   const PROPOSAL = STATS.map(st => ({...LAB.weights[st.key]}));
@@ -278,7 +278,7 @@ const LAB = {{ lab|tojson }};
     { label: 'Club',   title: 'Club',              num: false, get: p => p.c },
     { label: 'Owner',  title: 'Owner',             num: false, get: p => p.o || '(free agent)' },
     { label: 'Pts',    title: 'Points under current scoring', num: true, get: p => p._pts, fmt: fmt1 },
-    { label: 'Δ', title: 'Change vs actual 2025/26 scoring', num: true, get: p => p._d, fmt: fmt1 },
+    { label: 'Δ', title: 'Change vs actual {{ LAB_SEASON_LABEL }} scoring', num: true, get: p => p._d, fmt: fmt1 },
     { label: 'PPG',    title: 'Points per game',   num: true, get: p => p._ppg, fmt: fmt1 },
     { label: 'P/90',   title: 'Points per 90 min', num: true, get: p => p._p90, fmt: fmt1 },
     { label: 'ADP',    title: 'Fantrax EPL average draft position, 2026/27 preseason',
@@ -317,7 +317,7 @@ const LAB = {{ lab|tojson }};
       if (isChanged) changed++;
     });
     wStatus.textContent = matches(PROPOSAL)
-      ? 'Showing the proposed 2026/27 scoring — Δ is the change vs last season.'
+      ? 'Showing the live {{ SEASON_LABEL }} scoring — Δ is the change vs {{ LAB_SEASON_LABEL }}.'
       : (changed
           ? changed + ' weight' + (changed > 1 ? 's' : '') + ' changed from last season.'
           : "Using last season's official scoring.");

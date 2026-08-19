@@ -4,11 +4,24 @@
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">2025/26 Season</div>
+    <div class="page-header__eyebrow">{{ SEASON_LABEL }} Season</div>
     <h1 class="page-header__title">Gameweeks</h1>
   </header>
 
   <div class="section-label">All Gameweeks</div>
+  {% if not weeks %}
+  <p style="color:var(--c-ink-mid); line-height:1.7; max-width:640px; margin-bottom:28px;">
+    No gameweeks scored yet.{% if season_start %} The season opens {{ season_start }}.{% endif %}
+    GW1 pairings are up on the <a href="{{ url_for('page', 'fixtures') }}">Fixtures</a> page.
+  </p>
+  <div class="gw-grid">
+    <a href="{{ url_gw(1) }}" class="gw-tile">
+      <div class="gw-label">GW</div>
+      <div class="gw-num">1</div>
+      <div style="font-size:0.6875rem; color:var(--c-ink-light); margin-top:4px; font-weight:600;">upcoming</div>
+    </a>
+  </div>
+  {% endif %}
   <div class="gw-grid">
     {% for w in weeks %}
     <a href="{{ url_gw(w.week) }}" class="gw-tile">

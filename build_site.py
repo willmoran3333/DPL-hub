@@ -44,14 +44,23 @@ TEMPLATES_DIR     = HERE / "templates"
 STATIC_DIR        = HERE / "static"
 DIST_DIR          = HERE / "dist"
 TEAM_MAP_PATH       = HERE / "team_mapping.yml"
-HISTORY_2024_PATH   = HERE / "history_2024.json"
+HISTORY_2024_PATH   = HERE / "history_2024.json"   # legacy alias
 FEATURED_PATH       = HERE / "featured_team.yml"
 FEATURED_MATCHES_PATH = HERE / "featured_matches.yml"
 DRAFT_PATH          = HERE / "draft_data.yml"
 
-LEAGUE_ID     = "1244790289042776064"
-SEASON        = "2025"
+LEAGUE_ID     = "1385458928208343040"   # DPL 2026/27
+SEASON        = "2026"
 YOU_ROSTER_ID = 1  # willmoran
+
+# Completed seasons, newest first — drives the History page and the Players
+# page season selector. Add the current season here once it finishes.
+PAST_SEASONS = [
+    {"season": "2025", "label": "2025/26", "league_id": "1244790289042776064",
+     "file": "history_2025.json"},
+    {"season": "2024", "label": "2024/25", "league_id": "1121835436143435776",
+     "file": "history_2024.json"},
+]
 
 # Subscribe form action — Formspree, Netlify Forms, etc.
 # Update this to your actual endpoint when you have one.
@@ -100,6 +109,21 @@ def load_draft() -> dict:
         with open(DRAFT_PATH) as f:
             return yaml.safe_load(f)
     return {}
+
+
+def load_histories() -> list[dict]:
+    """Every completed season in PAST_SEASONS that has a frozen JSON file,
+    newest first. Regenerate a season's file with make_history.py."""
+    out = []
+    for entry in PAST_SEASONS:
+        path = HERE / entry["file"]
+        if not path.exists():
+            continue
+        with open(path) as f:
+            data = json.load(f)
+        data["label"] = entry["label"]
+        out.append(data)
+    return out
 
 
 def load_history_2024() -> dict:
@@ -339,13 +363,82 @@ def get_gw_detail(conn, week: int, team_map: dict, standings_map: dict) -> dict:
 # Players
 # ────────────────────────────────────────────────────────────────────
 
+# The Draft Lab and the Players page both re-score historical stats. They use
+# the *live* 2026/27 league settings — the 2026 rebalance was adopted on
+# Sleeper, so the proposal JSON is now only a fallback for a cold DB.
+LAB_SEASON = "2025"   # last season with a full set of stats to re-score
+
+
 def load_proposed_scoring() -> dict | None:
-    """The proposed 2026/27 scoring (the Draft Lab default), or None if absent."""
+    """Fallback only: the 2026/27 proposal as authored, if the DB has no league."""
     try:
         with open(HERE / "scoring_proposal_2026.json") as f:
             return json.load(f)["wills_config_aug9"]["full_scoring_settings"]
     except (OSError, KeyError, json.JSONDecodeError):
         return None
+
+
+def get_season_start(conn) -> str | None:
+    """The EPL season opener as 'Fri 21 Aug', or None if we don't have it."""
+    row = q1(conn, "SELECT season_start_date FROM sport_state WHERE sport = 'clubsoccer:epl'")
+    raw = row["season_start_date"] if row else None
+    if not raw:
+        return None
+    from datetime import date
+    try:
+        d = date.fromisoformat(raw)
+    except ValueError:
+        return raw
+    return f"{d:%a} {d.day} {d:%b}"
+
+
+def get_draft_summary(conn) -> dict | None:
+    """Pick count and round count for this season's draft, if it has happened."""
+    row = q1(conn, """
+        SELECT COUNT(*) AS picks, MAX(round) AS rounds
+        FROM draft_picks WHERE league_id = ? AND season = ?
+    """, (LEAGUE_ID, SEASON))
+    if not row or not row["picks"]:
+        return None
+    return {"picks": row["picks"], "rounds": row["rounds"]}
+
+
+def season_label(season: str) -> str:
+    """"2025" -> "2025/26"."""
+    try:
+        return f"{season}/{str(int(season) + 1)[2:]}"
+    except (TypeError, ValueError):
+        return str(season)
+
+
+def get_stat_seasons(conn) -> list[dict]:
+    """Seasons with player stats in the DB, newest first."""
+    rows = q(conn, """
+        SELECT season, COUNT(*) AS n
+        FROM player_stats
+        WHERE stat_value IS NOT NULL
+        GROUP BY season
+        HAVING n > 0
+        ORDER BY season DESC
+    """)
+    return [{"season": r["season"], "label": season_label(r["season"])} for r in rows]
+
+
+def get_league_scoring(conn, league_id: str = None) -> dict:
+    """A league's scoring_settings from the DB ({} if we don't have it)."""
+    row = q1(conn, "SELECT scoring_settings FROM league WHERE league_id = ?",
+             (league_id or LEAGUE_ID,))
+    if not row:
+        return {}
+    try:
+        return json.loads(row["scoring_settings"] or "{}")
+    except json.JSONDecodeError:
+        return {}
+
+
+def current_scoring(conn) -> dict:
+    """This season's live scoring rules, falling back to the 2026 proposal."""
+    return get_league_scoring(conn, LEAGUE_ID) or (load_proposed_scoring() or {})
 
 
 FANTRAX_ADP_PATH = HERE / "data" / "fantrax_adp_epl_2026-27.csv"
@@ -482,10 +575,10 @@ def get_all_active_players(conn, current_week: int | None = None,
     """, (season, LEAGUE_ID))
     players = [dict(r) for r in rows]
 
-    # Re-score this table (and only this table) with the proposed 2026/27
-    # weights — the same set the Draft Lab defaults to. Match results,
-    # standings and history keep the real 2025/26 scores.
-    proposed = load_proposed_scoring()
+    # Re-score this table (and only this table) with the live 2026/27 weights —
+    # the same set the Draft Lab defaults to — so past seasons read on this
+    # year's terms. Match results, standings and history keep real scores.
+    proposed = current_scoring(conn)
     prop_week: dict[str, dict[int, float]] = {}
     if proposed:
         prop_tot: dict[str, float] = {}
@@ -601,12 +694,15 @@ def get_draft_lab_data(conn) -> dict:
     """
     stat_keys = [s[0] for s in DRAFT_LAB_STATS]
 
-    scoring_row = q1(conn, "SELECT scoring_settings FROM league WHERE league_id = ?", (LEAGUE_ID,))
-    scoring = json.loads(scoring_row["scoring_settings"] or "{}")
+    # The lab re-scores a full season of stats, so it stays on the last
+    # completed season (LAB_SEASON) rather than the in-progress one.
+    prev_league = next((p["league_id"] for p in PAST_SEASONS
+                        if p["season"] == LAB_SEASON), None)
+    scoring = get_league_scoring(conn, prev_league)   # rules that season ran under
 
-    # 2026/27 proposed scoring (wills_config_aug9) is the page default;
-    # the official 2025/26 settings stay available as a one-click preset.
-    proposed = load_proposed_scoring() or scoring
+    # The live 2026/27 settings are the page default; the season's own
+    # settings stay available as a one-click preset.
+    proposed = current_scoring(conn) or scoring
 
     def _weights(src: dict) -> dict:
         # weights[stat] = {gk, d, m, f} — 0 where the league didn't score it
@@ -626,7 +722,7 @@ def get_draft_lab_data(conn) -> dict:
         FROM player_stats
         WHERE season = ? AND stat_key IN ('pos_gk_min','pos_d_min','pos_m_min','pos_f_min')
         GROUP BY player_id, stat_key
-    """, (SEASON,))
+    """, (LAB_SEASON,))
     scoring_pos: dict[str, tuple[float, str]] = {}
     for r in pos_min_rows:
         pc = r["stat_key"].split("_")[1]
@@ -651,7 +747,7 @@ def get_draft_lab_data(conn) -> dict:
         LEFT JOIN roster_lookup rl ON rl.player_id = p.player_id
         WHERE p.position_primary IN ('GK','D','M','F')
         GROUP BY p.player_id, s.stat_key
-    """, (LEAGUE_ID, SEASON, *stat_keys))
+    """, (LEAGUE_ID, LAB_SEASON, *stat_keys))
 
     by_player: dict[str, dict] = {}
     for r in rows:
@@ -779,7 +875,13 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
         WHERE league_id=? AND season=? AND points IS NOT NULL
         ORDER BY points DESC LIMIT 1
     """, (LEAGUE_ID, SEASON))
-    high["team_name"], high["display_name"] = team_label(high["roster_id"])
+    # Pre-season / first GW: nothing scored yet, so these stay None and the
+    # templates skip the card rather than rendering an empty award.
+    if high:
+        high = dict(high)
+        high["team_name"], high["display_name"] = team_label(high["roster_id"])
+    else:
+        high = None
 
     # Season low (nonzero)
     low = q1(conn, """
@@ -787,7 +889,11 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
         WHERE league_id=? AND season=? AND points IS NOT NULL AND points > 0
         ORDER BY points ASC LIMIT 1
     """, (LEAGUE_ID, SEASON))
-    low["team_name"], low["display_name"] = team_label(low["roster_id"])
+    if low:
+        low = dict(low)
+        low["team_name"], low["display_name"] = team_label(low["roster_id"])
+    else:
+        low = None
 
     # Biggest blowout + closest game (with both teams scored)
     margins = q(conn, """
@@ -1078,10 +1184,107 @@ def compute_weekly_awards(conn, week: int, team_map: dict, standings: list[dict]
 def get_epl_fixtures(conn, week: int) -> list[dict]:
     rows = q(conn, """
         SELECT home_name, away_name, date, status
-        FROM fixtures WHERE week = ?
+        FROM fixtures WHERE season = ? AND week = ?
         ORDER BY date
-    """, (week,))
+    """, (SEASON, week))
     return [dict(r) for r in rows]
+
+
+# ────────────────────────────────────────────────────────────────────
+# Draft board (real picks, from the Sleeper draft)
+# ────────────────────────────────────────────────────────────────────
+
+def get_draft_board(conn) -> dict | None:
+    """This season's actual draft: the board grid, each manager's haul, and
+    value-vs-ADP. Returns None until the draft has been ingested."""
+    picks = q(conn, """
+        SELECT d.pick_no, d.round, d.draft_slot, d.roster_id,
+               d.player_id, d.metadata,
+               p.full_name, p.position_primary, p.team_abbr,
+               u.display_name
+        FROM draft_picks d
+        LEFT JOIN players p       ON p.player_id = d.player_id
+        LEFT JOIN rosters r       ON r.league_id = d.league_id AND r.roster_id = d.roster_id
+        LEFT JOIN league_users u  ON u.league_id = d.league_id AND u.user_id = r.owner_id
+        WHERE d.league_id = ? AND d.season = ?
+        ORDER BY d.pick_no
+    """, (LEAGUE_ID, SEASON))
+    if not picks:
+        return None
+
+    rows = []
+    for r in picks:
+        try:
+            meta = json.loads(r["metadata"] or "{}")
+        except json.JSONDecodeError:
+            meta = {}
+        name = r["full_name"] or " ".join(
+            x for x in (meta.get("first_name"), meta.get("last_name")) if x
+        ) or r["player_id"]
+        rows.append({
+            "pick_no":   r["pick_no"],
+            "round":     r["round"],
+            "slot":      r["draft_slot"],
+            "roster_id": r["roster_id"],
+            "manager":   r["display_name"] or f"Roster {r['roster_id']}",
+            "player_id": r["player_id"],
+            "full_name": name,
+            "position_primary": r["position_primary"] or meta.get("position") or "",
+            "club":      r["team_abbr"] or (meta.get("team") or "").upper(),
+        })
+
+    # ADP join reuses the Players-page matcher; ordering by pick number means
+    # earlier picks claim ambiguous name matches first.
+    shim = [{"full_name": r["full_name"], "position_primary": r["position_primary"],
+             "pts": -r["pick_no"]} for r in rows]
+    attach_fantrax_adp(shim)
+    for r, sh in zip(rows, shim):
+        r["adp"] = sh["adp"]
+        # Positive = drafted later than ADP (value); negative = a reach.
+        r["adp_delta"] = round(sh["adp"] - r["pick_no"], 1) if sh["adp"] else None
+
+    # Board grid: one row per round, columns ordered by draft slot. Snake
+    # order means odd rounds run 1→12 and even rounds 12→1; laying the board
+    # out by slot keeps each manager in a single column.
+    slots = sorted({r["slot"] for r in rows if r["slot"]})
+    slot_manager = {}
+    for r in rows:
+        slot_manager.setdefault(r["slot"], r["manager"])
+    by_slot_round = {(r["slot"], r["round"]): r for r in rows}
+    max_round = max(r["round"] for r in rows)
+    board = [
+        {"round": rd, "cells": [by_slot_round.get((sl, rd)) for sl in slots]}
+        for rd in range(1, max_round + 1)
+    ]
+
+    # Per-manager haul, in pick order
+    by_manager: dict[int, dict] = {}
+    for r in rows:
+        m = by_manager.setdefault(r["roster_id"], {
+            "roster_id": r["roster_id"], "manager": r["manager"],
+            "slot": r["slot"], "picks": [], "pos_counts": {},
+        })
+        m["picks"].append(r)
+        pos = r["position_primary"] or "?"
+        m["pos_counts"][pos] = m["pos_counts"].get(pos, 0) + 1
+    managers = sorted(by_manager.values(), key=lambda m: m["slot"] or 99)
+
+    # Best value / biggest reach, only over players Fantrax actually ranked
+    scored = [r for r in rows if r["adp_delta"] is not None]
+    best_value = max(scored, key=lambda r: r["adp_delta"]) if scored else None
+    biggest_reach = min(scored, key=lambda r: r["adp_delta"]) if scored else None
+
+    return {
+        "picks":    rows,
+        "board":    board,
+        "columns":  [{"slot": sl, "manager": slot_manager.get(sl, "")} for sl in slots],
+        "managers": managers,
+        "rounds":   max_round,
+        "total":    len(rows),
+        "first_round": [r for r in rows if r["round"] == 1],
+        "best_value": best_value,
+        "biggest_reach": biggest_reach,
+    }
 
 
 # ────────────────────────────────────────────────────────────────────
@@ -1466,6 +1669,9 @@ def make_env(relative_depth: int = 0) -> Environment:
     env.globals["url_club"]   = url_club
     env.globals["url_gw"]     = url_gw
     env.globals["url_player"] = url_player
+    # Season labels so no template has to hardcode "2025/26" again.
+    env.globals["SEASON_LABEL"]     = season_label(SEASON)
+    env.globals["LAB_SEASON_LABEL"] = season_label(LAB_SEASON)
     return env
 
 
@@ -1488,7 +1694,10 @@ def build(open_after: bool = False):
     standings_map = {t["roster_id"]: t for t in standings}
     weeks_summary = get_all_weeks_summary(conn)
     last_gw       = get_gw_detail(conn, current_week, team_map, standings_map) if current_week >= 1 else None
-    hist_2024     = load_history_2024()
+    histories     = load_histories()
+    preseason     = current_week < 1
+    season_start  = get_season_start(conn)
+    draft_summary = get_draft_summary(conn)
     upcoming_week = current_week + 1
     upcoming      = get_upcoming_matchups(conn, upcoming_week, team_map, standings)
     epl_fixtures  = get_epl_fixtures(conn, upcoming_week)
@@ -1522,6 +1731,10 @@ def build(open_after: bool = False):
            last_gw=last_gw,
            featured=featured,
            season_high=stats_data["season_high"],
+           preseason=preseason,
+           season_start=season_start,
+           draft_summary=draft_summary,
+           last_champion=(histories[0] if histories else None),
            team_map=team_map)
 
     render(env0, "table.html", DIST_DIR / "table.html",
@@ -1540,17 +1753,23 @@ def build(open_after: bool = False):
            active_nav="gameweeks",
            weeks=weeks_summary,
            current_week=current_week,
+           season_start=season_start,
            team_map=team_map)
 
-    players_now  = get_all_active_players(conn, season="2025")
-    players_prev = get_all_active_players(conn, season="2024")
-    for p in players_now:
-        p["season"] = "2025"
-    for p in players_prev:
-        p["season"] = "2024"
+    # Season selector: every season we hold stats for, newest first. The
+    # in-progress season shows up on its own once the first GW lands.
+    player_seasons = get_stat_seasons(conn)
+    all_players = []
+    for ps in player_seasons:
+        rows_ = get_all_active_players(conn, season=ps["season"])
+        for pl in rows_:
+            pl["season"] = ps["season"]
+        all_players.extend(rows_)
     render(env0, "players.html", DIST_DIR / "players.html",
            active_nav="players",
-           players=players_now + players_prev,
+           players=all_players,
+           player_seasons=player_seasons,
+           season_labels={ps["season"]: ps["label"] for ps in player_seasons},
            team_map=team_map)
 
     render(env0, "fixtures.html", DIST_DIR / "fixtures.html",
@@ -1570,6 +1789,7 @@ def build(open_after: bool = False):
     render(env0, "draft.html", DIST_DIR / "draft.html",
            active_nav="draft",
            draft=draft,
+           board=get_draft_board(conn),
            team_map=team_map)
 
     render(env0, "draftlab.html", DIST_DIR / "draftlab.html",
@@ -1579,7 +1799,7 @@ def build(open_after: bool = False):
 
     render(env0, "history.html", DIST_DIR / "history.html",
            active_nav="history",
-           hist=hist_2024,
+           histories=histories,
            team_map=team_map)
 
     render(env0, "subscribe.html", DIST_DIR / "subscribe.html",
