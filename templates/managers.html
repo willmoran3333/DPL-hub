@@ -42,6 +42,7 @@
   .h2h td.h2h-none { color: var(--c-ink-light); }
   .h2h td.h2h-win  { color: var(--c-success); font-weight: 700; }
   .h2h td.h2h-loss { color: var(--c-accent-red); font-weight: 700; }
+  .h2h td.h2h-other { border-left: 1px solid var(--c-border); color: var(--c-ink-mid); }
   .h2h td.h2h-total { border-left: 1px solid var(--c-border); font-weight: 700;
                       color: var(--c-ink); }
 </style>
@@ -104,8 +105,9 @@
     wins first. Green is a winning record, red a losing one.
     <br><br>
     Results use commissioner-adjusted scores where they exist, so these match the standings
-    rather than the raw weekly totals. Games against managers who have since left the league
-    are not counted, which is why a row total can fall short of that manager's full career record.
+    rather than the raw weekly totals.{% if h2h.departed %} <strong>Others</strong> collects games
+    against managers who have since left the league ({{ h2h.departed|join(', ') }}), so every row
+    totals to that manager's full career record.{% endif %}
   </p>
 
   <div class="standings-table-wrap mb-8">
@@ -114,6 +116,7 @@
         <tr>
           <th class="h2h-corner"></th>
           {% for m in h2h.managers %}<th class="h2h-col">{{ m.display_name }}</th>{% endfor %}
+          {% if h2h.departed %}<th class="h2h-col">Others</th>{% endif %}
           <th class="h2h-col">Total</th>
         </tr>
       </thead>
@@ -136,6 +139,12 @@
               {% endif %}
             {% endif %}
           {% endfor %}
+          {% if h2h.departed %}
+          <td class="h2h-other {{ 'h2h-win' if a.others.w > a.others.l else 'h2h-loss' if a.others.l > a.others.w else '' }}"
+              title="v {{ h2h.departed|join(', ') }}">
+            {% if a.others.played %}{{ a.others.w }}-{{ a.others.l }}{% if a.others.t %}-{{ a.others.t }}{% endif %}{% else %}·{% endif %}
+          </td>
+          {% endif %}
           <td class="h2h-total">
             {% if a.played %}{{ a.w }}-{{ a.l }}{% if a.t %}-{{ a.t }}{% endif %}{% else %}·{% endif %}
           </td>

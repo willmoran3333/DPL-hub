@@ -1323,8 +1323,10 @@ def get_h2h_matrix(conn) -> dict:
     Covers every completed season in PAST_SEASONS plus whatever of the current
     season has been scored. Wins use COALESCE(custom_points, points) — raw
     points ignores commissioner adjustments and mis-states several records.
-    Meetings with managers who have since left the league are not counted, so a
-    row total is short of that manager's full career record.
+
+    Meetings with managers who have left the league land in an "Others" column
+    rather than being dropped, so each row totals to that manager's full career
+    record and ties out against the career table above it.
     """
     leagues = [(SEASON, LEAGUE_ID)] + [(e["season"], e["league_id"]) for e in PAST_SEASONS]
 
@@ -1363,6 +1365,9 @@ def get_h2h_matrix(conn) -> dict:
         for a in active
     }
 
+    others = {m["display_name"]: {"w": 0, "l": 0, "t": 0, "played": 0} for m in active}
+    departed: set[str] = set()
+
     seasons_seen: set[str] = set()
     for season, lid in leagues:
         for r in q(conn, """
@@ -1380,19 +1385,28 @@ def get_h2h_matrix(conn) -> dict:
             if pa is None or pb is None or (pa == 0 and pb == 0):
                 continue          # unplayed week
             na = owner.get((lid, r["ra"])); nb = owner.get((lid, r["rb"]))
-            if na not in names or nb not in names:
-                continue          # a departed manager
+            if na is None or nb is None or (na not in names and nb not in names):
+                continue
             seasons_seen.add(season)
             for x, y, px, py in ((na, nb, pa, pb), (nb, na, pb, pa)):
-                c = cells[x][y]
-                c["w" if px > py else "l" if py > px else "t"] += 1
-                c["pf"] += px; c["pa"] += py; c["played"] += 1
+                if x not in names:
+                    continue
+                key = "w" if px > py else "l" if py > px else "t"
+                if y in names:
+                    c = cells[x][y]
+                    c["pf"] += px; c["pa"] += py
+                else:
+                    c = others[x]
+                    departed.add(y)
+                c[key] += 1; c["played"] += 1
 
     for m in active:
         n = m["display_name"]
-        w = sum(c["w"] for c in cells[n].values())
-        l = sum(c["l"] for c in cells[n].values())
-        t = sum(c["t"] for c in cells[n].values())
+        o = others[n]
+        m["others"] = o
+        w = sum(c["w"] for c in cells[n].values()) + o["w"]
+        l = sum(c["l"] for c in cells[n].values()) + o["l"]
+        t = sum(c["t"] for c in cells[n].values()) + o["t"]
         g = w + l + t
         m["w"], m["l"], m["t"], m["played"] = w, l, t, g
         m["win_pct"] = round(w / g, 3) if g else None
@@ -1402,6 +1416,7 @@ def get_h2h_matrix(conn) -> dict:
     return {
         "managers": active,
         "cells": cells,
+        "departed": sorted(departed, key=str.lower),
         "seasons": [labels[s] for s in sorted(seasons_seen)],
     }
 

@@ -26,17 +26,41 @@ def rows(conn, sql, args=()):
 def build(season: str, league_id: str, notes: str) -> dict:
     conn = sqlite3.connect(DB_PATH)
 
+    # Standings are computed from the played matchups, not read off
+    # rosters.wins/fpts. Sleeper stopped updating those after week 37 of
+    # 2025/26, which left every manager a game short. Recomputing reproduces
+    # 2024/25's stored totals exactly and gets 2025/26 right.
+    #
+    # NB: team_name comes from league_users, which reflects whatever a manager
+    # calls their team *today* — rename after a season and a re-freeze will
+    # overwrite the historical name. Check the file before overwriting one.
     standings = rows(conn, """
+        WITH legs AS (
+            SELECT a.roster_id,
+                   COALESCE(a.custom_points, a.points) AS pf,
+                   COALESCE(b.custom_points, b.points) AS pa
+            FROM matchup_legs a
+            JOIN matchup_legs b
+              ON b.league_id = a.league_id AND b.season = a.season
+             AND b.week = a.week AND b.matchup_id = a.matchup_id
+             AND b.roster_id <> a.roster_id
+            WHERE a.league_id = ?
+              AND a.points IS NOT NULL AND b.points IS NOT NULL
+        )
         SELECT r.roster_id, u.display_name, u.team_name,
-               r.wins, r.losses, r.ties,
-               ROUND(COALESCE(r.fpts,0) + COALESCE(r.fpts_decimal,0)/100.0, 2)                 AS pts_for,
-               ROUND(COALESCE(r.fpts_against,0) + COALESCE(r.fpts_against_decimal,0)/100.0, 2) AS pts_against
+               SUM(CASE WHEN l.pf > l.pa THEN 1 ELSE 0 END) AS wins,
+               SUM(CASE WHEN l.pa > l.pf THEN 1 ELSE 0 END) AS losses,
+               SUM(CASE WHEN l.pf = l.pa THEN 1 ELSE 0 END) AS ties,
+               ROUND(SUM(l.pf), 2)                          AS pts_for,
+               ROUND(SUM(l.pa), 2)                          AS pts_against
         FROM rosters r
+        JOIN legs l ON l.roster_id = r.roster_id
         LEFT JOIN league_users u
                ON u.league_id = r.league_id AND u.user_id = r.owner_id
         WHERE r.league_id = ?
-        ORDER BY r.wins DESC, pts_for DESC
-    """, (league_id,))
+        GROUP BY r.roster_id, u.display_name, u.team_name
+        ORDER BY wins DESC, pts_for DESC
+    """, (league_id, league_id))
     for t in standings:
         t["team_name"] = (t["team_name"] or "").strip()
 
