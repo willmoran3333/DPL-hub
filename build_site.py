@@ -1317,6 +1317,95 @@ def compute_draft_alpha(conn, season: str, league_id: str) -> list[dict] | None:
     return picks
 
 
+def get_h2h_matrix(conn) -> dict:
+    """Head-to-head records between the managers active this season.
+
+    Covers every completed season in PAST_SEASONS plus whatever of the current
+    season has been scored. Wins use COALESCE(custom_points, points) — raw
+    points ignores commissioner adjustments and mis-states several records.
+    Meetings with managers who have since left the league are not counted, so a
+    row total is short of that manager's full career record.
+    """
+    leagues = [(SEASON, LEAGUE_ID)] + [(e["season"], e["league_id"]) for e in PAST_SEASONS]
+
+    # roster_id -> display name, per league (roster_ids are stable, owners are not)
+    owner: dict[tuple[str, int], str] = {}
+    for season, lid in leagues:
+        for r in q(conn, """
+            SELECT rs.roster_id, u.display_name
+            FROM rosters rs
+            LEFT JOIN league_users u
+              ON u.league_id = rs.league_id AND u.user_id = rs.owner_id
+            WHERE rs.league_id = ?
+        """, (lid,)):
+            if r["display_name"]:
+                owner[(lid, r["roster_id"])] = r["display_name"]
+
+    active = []
+    for r in q(conn, """
+        SELECT rs.roster_id, u.display_name, u.team_name
+        FROM rosters rs
+        LEFT JOIN league_users u
+          ON u.league_id = rs.league_id AND u.user_id = rs.owner_id
+        WHERE rs.league_id = ?
+    """, (LEAGUE_ID,)):
+        if r["display_name"]:
+            active.append({"roster_id": r["roster_id"],
+                           "display_name": r["display_name"],
+                           "team_name": r["team_name"] or ""})
+    active.sort(key=lambda m: m["display_name"].lower())
+    names = {m["display_name"] for m in active}
+
+    cells: dict[str, dict[str, dict]] = {
+        a["display_name"]: {b["display_name"]: {"w": 0, "l": 0, "t": 0,
+                                                "pf": 0.0, "pa": 0.0, "played": 0}
+                            for b in active if b is not a}
+        for a in active
+    }
+
+    seasons_seen: set[str] = set()
+    for season, lid in leagues:
+        for r in q(conn, """
+            SELECT a.roster_id AS ra, b.roster_id AS rb,
+                   COALESCE(a.custom_points, a.points) AS pa,
+                   COALESCE(b.custom_points, b.points) AS pb
+            FROM matchup_legs a
+            JOIN matchup_legs b
+              ON b.league_id = a.league_id AND b.season = a.season
+             AND b.week = a.week AND b.matchup_id = a.matchup_id
+             AND b.roster_id > a.roster_id
+            WHERE a.league_id = ? AND a.season = ?
+        """, (lid, season)):
+            pa, pb = r["pa"], r["pb"]
+            if pa is None or pb is None or (pa == 0 and pb == 0):
+                continue          # unplayed week
+            na = owner.get((lid, r["ra"])); nb = owner.get((lid, r["rb"]))
+            if na not in names or nb not in names:
+                continue          # a departed manager
+            seasons_seen.add(season)
+            for x, y, px, py in ((na, nb, pa, pb), (nb, na, pb, pa)):
+                c = cells[x][y]
+                c["w" if px > py else "l" if py > px else "t"] += 1
+                c["pf"] += px; c["pa"] += py; c["played"] += 1
+
+    for m in active:
+        n = m["display_name"]
+        w = sum(c["w"] for c in cells[n].values())
+        l = sum(c["l"] for c in cells[n].values())
+        t = sum(c["t"] for c in cells[n].values())
+        g = w + l + t
+        m["w"], m["l"], m["t"], m["played"] = w, l, t, g
+        m["win_pct"] = round(w / g, 3) if g else None
+
+    labels = {e["season"]: e["label"] for e in PAST_SEASONS}
+    labels.setdefault(SEASON, f"{SEASON}/{str(int(SEASON) + 1)[-2:]}")
+    return {
+        "managers": active,
+        "cells": cells,
+        "seasons": [labels[s] for s in sorted(seasons_seen)],
+    }
+
+
 def get_manager_stats(conn, histories: list[dict], team_map: dict) -> dict:
     """Career records + per-season draft alpha, keyed by Sleeper display name."""
     seasons = []           # newest first: {season, label, league_id}
@@ -2058,6 +2147,7 @@ def build(open_after: bool = False):
     render(env0, "managers.html", DIST_DIR / "managers.html",
            active_nav="managers",
            mgr=get_manager_stats(conn, histories, team_map),
+           h2h=get_h2h_matrix(conn),
            team_map=team_map)
 
     render(env0, "history.html", DIST_DIR / "history.html",

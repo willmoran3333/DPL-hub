@@ -17,6 +17,33 @@
   .mgr-note { font-size: 0.75rem; color: var(--c-ink-light); margin-top: 10px; line-height: 1.6; }
   .method { font-size: 0.8125rem; color: var(--c-ink-mid); line-height: 1.7;
             max-width: 680px; margin-bottom: 28px; }
+
+  /* Head-to-head matrix */
+  .h2h { border-collapse: collapse; font-size: 0.8125rem; }
+  .h2h th.h2h-col {
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    height: 118px; vertical-align: bottom; text-align: left;
+    padding: 6px 3px; font-family: var(--font-display); font-size: 0.6875rem;
+    font-weight: 700; letter-spacing: 0.06em; color: var(--c-ink-mid);
+    border-bottom: 2px solid var(--c-rule); white-space: nowrap;
+  }
+  .h2h th.h2h-corner { border-bottom: 2px solid var(--c-rule); }
+  .h2h th.h2h-row {
+    text-align: left; font-weight: 600; font-size: 0.8125rem; color: var(--c-ink);
+    padding: var(--sp-2) var(--sp-3) var(--sp-2) 0; white-space: nowrap;
+    position: sticky; left: 0; background: var(--c-bg); z-index: 1;
+  }
+  .h2h tbody tr { border-bottom: 1px solid var(--c-border); }
+  .h2h tbody tr:hover { background: var(--c-bg-soft); }
+  .h2h tbody tr:hover th.h2h-row { background: var(--c-bg-soft); }
+  .h2h td { padding: var(--sp-2) 4px; text-align: center; white-space: nowrap;
+            min-width: 44px; font-variant-numeric: tabular-nums; }
+  .h2h td.h2h-self { background: var(--c-bg-soft); color: var(--c-ink-light); }
+  .h2h td.h2h-none { color: var(--c-ink-light); }
+  .h2h td.h2h-win  { color: var(--c-success); font-weight: 700; }
+  .h2h td.h2h-loss { color: var(--c-accent-red); font-weight: 700; }
+  .h2h td.h2h-total { border-left: 1px solid var(--c-border); font-weight: 700;
+                      color: var(--c-ink); }
 </style>
 {% endblock %}
 
@@ -63,6 +90,55 @@
           <td class="col-hide-sm">{% if m.career.ppg %}{{ "%.1f"|format(m.career.ppg) }}{% else %}—{% endif %}</td>
           <td>{% if m.career.best_finish %}{{ m.career.best_finish }}{% else %}—{% endif %}</td>
           <td class="col-pts">{{ m.career.titles or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Head to Head</div>
+  <p class="method">
+    Every completed meeting between the twelve managers in the league right now{% if h2h.seasons %},
+    across {{ h2h.seasons|join(' and ') }}{% endif %}. Read a row as that manager's record:
+    the cell where <strong>brendog2814</strong> meets <strong>willmoran</strong> is brendog2814's
+    wins first. Green is a winning record, red a losing one.
+    <br><br>
+    Results use commissioner-adjusted scores where they exist, so these match the standings
+    rather than the raw weekly totals. Games against managers who have since left the league
+    are not counted, which is why a row total can fall short of that manager's full career record.
+  </p>
+
+  <div class="standings-table-wrap mb-8">
+    <table class="h2h">
+      <thead>
+        <tr>
+          <th class="h2h-corner"></th>
+          {% for m in h2h.managers %}<th class="h2h-col">{{ m.display_name }}</th>{% endfor %}
+          <th class="h2h-col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in h2h.managers %}
+        <tr>
+          <th class="h2h-row">{{ a.display_name }}</th>
+          {% for b in h2h.managers %}
+            {% if a.display_name == b.display_name %}
+              <td class="h2h-self">—</td>
+            {% else %}
+              {% set c = h2h.cells[a.display_name][b.display_name] %}
+              {% if not c.played %}
+                <td class="h2h-none" title="never played">·</td>
+              {% else %}
+                <td class="{{ 'h2h-win' if c.w > c.l else 'h2h-loss' if c.l > c.w else '' }}"
+                    title="{{ a.display_name }} v {{ b.display_name }} — {{ '%.1f'|format(c.pf) }} to {{ '%.1f'|format(c.pa) }} on points">
+                  {{ c.w }}-{{ c.l }}{% if c.t %}-{{ c.t }}{% endif %}
+                </td>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          <td class="h2h-total">
+            {% if a.played %}{{ a.w }}-{{ a.l }}{% if a.t %}-{{ a.t }}{% endif %}{% else %}·{% endif %}
+          </td>
         </tr>
         {% endfor %}
       </tbody>

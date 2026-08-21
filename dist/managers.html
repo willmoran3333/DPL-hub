@@ -28,6 +28,33 @@
   .mgr-note { font-size: 0.75rem; color: var(--c-ink-light); margin-top: 10px; line-height: 1.6; }
   .method { font-size: 0.8125rem; color: var(--c-ink-mid); line-height: 1.7;
             max-width: 680px; margin-bottom: 28px; }
+
+  /* Head-to-head matrix */
+  .h2h { border-collapse: collapse; font-size: 0.8125rem; }
+  .h2h th.h2h-col {
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    height: 118px; vertical-align: bottom; text-align: left;
+    padding: 6px 3px; font-family: var(--font-display); font-size: 0.6875rem;
+    font-weight: 700; letter-spacing: 0.06em; color: var(--c-ink-mid);
+    border-bottom: 2px solid var(--c-rule); white-space: nowrap;
+  }
+  .h2h th.h2h-corner { border-bottom: 2px solid var(--c-rule); }
+  .h2h th.h2h-row {
+    text-align: left; font-weight: 600; font-size: 0.8125rem; color: var(--c-ink);
+    padding: var(--sp-2) var(--sp-3) var(--sp-2) 0; white-space: nowrap;
+    position: sticky; left: 0; background: var(--c-bg); z-index: 1;
+  }
+  .h2h tbody tr { border-bottom: 1px solid var(--c-border); }
+  .h2h tbody tr:hover { background: var(--c-bg-soft); }
+  .h2h tbody tr:hover th.h2h-row { background: var(--c-bg-soft); }
+  .h2h td { padding: var(--sp-2) 4px; text-align: center; white-space: nowrap;
+            min-width: 44px; font-variant-numeric: tabular-nums; }
+  .h2h td.h2h-self { background: var(--c-bg-soft); color: var(--c-ink-light); }
+  .h2h td.h2h-none { color: var(--c-ink-light); }
+  .h2h td.h2h-win  { color: var(--c-success); font-weight: 700; }
+  .h2h td.h2h-loss { color: var(--c-accent-red); font-weight: 700; }
+  .h2h td.h2h-total { border-left: 1px solid var(--c-border); font-weight: 700;
+                      color: var(--c-ink); }
 </style>
 
 </head>
@@ -336,6 +363,1431 @@
           <td class="col-hide-sm">69.0</td>
           <td>11</td>
           <td class="col-pts">—</td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Head to Head</div>
+  <p class="method">
+    Every completed meeting between the twelve managers in the league right now,
+    across 2024/25 and 2025/26. Read a row as that manager's record:
+    the cell where <strong>brendog2814</strong> meets <strong>willmoran</strong> is brendog2814's
+    wins first. Green is a winning record, red a losing one.
+    <br><br>
+    Results use commissioner-adjusted scores where they exist, so these match the standings
+    rather than the raw weekly totals. Games against managers who have since left the league
+    are not counted, which is why a row total can fall short of that manager's full career record.
+  </p>
+
+  <div class="standings-table-wrap mb-8">
+    <table class="h2h">
+      <thead>
+        <tr>
+          <th class="h2h-corner"></th>
+          <th class="h2h-col">benditlikebergvall</th><th class="h2h-col">bjennings28</th><th class="h2h-col">brendog2814</th><th class="h2h-col">cstoney20</th><th class="h2h-col">erozier</th><th class="h2h-col">Flabiano9</th><th class="h2h-col">JordiCarb</th><th class="h2h-col">mdropkin</th><th class="h2h-col">Noahvillasana17</th><th class="h2h-col">rmeernst</th><th class="h2h-col">skoeiboy</th><th class="h2h-col">willmoran</th>
+          <th class="h2h-col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <th class="h2h-row">benditlikebergvall</th>
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="benditlikebergvall v bjennings28 — 646.5 to 564.0 on points">
+                  5-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="benditlikebergvall v brendog2814 — 613.5 to 633.8 on points">
+                  6-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="benditlikebergvall v cstoney20 — 306.0 to 357.5 on points">
+                  0-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="benditlikebergvall v erozier — 494.5 to 496.2 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="benditlikebergvall v Flabiano9 — 615.0 to 640.5 on points">
+                  2-5
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="benditlikebergvall v JordiCarb — 525.2 to 452.5 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="benditlikebergvall v Noahvillasana17 — 602.5 to 584.0 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="benditlikebergvall v rmeernst — 535.8 to 525.8 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="benditlikebergvall v skoeiboy — 501.0 to 533.0 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="benditlikebergvall v willmoran — 492.5 to 568.0 on points">
+                  3-3
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            33-32
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">bjennings28</th>
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="bjennings28 v benditlikebergvall — 564.0 to 646.5 on points">
+                  3-5
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="bjennings28 v brendog2814 — 457.8 to 462.8 on points">
+                  2-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="bjennings28 v cstoney20 — 342.0 to 239.5 on points">
+                  4-0
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="bjennings28 v erozier — 532.0 to 522.0 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="bjennings28 v Flabiano9 — 739.2 to 736.8 on points">
+                  5-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="bjennings28 v JordiCarb — 626.0 to 430.5 on points">
+                  5-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="bjennings28 v Noahvillasana17 — 587.0 to 526.0 on points">
+                  2-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="bjennings28 v rmeernst — 576.5 to 578.5 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="bjennings28 v skoeiboy — 504.8 to 427.5 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="bjennings28 v willmoran — 541.8 to 670.2 on points">
+                  2-5
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            34-31
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">brendog2814</th>
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="brendog2814 v benditlikebergvall — 633.8 to 613.5 on points">
+                  1-6
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="brendog2814 v bjennings28 — 462.8 to 457.8 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="brendog2814 v cstoney20 — 346.8 to 370.5 on points">
+                  1-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="brendog2814 v erozier — 548.2 to 773.8 on points">
+                  3-5
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="brendog2814 v Flabiano9 — 508.2 to 456.2 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="brendog2814 v JordiCarb — 608.5 to 588.8 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="brendog2814 v Noahvillasana17 — 578.8 to 566.8 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="brendog2814 v rmeernst — 644.5 to 655.8 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="brendog2814 v skoeiboy — 538.0 to 560.5 on points">
+                  5-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="brendog2814 v willmoran — 571.2 to 713.0 on points">
+                  1-7
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            29-38
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">cstoney20</th>
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="cstoney20 v benditlikebergvall — 357.5 to 306.0 on points">
+                  4-0
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="cstoney20 v bjennings28 — 239.5 to 342.0 on points">
+                  0-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="cstoney20 v brendog2814 — 370.5 to 346.8 on points">
+                  3-1
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="cstoney20 v erozier — 254.0 to 287.0 on points">
+                  0-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="cstoney20 v Flabiano9 — 213.5 to 285.8 on points">
+                  0-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="cstoney20 v JordiCarb — 229.8 to 294.8 on points">
+                  0-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="cstoney20 v Noahvillasana17 — 253.5 to 276.2 on points">
+                  1-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="cstoney20 v rmeernst — 241.5 to 269.2 on points">
+                  2-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="cstoney20 v skoeiboy — 353.0 to 315.5 on points">
+                  2-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="cstoney20 v willmoran — 377.0 to 297.2 on points">
+                  2-2
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            14-21
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">erozier</th>
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="erozier v benditlikebergvall — 496.2 to 494.5 on points">
+                  2-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="erozier v bjennings28 — 522.0 to 532.0 on points">
+                  2-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="erozier v brendog2814 — 773.8 to 548.2 on points">
+                  5-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="erozier v cstoney20 — 287.0 to 254.0 on points">
+                  3-0
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="erozier v Flabiano9 — 544.2 to 531.8 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="erozier v JordiCarb — 645.2 to 580.8 on points">
+                  5-2-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="erozier v Noahvillasana17 — 679.5 to 684.5 on points">
+                  4-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="erozier v rmeernst — 473.5 to 499.8 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="erozier v skoeiboy — 731.0 to 660.2 on points">
+                  6-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="erozier v willmoran — 516.8 to 561.2 on points">
+                  1-5
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            35-30-1
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">Flabiano9</th>
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Flabiano9 v benditlikebergvall — 640.5 to 615.0 on points">
+                  5-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Flabiano9 v bjennings28 — 736.8 to 739.2 on points">
+                  4-5
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Flabiano9 v brendog2814 — 456.2 to 508.2 on points">
+                  2-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Flabiano9 v cstoney20 — 285.8 to 213.5 on points">
+                  3-0
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Flabiano9 v erozier — 531.8 to 544.2 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class=""
+                    title="Flabiano9 v JordiCarb — 508.2 to 480.0 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Flabiano9 v Noahvillasana17 — 575.5 to 623.2 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Flabiano9 v rmeernst — 543.2 to 635.5 on points">
+                  2-5
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Flabiano9 v skoeiboy — 564.2 to 583.5 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Flabiano9 v willmoran — 602.5 to 761.8 on points">
+                  2-5
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            30-36
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">JordiCarb</th>
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="JordiCarb v benditlikebergvall — 452.5 to 525.2 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="JordiCarb v bjennings28 — 430.5 to 626.0 on points">
+                  1-5
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="JordiCarb v brendog2814 — 588.8 to 608.5 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="JordiCarb v cstoney20 — 294.8 to 229.8 on points">
+                  3-0
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="JordiCarb v erozier — 580.8 to 645.2 on points">
+                  2-5-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="JordiCarb v Flabiano9 — 480.0 to 508.2 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="JordiCarb v Noahvillasana17 — 431.8 to 467.0 on points">
+                  1-5
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="JordiCarb v rmeernst — 686.5 to 576.8 on points">
+                  6-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="JordiCarb v skoeiboy — 509.0 to 387.8 on points">
+                  6-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="JordiCarb v willmoran — 684.5 to 752.5 on points">
+                  4-4
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            34-31-1
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">mdropkin</th>
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+          <td class="h2h-total">
+            ·
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">Noahvillasana17</th>
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Noahvillasana17 v benditlikebergvall — 584.0 to 602.5 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Noahvillasana17 v bjennings28 — 526.0 to 587.0 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Noahvillasana17 v brendog2814 — 566.8 to 578.8 on points">
+                  2-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Noahvillasana17 v cstoney20 — 276.2 to 253.5 on points">
+                  2-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="Noahvillasana17 v erozier — 684.5 to 679.5 on points">
+                  4-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Noahvillasana17 v Flabiano9 — 623.2 to 575.5 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Noahvillasana17 v JordiCarb — 467.0 to 431.8 on points">
+                  5-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Noahvillasana17 v rmeernst — 674.8 to 516.2 on points">
+                  6-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="Noahvillasana17 v skoeiboy — 557.8 to 544.5 on points">
+                  5-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="Noahvillasana17 v willmoran — 416.8 to 561.8 on points">
+                  2-4
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            38-26
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">rmeernst</th>
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="rmeernst v benditlikebergvall — 525.8 to 535.8 on points">
+                  3-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="rmeernst v bjennings28 — 578.5 to 576.5 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="rmeernst v brendog2814 — 655.8 to 644.5 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="rmeernst v cstoney20 — 269.2 to 241.5 on points">
+                  1-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="rmeernst v erozier — 499.8 to 473.5 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="rmeernst v Flabiano9 — 635.5 to 543.2 on points">
+                  5-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="rmeernst v JordiCarb — 576.8 to 686.5 on points">
+                  2-6
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="rmeernst v Noahvillasana17 — 516.2 to 674.8 on points">
+                  1-6
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class=""
+                    title="rmeernst v skoeiboy — 451.2 to 514.5 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="rmeernst v willmoran — 678.8 to 755.8 on points">
+                  4-4
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            30-36
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">skoeiboy</th>
+          
+            
+              
+              
+                <td class=""
+                    title="skoeiboy v benditlikebergvall — 533.0 to 501.0 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="skoeiboy v bjennings28 — 427.5 to 504.8 on points">
+                  2-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="skoeiboy v brendog2814 — 560.5 to 538.0 on points">
+                  3-5
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="skoeiboy v cstoney20 — 315.5 to 353.0 on points">
+                  2-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="skoeiboy v erozier — 660.2 to 731.0 on points">
+                  2-6
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="skoeiboy v Flabiano9 — 583.5 to 564.2 on points">
+                  4-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="skoeiboy v JordiCarb — 387.8 to 509.0 on points">
+                  1-6
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="skoeiboy v Noahvillasana17 — 544.5 to 557.8 on points">
+                  3-5
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="skoeiboy v rmeernst — 514.5 to 451.2 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+            
+              
+              
+                <td class="h2h-loss"
+                    title="skoeiboy v willmoran — 421.2 to 566.2 on points">
+                  2-4
+                </td>
+              
+            
+          
+          <td class="h2h-total">
+            25-41
+          </td>
+        </tr>
+        
+        <tr>
+          <th class="h2h-row">willmoran</th>
+          
+            
+              
+              
+                <td class=""
+                    title="willmoran v benditlikebergvall — 568.0 to 492.5 on points">
+                  3-3
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="willmoran v bjennings28 — 670.2 to 541.8 on points">
+                  5-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="willmoran v brendog2814 — 713.0 to 571.2 on points">
+                  7-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="willmoran v cstoney20 — 297.2 to 377.0 on points">
+                  2-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="willmoran v erozier — 561.2 to 516.8 on points">
+                  5-1
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="willmoran v Flabiano9 — 761.8 to 602.5 on points">
+                  5-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="willmoran v JordiCarb — 752.5 to 684.5 on points">
+                  4-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-none" title="never played">·</td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="willmoran v Noahvillasana17 — 561.8 to 416.8 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class=""
+                    title="willmoran v rmeernst — 755.8 to 678.8 on points">
+                  4-4
+                </td>
+              
+            
+          
+            
+              
+              
+                <td class="h2h-win"
+                    title="willmoran v skoeiboy — 566.2 to 421.2 on points">
+                  4-2
+                </td>
+              
+            
+          
+            
+              <td class="h2h-self">—</td>
+            
+          
+          <td class="h2h-total">
+            43-23
+          </td>
         </tr>
         
       </tbody>
