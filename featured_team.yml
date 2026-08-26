@@ -8,21 +8,24 @@ show: true
 roster_id: 2
 gw: 1
 headline: "137.65, and almost none of it was drafted"
-subheadline: "skoeiboy opens with the biggest week of his DPL career — built on a 7-unit waiver bid and a free agent"
+subheadline: "skoeiboy opens with the second-biggest week of his DPL career — built on a $7 waiver bid and a free agent"
 body: >
   skoeiboy put 137.65 on the board in GW1 and won by 36.75 over bjennings28,
-  who scored 100.90 and still lost. Five of the twelve highest-scoring
-  starters in the league were his: Cole Palmer 31.00, Maxim De Cuyper 28.00,
-  Emersonn 22.00, Martin Ødegaard 20.00, Keane Lewis-Potter 18.50. The two
-  in the middle of that list are the point. De Cuyper cost a 7-unit waiver
-  bid the week before a ball was kicked; Emersonn cost nothing at all, a
-  free-agent add nobody else moved on. Together they returned 50.00 — more
-  than a third of the total, from two players who were not on the roster on
-  draft night. The rest of it was clean rather than lucky: 2.00 points left
-  on the bench, the lowest figure in the league, with every start that
-  mattered getting the nod. For context on the number itself, his previous
-  best raw week in three DPL seasons was 129.50, back in GW23 of 2024. Only
-  the commissioner-adjusted 141.00 from GW31 last year sits above this one.
+  who scored 100.90 and still lost. Four of the twelve highest-scoring
+  starters in the league were his — Cole Palmer 30.05, Maxim De Cuyper 24.00,
+  Emersonn 22.80, Martin Ødegaard 19.00 — with Keane Lewis-Potter 17.60 just
+  outside in 13th. The two in the middle of that list are the point. De Cuyper
+  cost him $7 on the waiver before a ball was kicked, and he was the only
+  manager willing to pay: two rivals filed claims of their own and neither put
+  a cent behind them. Emersonn cost nothing at all, a free-agent add nobody
+  else moved on. Together they returned 46.80, more than a third of his score,
+  from two players who were not on the roster on draft night.
+
+
+  The rest of it was clean rather than lucky: 1.55 points left on the bench,
+  the lowest figure in the league, with every start that mattered getting the
+  nod. For context on the number itself, his best week in three DPL seasons is
+  141.00, in GW31 of last season — this one lands just short of it.
 
 highlight_stats:
   - label: "GW1 Score"
@@ -30,6 +33,6 @@ highlight_stats:
   - label: "Margin"
     value: "+36.75"
   - label: "Left on Bench"
-    value: "2.00"
+    value: "1.55"
   - label: "Waiver Hit"
-    value: "De Cuyper (7)"
+    value: "De Cuyper ($7)"
