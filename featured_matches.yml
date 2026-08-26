@@ -5,24 +5,29 @@
 # from that week's real pairings (the build script verifies them against
 # matchup_legs and flags any that don't line up). Rewrite the copy weekly.
 
-gw: 1
+gw: 2
 
 matches:
-  - home_roster_id: 10
-    away_roster_id: 11
-    headline: "The champion opens against the newcomer"
-    body: >
-      erozier begins the defence of a title he won with a squad that no
-      longer exists — everyone redrafted in August. He took Saka at five
-      and built out from there; mdropkin, the one manager in the league
-      with no DPL history at all, went João Pedro at nine and drafted a
-      roster that leans forward. First real read on both.
-
   - home_roster_id: 1
-    away_roster_id: 7
-    headline: "Isak leads the line against the Cunha plan"
+    away_roster_id: 2
+    headline: "The 137 has to do it again"
     body: >
-      willmoran spent back-to-back picks at 12 and 13 on Isak and Watkins,
-      and starts the week with Isak up top and Watkins on the bench —
-      already a selection call in GW1. rmeernst opened with Matheus Cunha
-      and Morgan Gibbs-White. Two different shapes, no form guide.
+      skoeiboy drew the hardest possible follow-up: the league's high scorer
+      against the manager who has the most reason to want a bounce. willmoran
+      lost his opener 82.60–76.60 to mdropkin, the one man in the twelve with
+      no DPL history, and did it with Isak returning 8.00 and Watkins still on
+      the bench. Kiernan Dewsbury-Hall led that side with 18.00, which tells
+      you the top end never arrived. Ice man's problem is different — De Cuyper
+      and Emersonn were worth 50.00 between them in GW1, and neither is priced
+      like that going forward.
+
+  - home_roster_id: 6
+    away_roster_id: 10
+    headline: "Best loser meets the champion"
+    body: >
+      bjennings28 scored 100.90 in GW1, the second-highest total in the league,
+      and lost by 36.75 because he ran into skoeiboy's week. Jack Hinshelwood
+      went for 28.50 and James Trafford added 15.00 from goal. erozier begins
+      the defence of his title with a narrower story: 79.40 past Flabiano9's
+      64.35, Saka and Gvardiol carrying most of it. One of these two is 1-0 on
+      merit and the other is 0-1 on the schedule.

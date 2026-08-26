@@ -3,31 +3,33 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Set show: false to hide the featured-manager block on the home page.
-show: false
+show: true
 
-roster_id: 11
-gw: 0
-headline: "A new name in the twelve"
-subheadline: "mdropkin takes slot 11 and builds Kurt Zouma's Kittens off the ninth pick"
+roster_id: 2
+gw: 1
+headline: "137.65, and almost none of it was drafted"
+subheadline: "skoeiboy opens with the biggest week of his DPL career — built on a 7-unit waiver bid and a free agent"
 body: >
-  The only change to the DPL roll call for 2026/27 is at slot 11, where
-  mdropkin comes in for jacklynch213. In a redraft league that matters less
-  than it might elsewhere — all twelve rosters went back in the box in
-  August and every manager built again from nothing, so the new man is
-  level on assets and behind only on history. He drew the ninth pick, spent
-  it on João Pedro, and doubled back for Declan Rice at 16. From there he
-  leaned Arsenal: Havertz, Tzolis and David Raya all landed on the same
-  roster, with Raya the eighth-round answer in goal. The shape that came
-  out of it is forward-loaded — seven up top, five at the back, four in
-  midfield — and it gets tested immediately. GW1 pairs him with erozier,
-  who won the thing last year.
+  skoeiboy put 137.65 on the board in GW1 and won by 36.75 over bjennings28,
+  who scored 100.90 and still lost. Five of the twelve highest-scoring
+  starters in the league were his: Cole Palmer 31.00, Maxim De Cuyper 28.00,
+  Emersonn 22.00, Martin Ødegaard 20.00, Keane Lewis-Potter 18.50. The two
+  in the middle of that list are the point. De Cuyper cost a 7-unit waiver
+  bid the week before a ball was kicked; Emersonn cost nothing at all, a
+  free-agent add nobody else moved on. Together they returned 50.00 — more
+  than a third of the total, from two players who were not on the roster on
+  draft night. The rest of it was clean rather than lucky: 2.00 points left
+  on the bench, the lowest figure in the league, with every start that
+  mattered getting the nod. For context on the number itself, his previous
+  best raw week in three DPL seasons was 129.50, back in GW23 of 2024. Only
+  the commissioner-adjusted 141.00 from GW31 last year sits above this one.
 
 highlight_stats:
-  - label: "Draft Slot"
-    value: "9th"
-  - label: "First Pick"
-    value: "João Pedro"
-  - label: "Squad Shape"
-    value: "7F · 4M · 5D · 1GK"
-  - label: "GW1 Opponent"
-    value: "erozier"
+  - label: "GW1 Score"
+    value: "137.65"
+  - label: "Margin"
+    value: "+36.75"
+  - label: "Left on Bench"
+    value: "2.00"
+  - label: "Waiver Hit"
+    value: "De Cuyper (7)"
