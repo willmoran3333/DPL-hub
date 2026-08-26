@@ -54,12 +54,70 @@ PAST_SEASONS = {
     "2025": "1244790289042776064",  # DPL 2025/26 (erozier champion)
 }
 
+# FPL price history. Sleeper carries no price and no market signal at all, so
+# the market's view — what a player costs, which way the price is moving, who is
+# being transferred in — has to come from outside. This community archive keeps
+# one row per FPL player per gameweek going back to 2016/17.
+FPL_ARCHIVE = ("https://raw.githubusercontent.com/vaastav/"
+               "Fantasy-Premier-League/master/data/{dir}/gws/merged_gw.csv")
+# DPL season -> the archive's directory name for the same EPL season.
+FPL_ARCHIVE_DIRS = {"2024": "2024-25", "2025": "2025-26", "2026": "2026-27"}
+
 API_BASE = "https://api.sleeper.app"
 # Note: /schedule is at root, not under /v1
 SCHED_BASE = "https://api.sleeper.app"
 
 HTTP_TIMEOUT = 30
 RETRIES = 3
+
+
+def ingest_fpl_prices(conn: sqlite3.Connection, season: str) -> int:
+    """One season of FPL per-gameweek prices from the community archive.
+
+    Re-runnable: rows are keyed (season, gw, element) and upserted, so a
+    mid-season re-run refreshes the weeks that have since been published.
+    The current season has no merged_gw.csv until gameweeks are in the books;
+    that returns 0 rather than failing, and the live bootstrap covers it.
+    """
+    import csv, io
+    d = FPL_ARCHIVE_DIRS.get(season)
+    if not d:
+        print(f"    fpl prices {season}: no archive directory mapped")
+        return 0
+    try:
+        raw = fetch_bytes(FPL_ARCHIVE.format(dir=d))
+    except Exception as e:                     # 404 until the season has GWs
+        print(f"    fpl prices {season}: not published yet ({e})")
+        return 0
+    rd = csv.DictReader(io.StringIO(raw.decode("utf-8", errors="replace")))
+    ts, rows = now_iso(), []
+    for r in rd:
+        try:
+            rows.append((season, int(r["GW"]), int(r["element"]), r.get("name"),
+                         r.get("position"), r.get("team"),
+                         int(float(r["value"])) if r.get("value") else None,
+                         int(float(r["total_points"])) if r.get("total_points") else None,
+                         int(float(r["minutes"])) if r.get("minutes") else None,
+                         int(float(r["transfers_balance"])) if r.get("transfers_balance") else None,
+                         int(float(r["selected"])) if r.get("selected") else None,
+                         ts))
+        except (ValueError, KeyError, TypeError):
+            continue
+    conn.executemany("""
+        INSERT INTO fpl_prices (season, gw, element, name, position, team,
+                                value, total_points, minutes, transfers_balance,
+                                selected, fetched_at)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+        ON CONFLICT(season, gw, element) DO UPDATE SET
+            name=excluded.name, position=excluded.position, team=excluded.team,
+            value=excluded.value, total_points=excluded.total_points,
+            minutes=excluded.minutes, transfers_balance=excluded.transfers_balance,
+            selected=excluded.selected, fetched_at=excluded.fetched_at
+    """, rows)
+    conn.commit()
+    gws = len({r[1] for r in rows})
+    print(f"    fpl prices {season}: {len(rows)} rows across {gws} gameweeks")
+    return len(rows)
 
 
 # --------------------------------------------------------------------
@@ -111,6 +169,25 @@ def fetch_json(url: str):
         except HTTPError as e:
             if e.code == 404:
                 return None
+            last_err = e
+        except (URLError, TimeoutError) as e:
+            last_err = e
+        time.sleep(1.5 * (attempt + 1))
+    raise RuntimeError(f"Failed to fetch {url}: {last_err}")
+
+
+def fetch_bytes(url: str) -> bytes:
+    """Raw GET, for the CSV archive. Same retry shape as fetch_json, but a 404
+    is meaningful here (a season with no gameweeks yet) so it is raised."""
+    last_err = None
+    for attempt in range(RETRIES):
+        try:
+            req = Request(url, headers={"User-Agent": "dpl-ingest/1.0"})
+            with urlopen(req, timeout=max(HTTP_TIMEOUT, 60), context=_SSL_CTX) as r:
+                return r.read()
+        except HTTPError as e:
+            if e.code == 404:
+                raise
             last_err = e
         except (URLError, TimeoutError) as e:
             last_err = e
@@ -625,7 +702,17 @@ def main():
                     help="override max week for weekly loop (default: current week)")
     ap.add_argument("--league", help="league_id override (default: current season's)")
     ap.add_argument("--season", help="season override, e.g. 2025 (default: current)")
+    ap.add_argument("--fpl-prices", action="store_true",
+                    help="(re)ingest FPL per-gameweek price history for every "
+                         "season in FPL_ARCHIVE_DIRS, then exit")
     args = ap.parse_args()
+
+    if args.fpl_prices:
+        conn = open_db()
+        for yr in sorted(FPL_ARCHIVE_DIRS):
+            ingest_fpl_prices(conn, yr)
+        conn.close()
+        return
 
     if args.season and not args.league:
         # Convenience: `--season 2025` resolves the league from PAST_SEASONS.

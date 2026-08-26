@@ -344,3 +344,32 @@ SELECT
 FROM players p
 LEFT JOIN player_stats s ON s.player_id = p.player_id
 GROUP BY p.player_id, s.season;
+
+-- ────────────────────────────────────────────────────────────────────
+-- FPL price history, from the vaastav/Fantasy-Premier-League archive.
+-- One row per FPL player per gameweek. `value` is the FPL price in tenths
+-- of a million (40 = £4.0m), which is how the source stores it.
+--
+-- Sleeper is the system of record for DPL scoring; this table exists only
+-- to carry the market's view — price, price movement and net transfers —
+-- which is information about a player that Sleeper's own numbers lack.
+-- `season` uses the DPL convention (2025 = the 2025/26 EPL season), not
+-- the archive's "2025-26" directory name.
+-- ────────────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS fpl_prices (
+    season             TEXT    NOT NULL,
+    gw                 INTEGER NOT NULL,
+    element            INTEGER NOT NULL,   -- FPL player id, stable within a season
+    name               TEXT,
+    position           TEXT,               -- GKP / DEF / MID / FWD
+    team               TEXT,
+    value              INTEGER,            -- price x10
+    total_points       INTEGER,            -- FPL points that gameweek
+    minutes            INTEGER,
+    transfers_balance  INTEGER,            -- net transfers in, that gameweek
+    selected           INTEGER,            -- managers owning him
+    fetched_at         TEXT    NOT NULL,
+    PRIMARY KEY (season, gw, element)
+);
+CREATE INDEX IF NOT EXISTS idx_fpl_prices_season ON fpl_prices(season, gw);
+CREATE INDEX IF NOT EXISTS idx_fpl_prices_element ON fpl_prices(season, element);

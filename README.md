@@ -191,6 +191,38 @@ The push triggers `pages.yml`, which:
 
 ---
 
+## FPL price history (fpl_prices)
+
+Sleeper carries no price and no market signal, so price history comes from the
+community archive at `vaastav/Fantasy-Premier-League` — one row per FPL player
+per gameweek, back to 2016/17.
+
+```bash
+python3 ingest.py --fpl-prices     # 2024/25 and 2025/26; re-runnable
+```
+
+The current season 404s until it has gameweeks in the books, which is not an
+error — the live bootstrap in `data/fpl_bootstrap.json` covers it. Note that
+cache holds only a snapshot, so refresh it (`simulate.py --refresh-fpl`) before
+reading anything time-sensitive off it; it had been sitting on pre-season
+values with every price-movement field zeroed.
+
+What the archive says, measured on 2025/26:
+
+| question | answer |
+|---|---|
+| Does draft-day squad price predict where a manager finishes? | **No.** r = +0.09, r² = 0.008. Correlation with points-for is *negative* (−0.19). The most expensive squad finished last; the cheapest finished 3rd. |
+| Does price predict a *player's* output? | **Yes.** r = +0.51 on points per 90, r² = 0.26. |
+| Does price *movement* add anything beyond the level? | **Barely.** +0.003 to +0.025 R² over six-week horizons. |
+
+Two consequences. Squad price is not a team-strength signal and is not used as
+one — a snake draft hands everyone roughly equal sticker value, and what
+happens afterwards swamps it. And price movement is not fed into the simulator:
+it adds ~0.02 R² over the price level, while the level itself is already
+dominated by Sleeper's own projection (R² = 0.48), which the model weights at
+93%. The archive earns its place by answering these questions and by backing
+player-page price history, not by moving the rankings.
+
 ## Power rankings (simulate.py)
 
 `simulate.py` runs a correlated Monte Carlo over the real 38-week schedule and
