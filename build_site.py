@@ -1425,7 +1425,8 @@ def get_h2h_matrix(conn) -> dict:
     }
 
 
-def get_manager_stats(conn, histories: list[dict], team_map: dict) -> dict:
+def get_manager_stats(conn, histories: list[dict], team_map: dict,
+                      standings: list[dict] | None = None) -> dict:
     """Career records + per-season draft alpha, keyed by Sleeper display name."""
     seasons = []           # newest first: {season, label, league_id}
     for h in histories:
@@ -1437,7 +1438,8 @@ def get_manager_stats(conn, histories: list[dict], team_map: dict) -> dict:
     def slot(name):
         return mgrs.setdefault(name, {
             "display_name": name, "seasons": [], "alpha": {},
-            "picks": [], "career": {"wins": 0, "losses": 0, "pts_for": 0.0,
+            "picks": [], "career": {"wins": 0, "losses": 0, "ties": 0,
+                                     "pts_for": 0.0,
                                      "pts_against": 0.0, "titles": 0,
                                      "best_finish": None, "seasons_played": 0},
             "current": None,
@@ -1450,16 +1452,45 @@ def get_manager_stats(conn, histories: list[dict], team_map: dict) -> dict:
             m["seasons"].append({
                 "season": sn["season"], "label": sn["label"], "position": i,
                 "wins": t["wins"], "losses": t["losses"],
+                "ties": t.get("ties") or 0,
                 "pts_for": t["pts_for"], "pts_against": t["pts_against"],
             })
             cr = m["career"]
             cr["wins"] += t["wins"]; cr["losses"] += t["losses"]
+            cr["ties"] += t.get("ties") or 0
             cr["pts_for"] += t["pts_for"]; cr["pts_against"] += t["pts_against"]
             cr["seasons_played"] += 1
             if i == 1:
                 cr["titles"] += 1
             if cr["best_finish"] is None or i < cr["best_finish"]:
                 cr["best_finish"] = i
+
+    # ── The season in progress, as far as it has been scored ──
+    # get_h2h_matrix counts the current season's scored weeks, so this table
+    # has to as well: without it a manager's H2H row stops totalling to their
+    # career record, which is exactly what that matrix was built to guarantee.
+    # best_finish and titles stay completed-seasons-only — a provisional
+    # position is not a finish — but seasons_played counts the season entered.
+    for t in (standings or []):
+        played = (t.get("wins") or 0) + (t.get("losses") or 0) + (t.get("ties") or 0)
+        if not played or not t.get("display_name"):
+            continue
+        m = slot(t["display_name"])
+        cr = m["career"]
+        cr["wins"] += t.get("wins") or 0
+        cr["losses"] += t.get("losses") or 0
+        cr["ties"] += t.get("ties") or 0
+        cr["pts_for"] += t.get("pts_for") or 0.0
+        cr["pts_against"] += t.get("pts_against") or 0.0
+        cr["seasons_played"] += 1
+        m["seasons"].append({
+            "season": SEASON, "label": season_label(SEASON), "position": t.get("position"),
+            "wins": t.get("wins") or 0, "losses": t.get("losses") or 0,
+            "ties": t.get("ties") or 0,
+            "pts_for": t.get("pts_for") or 0.0,
+            "pts_against": t.get("pts_against") or 0.0,
+            "partial": True,
+        })
 
     # ── Draft alpha, per completed season ──
     for sn in seasons:
@@ -1501,8 +1532,9 @@ def get_manager_stats(conn, histories: list[dict], team_map: dict) -> dict:
     out = []
     for m in mgrs.values():
         cr = m["career"]
-        games = cr["wins"] + cr["losses"]
-        cr["win_pct"] = round(cr["wins"] / games, 3) if games else None
+        games = cr["wins"] + cr["losses"] + cr["ties"]
+        # A draw is half a win, the same convention simulate.py uses.
+        cr["win_pct"] = round((cr["wins"] + 0.5 * cr["ties"]) / games, 3) if games else None
         cr["pts_for"] = round(cr["pts_for"], 1)
         cr["pts_against"] = round(cr["pts_against"], 1)
         cr["ppg"] = round(cr["pts_for"] / games, 1) if games else None
@@ -1520,7 +1552,18 @@ def get_manager_stats(conn, histories: list[dict], team_map: dict) -> dict:
         m.pop("picks", None)
         out.append(m)
 
-    out.sort(key=lambda m: (not m["is_active"], -(m["career"]["win_pct"] or 0)))
+    # Sort on a win% shrunk toward .500, with a one-season prior. Now that
+    # records run through the season in progress, a manager one game into their
+    # first year would otherwise top the all-time table on a 1.000 — mdropkin
+    # did exactly that. The displayed Win% stays the real one; only the
+    # ordering is shrunk, and the Sns column shows how thin a record is.
+    SHRINK_GAMES = 38
+    def career_rank(m):
+        cr = m["career"]
+        games = cr["wins"] + cr["losses"] + cr["ties"]
+        wins = cr["wins"] + 0.5 * cr["ties"]
+        return (wins + 0.5 * SHRINK_GAMES) / (games + SHRINK_GAMES) if games else 0.0
+    out.sort(key=lambda m: (not m["is_active"], -career_rank(m)))
 
     # League-wide leaderboards for the alpha section
     alpha_rows = []
@@ -2165,7 +2208,7 @@ def build(open_after: bool = False):
 
     render(env0, "managers.html", DIST_DIR / "managers.html",
            active_nav="managers",
-           mgr=get_manager_stats(conn, histories, team_map),
+           mgr=get_manager_stats(conn, histories, team_map, standings),
            h2h=get_h2h_matrix(conn),
            team_map=team_map)
 

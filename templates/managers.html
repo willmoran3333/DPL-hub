@@ -51,12 +51,16 @@
 {% block body %}
 <div class="page">
   <header class="page-header">
-    <div class="page-header__eyebrow">All-time · {{ mgr.seasons|length }} completed seasons</div>
+    <div class="page-header__eyebrow">All-time · {{ mgr.seasons|length }} completed seasons + {{ SEASON_LABEL }} to date</div>
     <h1 class="page-header__title">Managers</h1>
     <p class="page-header__subtitle">Career records, draft alpha, and the picks that actually decided things.</p>
+    <p class="page-header__subtitle">Records run continuously through {{ SEASON_LABEL }}. Draft alpha and the
+      all-time hits below cover completed seasons only — a draft needs a full season to judge.</p>
   </header>
 
   <div class="section-label">Career Records</div>
+  {# A T column only where the league has actually drawn a week. #}
+  {% set any_ties = mgr.managers|map(attribute='career.ties')|select|list|length > 0 %}
   <div class="standings-table-wrap mb-8">
     <table class="standings-table">
       <thead>
@@ -66,6 +70,7 @@
           <th>Sns</th>
           <th>W</th>
           <th>L</th>
+          {% if any_ties %}<th>T</th>{% endif %}
           <th>Win%</th>
           <th class="col-hide-sm">PF</th>
           <th class="col-hide-sm">Pts/GW</th>
@@ -86,6 +91,7 @@
           <td>{{ m.career.seasons_played }}</td>
           <td class="col-pts">{{ m.career.wins }}</td>
           <td>{{ m.career.losses }}</td>
+          {% if any_ties %}<td>{{ m.career.ties or 0 }}</td>{% endif %}
           <td class="col-pts">{% if m.career.win_pct is not none %}{{ "%.3f"|format(m.career.win_pct) }}{% else %}—{% endif %}</td>
           <td class="col-hide-sm">{{ "%.0f"|format(m.career.pts_for) }}</td>
           <td class="col-hide-sm">{% if m.career.ppg %}{{ "%.1f"|format(m.career.ppg) }}{% else %}—{% endif %}</td>
@@ -241,7 +247,7 @@
       </div>
       <div class="mgr-card__name">{{ m.display_name }}</div>
       <div class="mgr-card__line">
-        <span><strong>{{ m.career.wins }}–{{ m.career.losses }}</strong> career</span>
+        <span><strong>{{ m.career.wins }}–{{ m.career.losses }}{% if m.career.ties %}–{{ m.career.ties }}{% endif %}</strong> career</span>
         {% if m.career.titles %}<span><strong>{{ m.career.titles }}</strong> title{{ 's' if m.career.titles > 1 }}</span>{% endif %}
         {% if m.alpha_career is not none %}
         <span>alpha <strong class="{{ 'alpha-pos' if m.alpha_career > 0 else 'alpha-neg' }}">{{ "%+.1f"|format(m.alpha_career) }}</strong>/GW</span>
@@ -266,8 +272,11 @@
       {% endif %}
       {% for s in m.seasons %}
       <div class="mgr-note">
-        {{ s.label }}: finished {{ s.position }}{{ 'st' if s.position == 1 else ('nd' if s.position == 2 else ('rd' if s.position == 3 else 'th')) }},
-        {{ s.wins }}–{{ s.losses }}, {{ "%.0f"|format(s.pts_for) }} PF
+        {{ s.label }}:
+        {%- if s.partial %} {{ s.position }}{{ 'st' if s.position == 1 else ('nd' if s.position == 2 else ('rd' if s.position == 3 else 'th')) }} so far,
+        {%- else %} finished {{ s.position }}{{ 'st' if s.position == 1 else ('nd' if s.position == 2 else ('rd' if s.position == 3 else 'th')) }},
+        {%- endif %}
+        {{ s.wins }}–{{ s.losses }}{% if s.ties %}–{{ s.ties }}{% endif %}, {{ "%.0f"|format(s.pts_for) }} PF
         {%- if m.alpha.get(s.season) is not none %}, alpha {{ "%+.1f"|format(m.alpha.get(s.season)) }}/GW{% endif %}.
       </div>
       {% endfor %}
