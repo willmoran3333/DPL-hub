@@ -75,6 +75,18 @@ PRICE_AVAIL_WEIGHT = 0.35
 # of a roster's initial gap to average that has closed by the final week.
 REVERSION_BY_SEASON_END = 0.35
 
+# ...but that drift is not equally available to everyone. A manager with half
+# the league's waiver budget left cannot buy the same improvement as one
+# carrying 50% more, and budget moves in trades: skoeiboy took $50 off
+# Flabiano9 in GW1, leaving 146 against a 96 base and Flabiano9 on 46.
+# Reversion is therefore tilted by how much budget a roster has left relative
+# to the league. At 0.10 a +52% budget edge is worth about +5% squad strength
+# by GW38 — roughly enough to buy your way from this roster's position to
+# league average, and symmetric, so a depleted budget is marked down the same.
+# The tilt ramps with the season: budget buys nothing until it is spent.
+BUDGET_TILT = 0.10
+WAIVER_BUDGET_BASE = 96   # league setting; overridden from the DB when present
+
 
 # ── name matching ────────────────────────────────────────────────────
 _TRANSLIT = str.maketrans({"ø":"o","Ø":"O","đ":"d","Đ":"D","ł":"l","Ł":"L",
@@ -253,6 +265,39 @@ def build_projections(conn) -> list[dict]:
     return out
 
 
+def load_budgets(conn) -> dict:
+    """Remaining waiver budget per roster, as a share of the league average.
+
+    Sleeper stores spend as `waiver_budget_used` in rosters.settings, and it
+    goes NEGATIVE when a manager receives budget in a trade. Returns
+    roster_id -> edge, where 0.0 is an average purse and +0.5 is half as much
+    again. Empty dict if the league has no budget settings, which leaves the
+    reversion untilted.
+    """
+    row = conn.execute("SELECT settings FROM league WHERE league_id=?",
+                       (LEAGUE_ID,)).fetchone()
+    base = WAIVER_BUDGET_BASE
+    if row and row[0]:
+        try:
+            base = json.loads(row[0]).get("waiver_budget", base) or base
+        except json.JSONDecodeError:
+            pass
+    left = {}
+    for rid, settings in conn.execute(
+            "SELECT roster_id, settings FROM rosters WHERE league_id=?", (LEAGUE_ID,)):
+        try:
+            used = (json.loads(settings or "{}") or {}).get("waiver_budget_used", 0) or 0
+        except json.JSONDecodeError:
+            used = 0
+        left[rid] = max(base - used, 0.0)
+    if not left:
+        return {}
+    mean = sum(left.values()) / len(left)
+    if mean <= 0:
+        return {}
+    return {rid: v / mean - 1.0 for rid, v in left.items()}
+
+
 def load_schedule(conn, as_of: int | None = None):
     """Split the season's fixtures into results already banked and games left.
 
@@ -319,6 +364,7 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
     club_ix = {c: i for i, c in enumerate(clubs)}
 
     pending, banked, weeks, weeks_played = load_schedule(conn, as_of)
+    budget_edge = load_budgets(conn)
 
     # Per-roster arrays, grouped by position
     packs = {}
@@ -380,11 +426,15 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
         need = sorted({r for pair in fixtures for r in pair})
 
         # fraction of the initial gap to average that has closed by this week
-        closed = REVERSION_BY_SEASON_END * (wk - 1) / max(n_weeks - 1, 1)
+        ramp = (wk - 1) / max(n_weeks - 1, 1)
+        closed = REVERSION_BY_SEASON_END * ramp
         revert = {}
         for rid in need:
             s0 = strength[rid]
             target = league_mean + (s0 - league_mean) * (1 - closed)
+            # Budget tilt, ramped the same way: an unspent purse is only worth
+            # something once there has been a season in which to spend it.
+            target *= 1.0 + BUDGET_TILT * ramp * budget_edge.get(rid, 0.0)
             revert[rid] = (target / s0) if s0 > 0 else 1.0
 
         shock = rng.normal(0.0, CLUB_SHOCK, size=(n_sims, len(clubs)))
@@ -582,6 +632,7 @@ def main():
                 "avail_persist": AVAIL_PERSIST,
                 "price_avail_weight": PRICE_AVAIL_WEIGHT,
                 "reversion_by_season_end": REVERSION_BY_SEASON_END,
+                "budget_tilt": BUDGET_TILT,
                 "club_shock": CLUB_SHOCK,
                 "shrink_minutes": SHRINK_MINUTES,
             },

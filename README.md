@@ -228,7 +228,20 @@ re-pulls the FPL bootstrap into `data/fpl_bootstrap.json`, `--as-of WEEK`
 replays the season as it stood after a given week.
 
 Key assumptions live at the top of the file — `AVAIL_PERSIST`,
-`REVERSION_BY_SEASON_END`, `PRICE_AVAIL_WEIGHT`, `CLUB_SHOCK`, `SHRINK_MINUTES`.
+`REVERSION_BY_SEASON_END`, `PRICE_AVAIL_WEIGHT`, `CLUB_SHOCK`, `SHRINK_MINUTES`,
+`BUDGET_TILT`.
+
+`BUDGET_TILT` is the one that is not about players. Reversion toward the league
+mean stands in for waivers and trades, but that drift is not equally available
+to everyone: budget moves in trades, and a manager carrying half the league's
+purse cannot buy the same improvement as one carrying half again as much. The
+tilt scales a roster's reversion target by its remaining waiver budget relative
+to the league, ramped across the season so an unspent purse is worth nothing
+until there has been time to spend it. At 0.10 a +52% budget edge is worth
+about +5% squad strength by GW38 — roughly enough to buy your way to league
+average — and it is symmetric, so a depleted budget is marked down the same.
+Budget is read from `rosters.settings.waiver_budget_used`, which goes negative
+when a manager receives budget in a trade.
 The leading group is stable across plausible settings; mid-table order is not,
 so present tiers rather than a strict 1-12.
 
