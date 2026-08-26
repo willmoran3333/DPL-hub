@@ -7,6 +7,12 @@ DPL season simulator — correlated Monte Carlo over the real 38-week schedule.
 
 Title is decided by best H2H record (no playoffs), points-for breaking ties.
 
+Weeks that have already been scored are NOT re-simulated: their real W/L and
+points-for are banked into every simulated season, and only the remaining
+fixtures are drawn. A manager at 10-2 carries those wins into their title
+probability. Early in a season this changes little; by the spring it is most
+of the signal.
+
 Modelling, in short:
   * Expected points per appearance blends this league's own 2025/26 per-90
     rates (re-scored under the live 2026/27 rules) with an FPL price anchor,
@@ -247,6 +253,54 @@ def build_projections(conn) -> list[dict]:
     return out
 
 
+def load_schedule(conn):
+    """Split the season's fixtures into results already banked and games left.
+
+    A leg counts as played when its points is not NULL — the same test
+    make_history.py uses. The effective score is COALESCE(custom_points,
+    points) so commissioner adjustments propagate, matching build_site.py.
+    A pair where both sides scored exactly 0 is treated as unplayed, as
+    build_site.get_h2h_matrix does; a genuine 0-0 is not a thing here, and
+    such rows are stale placeholders.
+
+    Returns (pending, seed, weeks, weeks_played):
+      pending[wk]  list of (roster_a, roster_b) still to be simulated
+      seed[rid]    {"w","l","t","pf"} banked from completed matchups
+      weeks        every week in the schedule, in order
+      weeks_played count of weeks with at least one completed matchup
+    """
+    pending = defaultdict(list)
+    seed: dict[int, dict] = {}
+    weeks, done_weeks = set(), set()
+
+    def rec(rid):
+        return seed.setdefault(rid, {"w": 0.0, "l": 0.0, "t": 0.0, "pf": 0.0})
+
+    for wk, ra, rb, pa, pb in conn.execute("""
+        SELECT a.week, a.roster_id, b.roster_id,
+               COALESCE(a.custom_points, a.points) AS pa,
+               COALESCE(b.custom_points, b.points) AS pb
+        FROM matchup_legs a
+        JOIN matchup_legs b ON b.league_id=a.league_id AND b.season=a.season
+         AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id > a.roster_id
+        WHERE a.league_id=? AND a.season=? ORDER BY a.week""", (LEAGUE_ID, SEASON)):
+        weeks.add(wk)
+        if pa is None or pb is None or (pa == 0 and pb == 0):
+            pending[wk].append((ra, rb))
+            continue
+        done_weeks.add(wk)
+        a_, b_ = rec(ra), rec(rb)
+        a_["pf"] += pa; b_["pf"] += pb
+        if pa > pb:
+            a_["w"] += 1; b_["l"] += 1
+        elif pb > pa:
+            b_["w"] += 1; a_["l"] += 1
+        else:                      # ties count half a win each, as in simulate()
+            a_["t"] += 1; b_["t"] += 1
+
+    return pending, seed, sorted(weeks), len(done_weeks)
+
+
 def simulate(conn, proj, n_sims: int, seed: int = 7):
     rng = np.random.default_rng(seed)
     rosters = sorted({p["roster_id"] for p in proj})
@@ -256,14 +310,7 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
     clubs = sorted({p["club"] or "?" for p in proj})
     club_ix = {c: i for i, c in enumerate(clubs)}
 
-    schedule = defaultdict(list)
-    for wk, a, b in conn.execute("""
-        SELECT a.week, a.roster_id, b.roster_id FROM matchup_legs a
-        JOIN matchup_legs b ON b.league_id=a.league_id AND b.season=a.season
-         AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id > a.roster_id
-        WHERE a.league_id=? AND a.season=? ORDER BY a.week""", (LEAGUE_ID, SEASON)):
-        schedule[wk].append((a, b))
-    weeks = sorted(schedule)
+    pending, banked, weeks, weeks_played = load_schedule(conn)
 
     # Per-roster arrays, grouped by position
     packs = {}
@@ -306,16 +353,28 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
     strength = {rid: xi_strength(rid) for rid in rosters}
     league_mean = sum(strength.values()) / len(strength)
 
+    ridx = {rid: i for i, rid in enumerate(rosters)}
     wins = np.zeros((len(rosters), n_sims))
     pf = np.zeros((len(rosters), n_sims))
-    ridx = {rid: i for i, rid in enumerate(rosters)}
+
+    # Every simulated season starts from what has actually happened.
+    for rid, r in banked.items():
+        if rid in ridx:
+            wins[ridx[rid]] = r["w"] + 0.5 * r["t"]
+            pf[ridx[rid]] = r["pf"]
 
     n_weeks = max(weeks) if weeks else 1
     for wk in weeks:
+        fixtures = pending.get(wk)
+        if not fixtures:
+            continue                  # week already in the books
+        # only these rosters need a score drawn this week
+        need = sorted({r for pair in fixtures for r in pair})
+
         # fraction of the initial gap to average that has closed by this week
         closed = REVERSION_BY_SEASON_END * (wk - 1) / max(n_weeks - 1, 1)
         revert = {}
-        for rid in rosters:
+        for rid in need:
             s0 = strength[rid]
             target = league_mean + (s0 - league_mean) * (1 - closed)
             revert[rid] = (target / s0) if s0 > 0 else 1.0
@@ -324,7 +383,7 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
         shock = np.exp(shock - CLUB_SHOCK**2 / 2)     # mean-preserving
 
         scores = {}
-        for rid in rosters:
+        for rid in need:
             pack = packs[rid]
             realised, expected, avail = {}, {}, {}
             for pos, g in pack.items():
@@ -383,7 +442,7 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
                 best_r = np.where(better, tot_r, best_r)
             scores[rid] = np.where(np.isfinite(best_e), best_r, base_r)
 
-        for a, b in schedule[wk]:
+        for a, b in fixtures:
             sa, sb = scores[a], scores[b]
             wins[ridx[a]] += (sa > sb); wins[ridx[b]] += (sb > sa)
             wins[ridx[a]] += 0.5 * (sa == sb); wins[ridx[b]] += 0.5 * (sa == sb)
@@ -398,14 +457,22 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
     for pos in range(len(rosters)):
         finish[:, pos] = np.bincount(order[pos], minlength=len(rosters)) / n_sims
 
-    return [{
+    res = [{
         "roster_id": rid, "manager": mgr_of[rid],
         "title_pct": float(titles[i]),
         "exp_wins": float(wins[i].mean()),
         "exp_pf": float(pf[i].mean()),
         "top3_pct": float(finish[i, :3].sum()),
         "last_pct": float(finish[i, -1]),
+        # Results already in the books. Named banked_*, not actual_*:
+        # build_site.load_power_rankings writes its own actual_wins from the
+        # live standings and would otherwise overwrite these.
+        "banked_wins": banked.get(rid, {}).get("w", 0.0),
+        "banked_losses": banked.get(rid, {}).get("l", 0.0),
+        "banked_ties": banked.get(rid, {}).get("t", 0.0),
+        "banked_pf": round(banked.get(rid, {}).get("pf", 0.0), 2),
     } for i, rid in enumerate(rosters)]
+    return res, weeks_played, len(weeks)
 
 
 def main():
@@ -432,14 +499,24 @@ def main():
                   f"{p['exp_week']:>8.1f}{p['own_weight']:>7.2f}")
         return
 
-    res = simulate(conn, proj, a.sims, a.seed)
+    res, weeks_played, n_weeks = simulate(conn, proj, a.sims, a.seed)
     res.sort(key=lambda r: -r["title_pct"])
     print(f"\nDPL {SEASON}/{int(SEASON)+1} — {a.sims:,} simulated seasons")
-    print("Title = best H2H record over 38 weeks, points-for breaks ties\n")
-    print(f"{'manager':22}{'title%':>8}{'top3%':>8}{'wooden%':>9}{'E[wins]':>9}{'E[PF]':>9}")
-    print("-" * 65)
+    print(f"Title = best H2H record over {n_weeks} weeks, points-for breaks ties")
+    if weeks_played:
+        print(f"Conditioned on {weeks_played} completed week"
+              f"{'' if weeks_played == 1 else 's'}; "
+              f"{n_weeks - weeks_played} simulated per season\n")
+    else:
+        print("No completed weeks yet — the whole season is simulated\n")
+    print(f"{'manager':22}{'now':>7}{'title%':>8}{'top3%':>8}{'wooden%':>9}"
+          f"{'E[wins]':>9}{'E[PF]':>9}")
+    print("-" * 72)
     for r in res:
-        print(f"{r['manager']:22}{100*r['title_pct']:>7.1f}%{100*r['top3_pct']:>7.1f}%"
+        now = f"{r['banked_wins']:.0f}-{r['banked_losses']:.0f}" + (
+            f"-{r['banked_ties']:.0f}" if r["banked_ties"] else "")
+        print(f"{r['manager']:22}{now:>7}{100*r['title_pct']:>7.1f}%"
+              f"{100*r['top3_pct']:>7.1f}%"
               f"{100*r['last_pct']:>8.1f}%{r['exp_wins']:>9.1f}{r['exp_pf']:>9.0f}")
     spread = res[0]["title_pct"] - res[-1]["title_pct"]
     print(f"\nbest-to-worst title spread: {100*spread:.1f} points")
@@ -449,6 +526,9 @@ def main():
         out.write_text(json.dumps({
             "season": SEASON,
             "sims": a.sims,
+            "weeks_total": n_weeks,
+            "weeks_played": weeks_played,
+            "weeks_simulated": n_weeks - weeks_played,
             "params": {
                 "avail_persist": AVAIL_PERSIST,
                 "price_avail_weight": PRICE_AVAIL_WEIGHT,
