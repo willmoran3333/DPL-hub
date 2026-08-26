@@ -10,8 +10,8 @@ gw: 1
 headline: "The Week of Sam"
 subheadline: "skoeiboy opens with the second-biggest week of his DPL career — built on two players he picked up after the draft"
 body: |
-  skoeiboy put 137.65 on the board in GW1 and won by 36.75 over bjennings28,
-  who scored 100.90 and still lost. Four of the twelve highest-scoring
+  skoeiboy put 137.65 on the board in GW1 and won by 37.75 over bjennings28,
+  who scored 99.90 and still lost. Four of the twelve highest-scoring
   starters in the league were his — Cole Palmer 30.05, Maxim De Cuyper 24.00,
   Emersonn 22.80, Martin Ødegaard 19.00 — with Keane Lewis-Potter 17.60 just
   outside in 13th.
@@ -25,7 +25,7 @@ highlight_stats:
   - label: "GW1 Score"
     value: "137.65"
   - label: "Margin"
-    value: "+36.75"
+    value: "+37.75"
   - label: "Left on Bench"
     value: "1.55"
   - label: "Waiver Hit"
