@@ -253,8 +253,13 @@ def build_projections(conn) -> list[dict]:
     return out
 
 
-def load_schedule(conn):
+def load_schedule(conn, as_of: int | None = None):
     """Split the season's fixtures into results already banked and games left.
+
+    as_of caps which weeks count as played, so the season can be replayed as it
+    stood at the end of any given week. That is what makes the title-probability
+    history reconstructable after the fact instead of only accumulating from now
+    on.
 
     A leg counts as played when its points is not NULL — the same test
     make_history.py uses. The effective score is COALESCE(custom_points,
@@ -285,6 +290,9 @@ def load_schedule(conn):
          AND b.week=a.week AND b.matchup_id=a.matchup_id AND b.roster_id > a.roster_id
         WHERE a.league_id=? AND a.season=? ORDER BY a.week""", (LEAGUE_ID, SEASON)):
         weeks.add(wk)
+        if as_of is not None and wk > as_of:
+            pending[wk].append((ra, rb))
+            continue
         if pa is None or pb is None or (pa == 0 and pb == 0):
             pending[wk].append((ra, rb))
             continue
@@ -301,7 +309,7 @@ def load_schedule(conn):
     return pending, seed, sorted(weeks), len(done_weeks)
 
 
-def simulate(conn, proj, n_sims: int, seed: int = 7):
+def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
     rng = np.random.default_rng(seed)
     rosters = sorted({p["roster_id"] for p in proj})
     mgr_of = {p["roster_id"]: p["manager"] for p in proj}
@@ -310,7 +318,7 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
     clubs = sorted({p["club"] or "?" for p in proj})
     club_ix = {c: i for i, c in enumerate(clubs)}
 
-    pending, banked, weeks, weeks_played = load_schedule(conn)
+    pending, banked, weeks, weeks_played = load_schedule(conn, as_of)
 
     # Per-roster arrays, grouped by position
     packs = {}
@@ -475,6 +483,38 @@ def simulate(conn, proj, n_sims: int, seed: int = 7):
     return res, weeks_played, len(weeks)
 
 
+def build_history(conn, proj, n_sims: int, seed: int):
+    """Rebuild the whole title-probability series, one run per completed week.
+
+    Week 0 is the pre-season projection; week N conditions on results through
+    N. Every point is generated from TODAY's rosters — Sleeper does not keep
+    historical roster snapshots — so this is not a record of what the model
+    said at the time. That is deliberate: holding the squads fixed means the
+    week-to-week move is the effect of RESULTS alone, which is what a change
+    column should show. Regenerate it after each gameweek; it is cheap, since
+    conditioning on more weeks leaves fewer to simulate.
+    """
+    _, _, weeks, weeks_played = load_schedule(conn)
+    snaps = []
+    for wk in range(0, weeks_played + 1):
+        res, _, _ = simulate(conn, proj, n_sims, seed, as_of=wk)
+        snaps.append({
+            "week": wk,
+            "title_pct": {str(r["roster_id"]): round(r["title_pct"], 5) for r in res},
+            "exp_wins": {str(r["roster_id"]): round(r["exp_wins"], 2) for r in res},
+        })
+        top = max(res, key=lambda r: r["title_pct"])
+        print(f"  week {wk:>2}: {len(res)} managers, leader {top['manager']} "
+              f"{100*top['title_pct']:.1f}%")
+    out = HERE / "power_rankings_history.json"
+    out.write_text(json.dumps({
+        "season": SEASON, "sims": n_sims,
+        "weeks_total": len(weeks), "weeks_played": weeks_played,
+        "snapshots": snaps,
+    }, indent=2) + "\n")
+    print(f"wrote {out.name}: {len(snaps)} snapshots (week 0 = pre-season)")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sims", type=int, default=5000)
@@ -483,6 +523,11 @@ def main():
     ap.add_argument("--refresh-fpl", action="store_true", help="re-pull FPL bootstrap")
     ap.add_argument("--write", action="store_true",
                     help="write power_rankings.json for the site build")
+    ap.add_argument("--as-of", type=int, default=None, metavar="WEEK",
+                    help="replay the season as it stood after WEEK (0 = pre-season)")
+    ap.add_argument("--history", action="store_true",
+                    help="rebuild power_rankings_history.json: one run per completed "
+                         "week, pre-season through the latest result")
     a = ap.parse_args()
 
     conn = sqlite3.connect(DB_PATH)
@@ -499,7 +544,11 @@ def main():
                   f"{p['exp_week']:>8.1f}{p['own_weight']:>7.2f}")
         return
 
-    res, weeks_played, n_weeks = simulate(conn, proj, a.sims, a.seed)
+    if a.history:
+        build_history(conn, proj, a.sims, a.seed)
+        return
+
+    res, weeks_played, n_weeks = simulate(conn, proj, a.sims, a.seed, a.as_of)
     res.sort(key=lambda r: -r["title_pct"])
     print(f"\nDPL {SEASON}/{int(SEASON)+1} — {a.sims:,} simulated seasons")
     print(f"Title = best H2H record over {n_weeks} weeks, points-for breaks ties")

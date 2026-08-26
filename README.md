@@ -196,16 +196,36 @@ The push triggers `pages.yml`, which:
 `simulate.py` runs a correlated Monte Carlo over the real 38-week schedule and
 ranks managers by title probability (best H2H record; there are no playoffs).
 
+Weeks already scored are not re-simulated: their real W/L and points-for are
+banked into every simulated season and only the remaining fixtures are drawn.
+
+Both commands below are the weekly step — run them together after a gameweek
+lands, and commit both JSON files:
+
 ```bash
-python3 simulate.py --sims 20000 --write   # writes power_rankings.json
-python3 build_site.py                      # Rankings tab picks it up
+python3 simulate.py --sims 20000 --write     # power_rankings.json (current week)
+python3 simulate.py --sims 20000 --history   # power_rankings_history.json (the series)
+python3 build_site.py                        # Rankings tab picks both up
 ```
 
-The site build reads `power_rankings.json` and never imports numpy, so CI stays
-light. Re-run the simulator whenever rosters change and commit the JSON.
+`--history` replays the season once per completed week, pre-season (week 0)
+through the latest result, and is what feeds the Chg column and the trend
+sparkline. Every point is generated from TODAY's rosters — Sleeper keeps no
+historical roster snapshots — so a week-on-week move isolates the effect of
+results rather than squad changes. It is cheap: conditioning on more weeks
+leaves fewer to simulate.
+
+Skipping `--history` does not corrupt anything. The build notices the series has
+fallen a week behind, suppresses the change column rather than showing the
+previous week's move as if it were this one, and prints the command to fix it.
+
+The site build reads these JSON files and never imports numpy, so CI stays
+light — neither workflow runs the simulator, so this step is local. Re-run it
+whenever rosters change and commit the JSON.
 
 Useful flags: `--projections` prints the per-player inputs, `--refresh-fpl`
-re-pulls the FPL bootstrap into `data/fpl_bootstrap.json`.
+re-pulls the FPL bootstrap into `data/fpl_bootstrap.json`, `--as-of WEEK`
+replays the season as it stood after a given week.
 
 Key assumptions live at the top of the file — `AVAIL_PERSIST`,
 `REVERSION_BY_SEASON_END`, `PRICE_AVAIL_WEIGHT`, `CLUB_SHOCK`, `SHRINK_MINUTES`.

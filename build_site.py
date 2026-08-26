@@ -50,6 +50,7 @@ FEATURED_MATCHES_PATH = HERE / "featured_matches.yml"
 DRAFT_PATH          = HERE / "draft_data.yml"
 WELCOME_PATH        = HERE / "welcome.yml"
 RANKINGS_PATH       = HERE / "power_rankings.json"
+RANKINGS_HIST_PATH  = HERE / "power_rankings_history.json"
 
 LEAGUE_ID     = "1385458928208343040"   # DPL 2026/27
 SEASON        = "2026"
@@ -156,10 +157,81 @@ def load_power_rankings(team_map: dict, standings: list[dict]) -> dict:
         m["team_name"] = t.get("team_name", "")
         m["actual_wins"] = t.get("wins")
         m["actual_pos"] = t.get("position")
+    attach_title_history(data)
     data["managers"].sort(key=lambda m: -m["title_pct"])
     for i, m in enumerate(data["managers"], start=1):
         m["rank"] = i
     return data
+
+
+# Sparkline geometry, in the viewBox the template draws into.
+SPARK_W, SPARK_H, SPARK_PAD = 88.0, 24.0, 3.0
+SPARK_WEEKS = 5
+
+
+def attach_title_history(data: dict) -> None:
+    """Hang a week-on-week move and a five-week trend off each manager.
+
+    Reads power_rankings_history.json (`simulate.py --history`). Absent or
+    stale-by-a-week, managers simply get no delta and no sparkline and the
+    columns fall back to an em dash — the page never depends on it.
+
+    Every point in that file is generated from the current rosters, so a move
+    reflects results landing, not squads changing. Sparklines share one scale
+    (zero to the highest probability anyone has held) so rows read against each
+    other rather than each against itself.
+    """
+    for m in data.get("managers", []):
+        m["title_prev"] = m["title_delta"] = None
+        m["spark_points"] = ""
+        m["spark_series"] = []
+
+    if not RANKINGS_HIST_PATH.exists():
+        return
+    try:
+        with open(RANKINGS_HIST_PATH) as f:
+            hist = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return
+    snaps = sorted(hist.get("snapshots", []), key=lambda s: s["week"])
+    if not snaps:
+        return
+
+    # The series has to end on the same week power_rankings.json was built for.
+    # Running `--write` without `--history` leaves it a week behind, and the
+    # delta would then quietly show LAST week's move as if it were this one.
+    # Better no number than a wrong one.
+    cur = data.get("weeks_played")
+    if cur is not None and snaps[-1]["week"] != cur:
+        print(f"  ! power_rankings_history.json ends at week {snaps[-1]['week']} but "
+              f"power_rankings.json is week {cur} — change column suppressed. "
+              f"Re-run: python3 simulate.py --sims {data.get('sims', 20000)} --history")
+        return
+
+    window = snaps[-SPARK_WEEKS:]
+    peak = max((v for s in snaps for v in s["title_pct"].values()), default=0.0)
+    if peak <= 0:
+        return
+
+    for m in data.get("managers", []):
+        key = str(m["roster_id"])
+        series = [s["title_pct"].get(key) for s in window]
+        series = [v for v in series if v is not None]
+        if not series:
+            continue
+        m["spark_series"] = series
+        m["spark_weeks"] = [s["week"] for s in window]
+        if len(series) >= 2:
+            m["title_prev"] = series[-2]
+            m["title_delta"] = series[-1] - series[-2]
+        span = SPARK_W - 2 * SPARK_PAD
+        step = span / (len(series) - 1) if len(series) > 1 else 0.0
+        pts = []
+        for i, v in enumerate(series):
+            x = SPARK_PAD + i * step
+            y = SPARK_H - SPARK_PAD - (v / peak) * (SPARK_H - 2 * SPARK_PAD)
+            pts.append(f"{x:.1f},{y:.1f}")
+        m["spark_points"] = " ".join(pts)
 
 
 def load_welcome() -> dict:

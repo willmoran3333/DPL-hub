@@ -9,6 +9,17 @@
   .tier-head td { padding-top: 18px !important; font-size: 0.6875rem; font-weight: 700;
                   letter-spacing: 0.14em; text-transform: uppercase;
                   color: var(--c-gold-deep); border-bottom: 1px solid var(--c-ink) !important; }
+  .delta { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+  .delta--up   { color: #1a7f4b; }
+  .delta--down { color: #b3261e; }
+  .delta--flat { color: var(--c-ink-light); }
+  .spark-line { display: block; overflow: visible; }
+  .spark-line polyline { fill: none; stroke-width: 1.5; stroke-linecap: round;
+                         stroke-linejoin: round; }
+  .spark-line .dot { stroke: none; }
+  .spark--up   polyline, .spark--up   .dot { stroke: #1a7f4b; fill: #1a7f4b; }
+  .spark--down polyline, .spark--down .dot { stroke: #b3261e; fill: #b3261e; }
+  .spark--flat polyline, .spark--flat .dot { stroke: var(--c-ink-light); fill: var(--c-ink-light); }
 </style>
 {% endblock %}
 
@@ -22,6 +33,13 @@
     <p class="page-header__subtitle">
       Ranked by how often each manager finishes with the best head-to-head record.
     </p>
+    {% if rk.managers and rk.managers[0].spark_series %}
+    <p class="page-header__subtitle">
+      Chg is the move in title chance since last week, in points. Trend is the
+      last {{ rk.managers[0].spark_series|length }} week{{ 's' if rk.managers[0].spark_series|length != 1 }},
+      week 0 being the pre-season projection, all rows drawn to one scale.
+    </p>
+    {% endif %}
   </header>
 
   <div class="section-label">Title Probability</div>
@@ -32,6 +50,8 @@
           <th class="col-pos">#</th>
           <th class="col-team">Manager</th>
           <th>Title</th>
+          <th>Chg</th>
+          <th class="col-hide-sm">Trend</th>
           <th class="col-hide-sm">Top 3</th>
           <th class="col-hide-sm">Last</th>
           <th>E[W]</th>
@@ -51,6 +71,25 @@
           <td class="col-pts" data-val="{{ m.title_pct }}">
             {{ "%.1f"|format(100 * m.title_pct) }}%
             <span class="prob-bar"><span style="width: {{ (100 * m.title_pct / rk.managers[0].title_pct)|round(1) }}%"></span></span>
+          </td>
+          {# Week-on-week move, in points of probability. #}
+          {% set d = m.title_delta %}
+          {% set dir = 'flat' if d is none or (d|abs) < 0.0005 else ('up' if d > 0 else 'down') %}
+          <td class="delta delta--{{ dir }}" data-val="{{ d if d is not none else 0 }}">
+            {%- if d is none %}—
+            {%- elif dir == 'flat' %}0.0
+            {%- else %}{{ "%+.1f"|format(100 * d) }}{% endif -%}
+          </td>
+          <td class="col-hide-sm">
+            {% if m.spark_points %}
+            <svg class="spark-line spark--{{ dir }}" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last {{ m.spark_series|length }} weeks">
+              <polyline points="{{ m.spark_points }}"></polyline>
+              {% set last = m.spark_points.split(' ')|last %}
+              <circle class="dot" cx="{{ last.split(',')[0] }}" cy="{{ last.split(',')[1] }}" r="2"></circle>
+            </svg>
+            {% else %}—{% endif %}
           </td>
           <td class="col-hide-sm" data-val="{{ m.top3_pct }}">{{ "%.0f"|format(100 * m.top3_pct) }}%</td>
           <td class="col-hide-sm" data-val="{{ m.last_pct }}">{{ "%.0f"|format(100 * m.last_pct) }}%</td>

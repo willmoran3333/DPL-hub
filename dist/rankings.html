@@ -20,6 +20,17 @@
   .tier-head td { padding-top: 18px !important; font-size: 0.6875rem; font-weight: 700;
                   letter-spacing: 0.14em; text-transform: uppercase;
                   color: var(--c-gold-deep); border-bottom: 1px solid var(--c-ink) !important; }
+  .delta { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+  .delta--up   { color: #1a7f4b; }
+  .delta--down { color: #b3261e; }
+  .delta--flat { color: var(--c-ink-light); }
+  .spark-line { display: block; overflow: visible; }
+  .spark-line polyline { fill: none; stroke-width: 1.5; stroke-linecap: round;
+                         stroke-linejoin: round; }
+  .spark-line .dot { stroke: none; }
+  .spark--up   polyline, .spark--up   .dot { stroke: #1a7f4b; fill: #1a7f4b; }
+  .spark--down polyline, .spark--down .dot { stroke: #b3261e; fill: #b3261e; }
+  .spark--flat polyline, .spark--flat .dot { stroke: var(--c-ink-light); fill: var(--c-ink-light); }
 </style>
 
 </head>
@@ -61,6 +72,13 @@
     <p class="page-header__subtitle">
       Ranked by how often each manager finishes with the best head-to-head record.
     </p>
+    
+    <p class="page-header__subtitle">
+      Chg is the move in title chance since last week, in points. Trend is the
+      last 2 weeks,
+      week 0 being the pre-season projection, all rows drawn to one scale.
+    </p>
+    
   </header>
 
   <div class="section-label">Title Probability</div>
@@ -71,6 +89,8 @@
           <th class="col-pos">#</th>
           <th class="col-team">Manager</th>
           <th>Title</th>
+          <th>Chg</th>
+          <th class="col-hide-sm">Trend</th>
           <th class="col-hide-sm">Top 3</th>
           <th class="col-hide-sm">Last</th>
           <th>E[W]</th>
@@ -91,6 +111,21 @@
             19.4%
             <span class="prob-bar"><span style="width: 100.0%"></span></span>
           </td>
+          
+          
+          
+          <td class="delta delta--down" data-val="-0.041700000000000015">-4.2</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--down" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,3.2 85.0,6.4"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="6.4" r="2"></circle>
+            </svg>
+            
+          </td>
           <td class="col-hide-sm" data-val="0.49154999999999993">49%</td>
           <td class="col-hide-sm" data-val="0.0053">1%</td>
           <td class="col-pts">21.4</td>
@@ -108,6 +143,21 @@
           <td class="col-pts" data-val="0.1905">
             19.1%
             <span class="prob-bar"><span style="width: 98.0%"></span></span>
+          </td>
+          
+          
+          
+          <td class="delta delta--down" data-val="-0.04880000000000001">-4.9</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--down" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,3.0 85.0,6.7"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="6.7" r="2"></circle>
+            </svg>
+            
           </td>
           <td class="col-hide-sm" data-val="0.4912">49%</td>
           <td class="col-hide-sm" data-val="0.00615">1%</td>
@@ -127,6 +177,21 @@
             18.1%
             <span class="prob-bar"><span style="width: 93.3%"></span></span>
           </td>
+          
+          
+          
+          <td class="delta delta--up" data-val="0.04005">+4.0</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--up" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,10.4 85.0,7.4"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="7.4" r="2"></circle>
+            </svg>
+            
+          </td>
           <td class="col-hide-sm" data-val="0.4774">48%</td>
           <td class="col-hide-sm" data-val="0.00565">1%</td>
           <td class="col-pts">21.4</td>
@@ -144,6 +209,21 @@
           <td class="col-pts" data-val="0.1301">
             13.0%
             <span class="prob-bar"><span style="width: 66.9%"></span></span>
+          </td>
+          
+          
+          
+          <td class="delta delta--up" data-val="0.025599999999999998">+2.6</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--up" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,13.1 85.0,11.2"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="11.2" r="2"></circle>
+            </svg>
+            
           </td>
           <td class="col-hide-sm" data-val="0.3883">39%</td>
           <td class="col-hide-sm" data-val="0.01115">1%</td>
@@ -163,6 +243,21 @@
             10.1%
             <span class="prob-bar"><span style="width: 52.1%"></span></span>
           </td>
+          
+          
+          
+          <td class="delta delta--down" data-val="-0.02395">-2.4</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--down" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,11.6 85.0,13.4"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="13.4" r="2"></circle>
+            </svg>
+            
+          </td>
           <td class="col-hide-sm" data-val="0.32155">32%</td>
           <td class="col-hide-sm" data-val="0.01405">1%</td>
           <td class="col-pts">20.2</td>
@@ -180,6 +275,21 @@
           <td class="col-pts" data-val="0.08985">
             9.0%
             <span class="prob-bar"><span style="width: 46.2%"></span></span>
+          </td>
+          
+          
+          
+          <td class="delta delta--up" data-val="0.0276">+2.8</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--up" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,16.3 85.0,14.2"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="14.2" r="2"></circle>
+            </svg>
+            
           </td>
           <td class="col-hide-sm" data-val="0.3039">30%</td>
           <td class="col-hide-sm" data-val="0.0174">2%</td>
@@ -199,6 +309,21 @@
             3.8%
             <span class="prob-bar"><span style="width: 19.7%"></span></span>
           </td>
+          
+          
+          
+          <td class="delta delta--up" data-val="0.007949999999999999">+0.8</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--up" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,18.7 85.0,18.1"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="18.1" r="2"></circle>
+            </svg>
+            
+          </td>
           <td class="col-hide-sm" data-val="0.16349999999999998">16%</td>
           <td class="col-hide-sm" data-val="0.0443">4%</td>
           <td class="col-pts">18.8</td>
@@ -216,6 +341,21 @@
           <td class="col-pts" data-val="0.03495">
             3.5%
             <span class="prob-bar"><span style="width: 18.0%"></span></span>
+          </td>
+          
+          
+          
+          <td class="delta delta--up" data-val="0.012950000000000003">+1.3</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--up" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,19.3 85.0,18.4"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="18.4" r="2"></circle>
+            </svg>
+            
           </td>
           <td class="col-hide-sm" data-val="0.15835">16%</td>
           <td class="col-hide-sm" data-val="0.04845">5%</td>
@@ -235,6 +375,21 @@
             2.4%
             <span class="prob-bar"><span style="width: 12.1%"></span></span>
           </td>
+          
+          
+          
+          <td class="delta delta--up" data-val="0.007300000000000001">+0.7</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--up" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,19.8 85.0,19.2"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="19.2" r="2"></circle>
+            </svg>
+            
+          </td>
           <td class="col-hide-sm" data-val="0.1101">11%</td>
           <td class="col-hide-sm" data-val="0.0728">7%</td>
           <td class="col-pts">18.1</td>
@@ -252,6 +407,21 @@
           <td class="col-pts" data-val="0.0109">
             1.1%
             <span class="prob-bar"><span style="width: 5.6%"></span></span>
+          </td>
+          
+          
+          
+          <td class="delta delta--down" data-val="-0.0051">-0.5</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--down" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,19.8 85.0,20.2"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="20.2" r="2"></circle>
+            </svg>
+            
           </td>
           <td class="col-hide-sm" data-val="0.0613">6%</td>
           <td class="col-hide-sm" data-val="0.1289">13%</td>
@@ -271,6 +441,21 @@
             0.3%
             <span class="prob-bar"><span style="width: 1.5%"></span></span>
           </td>
+          
+          
+          
+          <td class="delta delta--down" data-val="-0.0008500000000000001">-0.1</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--down" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,20.7 85.0,20.8"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="20.8" r="2"></circle>
+            </svg>
+            
+          </td>
           <td class="col-hide-sm" data-val="0.0193">2%</td>
           <td class="col-hide-sm" data-val="0.2908">29%</td>
           <td class="col-pts">15.3</td>
@@ -288,6 +473,21 @@
           <td class="col-pts" data-val="0.002">
             0.2%
             <span class="prob-bar"><span style="width: 1.0%"></span></span>
+          </td>
+          
+          
+          
+          <td class="delta delta--down" data-val="-0.0010500000000000002">-0.1</td>
+          <td class="col-hide-sm">
+            
+            <svg class="spark-line spark--down" width="88" height="24"
+                 viewBox="0 0 88 24" role="img"
+                 aria-label="Title chance over the last 2 weeks">
+              <polyline points="3.0,20.8 85.0,20.8"></polyline>
+              
+              <circle class="dot" cx="85.0" cy="20.8" r="2"></circle>
+            </svg>
+            
           </td>
           <td class="col-hide-sm" data-val="0.01355">1%</td>
           <td class="col-hide-sm" data-val="0.35505">36%</td>
