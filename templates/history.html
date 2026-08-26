@@ -40,6 +40,8 @@
     </div>
   </div>
 
+  {# Only seasons that actually had a drawn week get a T column. #}
+  {% set has_ties = hist.standings|selectattr('ties')|list|length > 0 %}
   <div class="standings-table-wrap">
     <table class="standings-table">
       <thead>
@@ -48,6 +50,7 @@
           <th class="col-team">Team</th>
           <th>W</th>
           <th>L</th>
+          {% if has_ties %}<th>T</th>{% endif %}
           <th>PF</th>
           <th class="col-hide-sm">PA</th>
         </tr>
@@ -64,6 +67,7 @@
           </td>
           <td class="col-pts">{{ t.wins }}</td>
           <td>{{ t.losses }}</td>
+          {% if has_ties %}<td>{{ t.ties or 0 }}</td>{% endif %}
           <td class="col-pts">{{ "%.1f"|format(t.pts_for) }}</td>
           <td class="col-hide-sm">{{ "%.1f"|format(t.pts_against) }}</td>
         </tr>
