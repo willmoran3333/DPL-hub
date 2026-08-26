@@ -50,9 +50,18 @@ BASE_SLOTS = {"GK": 1, "F": 1, "M": 3, "D": 3}
 FLEX_COMBOS = [(0,1,2),(0,2,1),(0,3,0),(1,0,2),(1,1,1),(1,2,0),(2,0,1),(2,1,0)]
 
 # Weekly spread when a player features, measured from 2025/26 under 2026 rules.
-POS_CV = {"GK": 1.03, "D": 0.88, "M": 0.84, "F": 0.85}
-POS_MEAN90 = {"GK": 6.5, "D": 6.7, "M": 7.5, "F": 8.6}
-CLUB_SHOCK = 0.30      # sd of the shared per-club, per-week log shock
+# Re-measured from 2025/26 stats re-scored under 2026/27 rules, players with
+# 900+ minutes. The old midfield and forward means (7.5, 8.6) were low against
+# the 7.98 and 9.66 the rebalanced scoring actually produces, which is most of
+# why the model ran about 8% light on team totals.
+# The raw weekly CV of a player who featured measures about 0.95, but that
+# number already contains cameos and rotation, which the model handles
+# separately through p_play. Using it as-is double-counts and put team-level
+# weekly SD at 27 against a real 22.5. These are that measurement scaled to
+# reproduce the observed team-level spread, which is the quantity that matters.
+POS_CV = {"GK": 0.80, "D": 0.79, "M": 0.74, "F": 0.77}
+POS_MEAN90 = {"GK": 6.4, "D": 6.7, "M": 8.0, "F": 9.7}
+CLUB_SHOCK = 0.16      # sd of the shared per-club, per-week log shock
 SHRINK_MINUTES = 2000  # minutes at which a player's own rate gets half weight.
                        # Raised from 900 to lean harder on the FPL price anchor:
                        # price embeds this-season expectation (transfers, role
@@ -98,12 +107,25 @@ BUDGET_TILT = 0.10
 # spread in 2025/26 team strength, 1.1 was predictable from the year before and
 # 6.9 was not. On a league mean near 81 that residual is about 8.5%.
 #
-# Calibrated so the model's realised between-manager season spread lands at
-# 8.5, the midpoint of the two seasons on record (6.7 and 10.3). With the rate
-# now coming from this season's projections the point estimates are tighter
-# than they were, so MORE season-level uncertainty is needed to reproduce the
-# spread real seasons actually show — not less.
-STRENGTH_UNCERTAINTY = 0.14
+# Tuned together with POS_CV and CLUB_SHOCK against three targets measured off
+# real seasons — league mean weekly score 81-88, within-manager weekly SD
+# 22.2-22.7, between-manager season spread 6.7-10.3. The settled trio lands at
+# 81.2 / 22.5 / 9.4. They interact, so re-tune them in one pass, not singly.
+STRENGTH_UNCERTAINTY = 0.10
+
+# Week-to-week spread of a team's score on a log scale — the noise the update
+# above has to see through. Real seasons put the within-manager weekly SD at
+# 22.2 and 22.7 on a mean near 81, so roughly 0.27 in log terms.
+WEEKLY_LOG_SD = 0.27
+
+# The update is winsorised at this many weekly SDs. GW1 of 2026/27 contains a
+# 35.65 — 3.2 SDs below the league mean, which is a lineup nobody set rather
+# than a squad three sigma worse than the field. Taken at face value it cut
+# that roster's title chance to 0.4%. Real team strength never sits two weekly
+# SDs off its projection (the observed season spread is a quarter of that), so
+# the cap only ever bites on a blow-up, and it bites less as weeks accumulate
+# and the mean stops being one bad Saturday.
+ROBUST_CLIP = 2.0
 
 # How much of a roster's projected gap to the league average we actually
 # believe. The projection is built from last season's per-90 rates and an FPL
@@ -114,14 +136,14 @@ STRENGTH_UNCERTAINTY = 0.14
 # certainty about the ordering, which is why the bottom two rounded to zero
 # after a single gameweek.
 #
-# Held at 0.85 rather than lower: the projection is backtested and decent
+# Held at 0.70: the projection is backtested and decent
 # (R^2 = 0.48 on points per 90), so most of the gap it reports is real. What it
 # cannot see is in-season management, and STRENGTH_UNCERTAINTY carries that.
 # Between them the model now reproduces the spread of real seasons while
 # admitting it does not know which team is which in August — which is the
 # honest position after one gameweek, when GW1 rank correlates with final rank
 # at only +0.22, and the reigning champion started 8th of 12.
-PROJECTION_SHRINK = 0.85
+PROJECTION_SHRINK = 0.70
 
 # This season's own projections, which is where the rate should mostly come
 # from. Backtested on 2025/26, where we hold all 38 weeks of Sleeper's
@@ -490,6 +512,54 @@ def load_schedule(conn, as_of: int | None = None):
     return pending, seed, sorted(weeks), len(done_weeks)
 
 
+def draw_season_strength(rng, n_sims, rosters, ridx, believed, banked, weeks_played):
+    """Per-season strength multiplier, conditioned on what each roster has scored.
+
+    The projection is a guess and STRENGTH_UNCERTAINTY says how wrong it might
+    be. Points already on the board are evidence about that, so the multiplier
+    is drawn from the posterior rather than the prior — otherwise a manager can
+    post 130 a week all autumn and the model still rates their squad exactly
+    where it did in August, which is what made a hot start move nothing.
+
+    Everything is measured in RELATIVE terms: a roster's share of the league's
+    scoring against the share its projection implied. That keeps a global level
+    error — the model runs a little light — out of the per-team update.
+
+    Normal-normal conjugate update on log strength. The prior carries precision
+    1/sigma^2; each played week adds 1/tau^2 where tau is the weekly spread on
+    a log scale, so one week barely moves the estimate and ten weeks dominate
+    it. That is the right shape: a single gameweek is mostly noise.
+    """
+    n = len(rosters)
+    prior_mu = -STRENGTH_UNCERTAINTY**2 / 2
+    mu = np.full(n, prior_mu)
+    sd = np.full(n, STRENGTH_UNCERTAINTY)
+
+    played = [r for r in rosters if banked.get(r, {}).get("pf", 0) > 0]
+    if weeks_played and played:
+        games = {r: (banked[r]["w"] + banked[r]["l"] + banked[r]["t"]) for r in played}
+        rate = {r: banked[r]["pf"] / games[r] for r in played if games[r]}
+        if rate:
+            obs_mean = float(np.mean(list(rate.values())))
+            proj_mean = float(np.mean([believed[r] for r in rate]))
+            if obs_mean > 0 and proj_mean > 0:
+                prior_prec = 1.0 / STRENGTH_UNCERTAINTY**2
+                for r, obs in rate.items():
+                    if obs <= 0 or believed[r] <= 0:
+                        continue
+                    # how far this roster beat its projected share of the league
+                    resid = np.log(obs / obs_mean) - np.log(believed[r] / proj_mean)
+                    lim = ROBUST_CLIP * WEEKLY_LOG_SD
+                    resid = float(np.clip(resid, -lim, lim))
+                    k = games[r]
+                    like_prec = k / WEEKLY_LOG_SD**2
+                    post_prec = prior_prec + like_prec
+                    i = ridx[r]
+                    mu[i] = (prior_mu * prior_prec + resid * like_prec) / post_prec
+                    sd[i] = np.sqrt(1.0 / post_prec)
+    return np.exp(rng.normal(mu, sd, size=(n_sims, n)))
+
+
 def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
     rng = np.random.default_rng(seed)
     rosters = sorted({p["roster_id"] for p in proj})
@@ -559,10 +629,10 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
             pf[ridx[rid]] = r["pf"]
 
     # One draw per roster per season, held for the whole year: how good this
-    # squad actually turns out to be, versus what we projected.
-    season_strength = np.exp(
-        rng.normal(-STRENGTH_UNCERTAINTY**2 / 2, STRENGTH_UNCERTAINTY,
-                   size=(n_sims, len(rosters))))
+    # squad actually turns out to be, versus what we projected — updated by
+    # whatever the roster has actually scored so far.
+    season_strength = draw_season_strength(
+        rng, n_sims, rosters, ridx, believed, banked, weeks_played)
 
     n_weeks = max(weeks) if weeks else 1
     for wk in weeks:

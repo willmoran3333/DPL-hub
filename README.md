@@ -259,6 +259,23 @@ Useful flags: `--projections` prints the per-player inputs, `--refresh-fpl`
 re-pulls the FPL bootstrap into `data/fpl_bootstrap.json`, `--as-of WEEK`
 replays the season as it stood after a given week.
 
+Results feed back into the projection. Each simulated season draws a strength
+multiplier per roster, and once weeks are on the board that draw comes from the
+posterior rather than the prior: a squad outscoring its projection has its level
+revised up. The update is relative (a roster's share of league scoring against
+the share its projection implied), so a global level error stays out of it, and
+winsorised at `ROBUST_CLIP` weekly SDs so one abandoned lineup is not read as
+evidence about a squad. Weight on results grows the way evidence should —
+12% after one week, 58% by GW10, 84% by GW38 — which is why the table is
+volatile in August and settles by the spring.
+
+The three variance constants are tuned as a set against real seasons, not
+singly: league mean weekly score 81-88, within-manager weekly SD 22.2-22.7,
+between-manager season spread 6.7-10.3. Current settings land at 81.2 / 22.5 /
+9.4. Re-tune `POS_CV`, `CLUB_SHOCK` and `STRENGTH_UNCERTAINTY` together — they
+trade against each other, and `POS_CV` is baked into the projections at build
+time, so rebuild them between sweep points or the sweep silently does nothing.
+
 Key assumptions live at the top of the file — `AVAIL_PERSIST`,
 `REVERSION_BY_SEASON_END`, `PRICE_AVAIL_WEIGHT`, `CLUB_SHOCK`, `SHRINK_MINUTES`,
 `BUDGET_TILT`.
