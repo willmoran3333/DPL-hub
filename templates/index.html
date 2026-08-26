@@ -29,7 +29,9 @@
     <div class="featured-card__eyebrow">Featured Manager{% if ft.gw %} · GW{{ ft.gw }}{% else %} · Pre-season{% endif %}</div>
     <h2 class="featured-card__headline">{{ ft.headline }}</h2>
     <p class="featured-card__sub">{{ ft.subheadline }}</p>
-    <p class="featured-card__body">{{ ft.body }}</p>
+    {% for para in ft.paragraphs or [ft.body] %}
+    <p class="featured-card__body">{{ para }}</p>
+    {% endfor %}
     {% if ft.highlight_stats %}
     <div class="featured-card__stats">
       {% for s in ft.highlight_stats %}

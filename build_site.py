@@ -106,6 +106,10 @@ def load_featured() -> dict:
             data = yaml.safe_load(f) or {}
         if not data.get("show", True):
             return {}
+        # Split on blank lines so the copy can run to more than one paragraph,
+        # same as load_welcome does for the commissioner's note.
+        data["paragraphs"] = [para.strip() for para in (data.get("body") or "").split("\n\n")
+                              if para.strip()]
         return data
     return {}
 
