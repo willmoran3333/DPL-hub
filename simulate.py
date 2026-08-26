@@ -85,6 +85,75 @@ REVERSION_BY_SEASON_END = 0.35
 # league average, and symmetric, so a depleted budget is marked down the same.
 # The tilt ramps with the season: budget buys nothing until it is spent.
 BUDGET_TILT = 0.10
+
+# How wrong the projection itself can be, as a per-season multiplier on a
+# roster's strength. This is NOT weekly noise — it is drawn once per simulated
+# season and held all year, because it stands for "we do not actually know how
+# good this squad is."
+#
+# Measured, not guessed. Across the eleven managers who played both 2024/25 and
+# 2025/26, the correlation between their mean weekly score in one season and
+# the next is r = +0.16 — r-squared of 0.02. willmoran went 107.6 to 81.2,
+# skoeiboy 66.8 to 80.3, erozier 78.1 to 91.9 and won it. Of the 7.0-point
+# spread in 2025/26 team strength, 1.1 was predictable from the year before and
+# 6.9 was not. On a league mean near 81 that residual is about 8.5%.
+#
+# Calibrated so the model's realised between-manager season spread lands at
+# 8.5, the midpoint of the two seasons on record (6.7 and 10.3). With the rate
+# now coming from this season's projections the point estimates are tighter
+# than they were, so MORE season-level uncertainty is needed to reproduce the
+# spread real seasons actually show — not less.
+STRENGTH_UNCERTAINTY = 0.14
+
+# How much of a roster's projected gap to the league average we actually
+# believe. The projection is built from last season's per-90 rates and an FPL
+# price anchor; it knows the squad, but it cannot see waivers, trades, lineup
+# calls or a manager paying attention in March. Left at 1.0 the model asserts a
+# 17.7 points-per-week gap between best and worst as SETTLED fact while letting
+# a manager's season level wobble only 4.9 — roughly three and a half sigma of
+# certainty about the ordering, which is why the bottom two rounded to zero
+# after a single gameweek.
+#
+# Held at 0.85 rather than lower: the projection is backtested and decent
+# (R^2 = 0.48 on points per 90), so most of the gap it reports is real. What it
+# cannot see is in-season management, and STRENGTH_UNCERTAINTY carries that.
+# Between them the model now reproduces the spread of real seasons while
+# admitting it does not know which team is which in August — which is the
+# honest position after one gameweek, when GW1 rank correlates with final rank
+# at only +0.22, and the reigning champion started 8th of 12.
+PROJECTION_SHRINK = 0.85
+
+# This season's own projections, which is where the rate should mostly come
+# from. Backtested on 2025/26, where we hold all 38 weeks of Sleeper's
+# projections alongside what actually happened:
+#
+#   Sleeper projection -> points per 90 played   R^2 = 0.48
+#   last season's per-90 -> same                 R^2 = 0.21
+#   both together                                R^2 = 0.64 vs 0.635 for the
+#                                                projection alone
+#
+# Prior-season rate adds +0.004 once the projection is in, and a regression of
+# actual on both splits 93/7. So the projection carries the rate and last
+# season is a garnish — which is what the year-over-year correlation of team
+# strength (r = +0.16) should have told us anyway.
+PROJ_WEIGHT = 0.93
+# Sleeper projects every player at 95 minutes and runs hot on the rate: by
+# position the ratio of actual per-90 to projection is GK 1.03, D 0.92, F 0.86,
+# M 0.81. This is the pooled fit, rate90 = A + B * projection.
+#
+# Only the DISPERSION is portable, not the level. Scoring settings are
+# re-tuned between seasons — 2026/27 moved 24 keys — and that shifts the whole
+# projection scale: the same Sleeper projections score 8.45 on average under
+# 2025/26 rules and 4.77 under 2026/27's, 44% lower. A fixed intercept and
+# slope fitted on one season therefore collapses on the next, which is exactly
+# what happened: a starting XI came out at 41 points a week against a league
+# that actually scores about 88.
+#
+# So the level is anchored to POS_MEAN90, the league's own measured per-90
+# means, and the projection supplies only relative standing within a position.
+# The fit's slope of 0.746 against a mean ratio of 0.866 says projections are
+# over-dispersed by about 0.86; that correction IS scale-free and is kept.
+PROJ_DISPERSION = 0.86
 WAIVER_BUDGET_BASE = 96   # league setting; overridden from the DB when present
 
 
@@ -137,6 +206,21 @@ def build_projections(conn) -> list[dict]:
     scoring = json.loads(conn.execute(
         "SELECT scoring_settings FROM league WHERE league_id=?", (LEAGUE_ID,)
     ).fetchone()[0] or "{}")
+
+    # This season's projections, latest week Sleeper has published. Covers
+    # about two thirds of rostered players — the rest fall back to the price
+    # anchor and last season's rate below.
+    proj_week = conn.execute(
+        "SELECT MAX(week) FROM player_projections WHERE season=?", (SEASON,)).fetchone()[0]
+    sleeper_proj: dict[str, float] = {}
+    if proj_week:
+        for pid, key, v in conn.execute("""
+            SELECT player_id, stat_key, stat_value FROM player_projections
+            WHERE season=? AND week=? AND stat_key LIKE 'pos_%'
+              AND stat_value IS NOT NULL""", (SEASON, proj_week)):
+            m = scoring.get(key, 0) or 0
+            if m:
+                sleeper_proj[pid] = sleeper_proj.get(pid, 0.0) + v * m
 
     # Prior-season points and minutes, re-scored under THIS season's rules
     pts, mins = defaultdict(float), defaultdict(float)
@@ -216,6 +300,29 @@ def build_projections(conn) -> list[dict]:
     shares = [min(p["minutes_prior"] / (38 * 90), 1.0) for p in prelim if p["minutes_prior"]]
     avail_base = float(np.clip(0.15 + 0.9 * np.mean(shares), 0.35, 0.85)) if shares else 0.62
 
+    # Price -> projection, per position, fitted on rostered players who have a
+    # projection. Used to impute one for those who do not, so every player sits
+    # on one scale before being converted to a per-90 rate.
+    proj_from_price = {}
+    for pos in POS_CV:
+        xs, ys = [], []
+        for q in prelim:
+            if q["pos"] == pos and q["fpl"] and q["player_id"] in sleeper_proj:
+                xs.append(np.log(q["fpl"]["cost"])); ys.append(sleeper_proj[q["player_id"]])
+        if len(xs) >= 8:
+            bb, aa = np.polyfit(xs, ys, 1)
+            proj_from_price[pos] = (aa, bb, float(np.mean(ys)))
+        else:
+            proj_from_price[pos] = (None, None, float(np.mean(ys)) if ys else 6.0)
+
+    # Positional mean of the projections actually in play, which is what the
+    # level gets anchored against.
+    proj_mean = {}
+    for pos in POS_CV:
+        vals = [sleeper_proj[q["player_id"]] for q in prelim
+                if q["pos"] == pos and q["player_id"] in sleeper_proj]
+        proj_mean[pos] = float(np.mean(vals)) if vals else None
+
     out = []
     for p in prelim:
         pos = p["pos"]; a, b = price_model[pos]
@@ -231,6 +338,28 @@ def build_projections(conn) -> list[dict]:
             w = p["minutes_prior"] / (p["minutes_prior"] + SHRINK_MINUTES)
             rate = w * p["own_rate"] + (1 - w) * anchor
         rate = max(rate, 0.5)
+
+        # Where this season's projection exists it takes the rate over almost
+        # entirely; what survives of `rate` is the 7% of last-season-and-price
+        # the backtest says is still worth carrying.
+        sp = sleeper_proj.get(p["player_id"])
+        imputed = False
+        if sp is None:
+            aa, bb, mean_p = proj_from_price[pos]
+            sp = (aa + bb * np.log(cost)) if aa is not None else mean_p
+            # Keep an imputed projection inside the range Sleeper actually
+            # publishes for the position; extrapolating off a price alone is
+            # how a fringe forward ends up projected above Haaland.
+            sp = float(np.clip(sp, 0.35 * mean_p, 1.6 * mean_p))
+            imputed = True
+        pm = proj_mean.get(pos)
+        if pm:
+            # Relative standing within the position, dispersion-corrected, then
+            # put back on the league's own per-90 scale.
+            rel = 1.0 + PROJ_DISPERSION * (sp / pm - 1.0)
+            rate = (PROJ_WEIGHT * POS_MEAN90[pos] * rel) + (1 - PROJ_WEIGHT) * rate
+        rate = max(rate, 0.5)
+        p["imputed"] = imputed
 
         # Availability: last season's minutes share, regressed toward the
         # baseline, then nudged by current FPL status.
@@ -261,8 +390,15 @@ def build_projections(conn) -> list[dict]:
                        ("roster_id","manager","player_id","name","pos","club")},
                     "cost": cost, "rate90": rate, "own_weight": round(w, 2),
                     "p_play": p_play, "exp_week": rate * p_play,
+                    "has_proj": p["player_id"] in sleeper_proj,
+                    "imputed": p.get("imputed", False),
                     "cv": POS_CV[pos]})
     return out
+
+
+# Set to a list to have simulate() record (week, roster_id, scores) so the
+# model's own skill/luck split can be measured against real seasons.
+DIAG_SCORES = None
 
 
 def load_budgets(conn) -> dict:
@@ -406,6 +542,11 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
 
     strength = {rid: xi_strength(rid) for rid in rosters}
     league_mean = sum(strength.values()) / len(strength)
+    # What we actually believe about each roster, as opposed to what the point
+    # estimate says. mu is built from the unshrunk player expectations, so the
+    # reversion factor below maps raw -> believed.
+    believed = {rid: league_mean + (v - league_mean) * PROJECTION_SHRINK
+                for rid, v in strength.items()}
 
     ridx = {rid: i for i, rid in enumerate(rosters)}
     wins = np.zeros((len(rosters), n_sims))
@@ -416,6 +557,12 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
         if rid in ridx:
             wins[ridx[rid]] = r["w"] + 0.5 * r["t"]
             pf[ridx[rid]] = r["pf"]
+
+    # One draw per roster per season, held for the whole year: how good this
+    # squad actually turns out to be, versus what we projected.
+    season_strength = np.exp(
+        rng.normal(-STRENGTH_UNCERTAINTY**2 / 2, STRENGTH_UNCERTAINTY,
+                   size=(n_sims, len(rosters))))
 
     n_weeks = max(weeks) if weeks else 1
     for wk in weeks:
@@ -431,18 +578,21 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
         revert = {}
         for rid in need:
             s0 = strength[rid]
-            target = league_mean + (s0 - league_mean) * (1 - closed)
+            target = league_mean + (believed[rid] - league_mean) * (1 - closed)
             # Budget tilt, ramped the same way: an unspent purse is only worth
             # something once there has been a season in which to spend it.
             target *= 1.0 + BUDGET_TILT * ramp * budget_edge.get(rid, 0.0)
             revert[rid] = (target / s0) if s0 > 0 else 1.0
 
+            season_mult = season_strength[:, [ridx[r] for r in need]]
+
         shock = rng.normal(0.0, CLUB_SHOCK, size=(n_sims, len(clubs)))
         shock = np.exp(shock - CLUB_SHOCK**2 / 2)     # mean-preserving
 
         scores = {}
-        for rid in need:
+        for slot_i, rid in enumerate(need):
             pack = packs[rid]
+            mine = season_mult[:, slot_i][:, None]   # this season's true level
             realised, expected, avail = {}, {}, {}
             for pos, g in pack.items():
                 if g["n"] == 0:
@@ -450,7 +600,7 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
                     expected[pos] = np.zeros((n_sims, 0))
                     continue
                 a = rng.random((n_sims, g["n"])) < g["pplay"]
-                mu = g["exp"][None, :] * shock[:, g["club"]] * revert[rid]
+                mu = g["exp"][None, :] * shock[:, g["club"]] * revert[rid] * mine
                 k = 1.0 / g["cv"][None, :] ** 2
                 draw = rng.gamma(shape=np.broadcast_to(k, mu.shape),
                                  scale=mu / k)
@@ -499,6 +649,10 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
                 best_e = np.where(better, tot_e, best_e)
                 best_r = np.where(better, tot_r, best_r)
             scores[rid] = np.where(np.isfinite(best_e), best_r, base_r)
+
+        if DIAG_SCORES is not None:
+            for rid, sc in scores.items():
+                DIAG_SCORES.append((wk, rid, sc))
 
         for a, b in fixtures:
             sa, sb = scores[a], scores[b]
@@ -633,6 +787,10 @@ def main():
                 "price_avail_weight": PRICE_AVAIL_WEIGHT,
                 "reversion_by_season_end": REVERSION_BY_SEASON_END,
                 "budget_tilt": BUDGET_TILT,
+                "strength_uncertainty": STRENGTH_UNCERTAINTY,
+                "projection_shrink": PROJECTION_SHRINK,
+                "proj_weight": PROJ_WEIGHT,
+                "proj_dispersion": PROJ_DISPERSION,
                 "club_shock": CLUB_SHOCK,
                 "shrink_minutes": SHRINK_MINUTES,
             },
