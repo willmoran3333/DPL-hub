@@ -77,6 +77,9 @@ SUBSCRIBE_ENDPOINT = "https://formspree.io/f/your-form-id"
 def open_db() -> sqlite3.Connection:
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
+    # The league-scoring view is TEMP, so it has to be built before the
+    # connection goes read-only.
+    install_league_scoring(conn)
     conn.execute("PRAGMA query_only = ON;")
     return conn
 
@@ -446,15 +449,14 @@ def get_gw_detail(conn, week: int, team_map: dict, standings_map: dict) -> dict:
 
     top_scorer = q1(conn, """
         SELECT ps.player_id, p.full_name, p.team_abbr, p.position_primary,
-               SUM(ps.stat_value) AS pts
-        FROM player_stats ps
+               ps.pts AS pts
+        FROM v_league_player_week ps
         JOIN players p ON p.player_id = ps.player_id
-        WHERE ps.season = ? AND ps.week = ? AND ps.stat_key = 'pts_std'
+        WHERE ps.season = ? AND ps.week = ?
           AND ps.player_id IN (
               SELECT json_each.value FROM v_matchup_legs ml, json_each(ml.starters)
               WHERE ml.league_id = ? AND ml.season = ? AND ml.week = ?
           )
-        GROUP BY ps.player_id
         ORDER BY pts DESC
         LIMIT 1
     """, (SEASON, week, LEAGUE_ID, SEASON, week))
@@ -650,7 +652,6 @@ def get_all_active_players(conn, current_week: int | None = None,
         WITH agg AS (
             SELECT
                 player_id,
-                SUM(CASE WHEN stat_key = 'pts_std' THEN stat_value ELSE 0 END) AS pts,
                 SUM(CASE WHEN stat_key = 'min'     THEN stat_value ELSE 0 END) AS mins,
                 SUM(CASE WHEN stat_key = 'g'       THEN stat_value ELSE 0 END) AS goals,
                 SUM(CASE WHEN stat_key = 'at'      THEN stat_value ELSE 0 END) AS assists,
@@ -664,6 +665,12 @@ def get_all_active_players(conn, current_week: int | None = None,
             WHERE season = ? AND stat_value IS NOT NULL
             GROUP BY player_id
         ),
+        -- Season points under the league's own scoring, NOT pts_std.
+        lg AS (
+            SELECT player_id, SUM(pts) AS pts
+            FROM v_league_player_week WHERE season = ?
+            GROUP BY player_id
+        ),
         roster_lookup AS (
             SELECT j.value AS player_id, r.roster_id, u.display_name AS owner
             FROM rosters r, json_each(r.players) j
@@ -672,7 +679,7 @@ def get_all_active_players(conn, current_week: int | None = None,
         )
         SELECT p.player_id, p.full_name, p.team_abbr, p.position_primary,
                p.injury_status,
-               COALESCE(a.pts,         0) AS pts,
+               COALESCE(lg.pts,        0) AS pts,
                COALESCE(a.mins,        0) AS mins,
                COALESCE(a.goals,       0) AS goals,
                COALESCE(a.assists,     0) AS assists,
@@ -684,10 +691,11 @@ def get_all_active_players(conn, current_week: int | None = None,
                rl.roster_id AS roster_id
         FROM players p
         LEFT JOIN agg           a  ON a.player_id  = p.player_id
+        LEFT JOIN lg               ON lg.player_id = p.player_id
         LEFT JOIN roster_lookup rl ON rl.player_id = p.player_id
-        WHERE COALESCE(a.mins, 0) > 0 OR COALESCE(a.pts, 0) != 0
-        ORDER BY a.pts DESC
-    """, (season, LEAGUE_ID))
+        WHERE COALESCE(a.mins, 0) > 0 OR COALESCE(lg.pts, 0) != 0
+        ORDER BY lg.pts DESC
+    """, (season, season, LEAGUE_ID))
     players = [dict(r) for r in rows]
 
     # Re-score this table (and only this table) with the live 2026/27 weights —
@@ -713,20 +721,17 @@ def get_all_active_players(conn, current_week: int | None = None,
             pl["pts"] = round(prop_tot.get(pl["player_id"], 0.0), 1)
         players.sort(key=lambda p: -(p["pts"] or 0))
 
-    # Pull last-5-weeks pts_std for each player (for the sparkline)
-    # Determine the window of weeks we care about
+    # Last five weeks under league scoring, for the form sparkline
     last_weeks = q(conn, """
-        SELECT DISTINCT week FROM player_stats
-        WHERE season=? AND stat_key='pts_std'
-        ORDER BY week DESC LIMIT 5
+        SELECT DISTINCT week FROM v_league_player_week
+        WHERE season=? ORDER BY week DESC LIMIT 5
     """, (season,))
     window_weeks = sorted([r["week"] for r in last_weeks])
 
-    # Pull all pts_std rows in the window
     pts_rows = q(conn, f"""
-        SELECT player_id, week, stat_value AS pts
-        FROM player_stats
-        WHERE season = ? AND stat_key = 'pts_std'
+        SELECT player_id, week, pts
+        FROM v_league_player_week
+        WHERE season = ?
           AND week IN ({','.join('?' * len(window_weeks)) or '0'})
     """, (season, *window_weeks)) if window_weeks else []
     recent_map: dict[str, dict[int, float]] = {}
@@ -940,8 +945,8 @@ def get_club_detail(conn, roster_id: int, team_map: dict, standings_map: dict) -
         FROM rp
         JOIN players p ON p.player_id = rp.player_id
         LEFT JOIN (
-            SELECT player_id, SUM(stat_value) AS total_pts
-            FROM player_stats WHERE season = ? AND stat_key = 'pts_std'
+            SELECT player_id, SUM(pts) AS total_pts
+            FROM v_league_player_week WHERE season = ?
             GROUP BY player_id
         ) ps ON ps.player_id = p.player_id
         ORDER BY season_pts DESC
@@ -1117,18 +1122,17 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
     def best_at_pos(pos):
         row = q1(conn, """
             SELECT ps.player_id, p.full_name, p.team_abbr, p.position_primary,
-                   ps.week, SUM(ps.stat_value) AS pts,
+                   ps.week, ps.pts AS pts,
                    ml.roster_id
-            FROM player_stats ps
+            FROM v_league_player_week ps
             JOIN players p ON p.player_id = ps.player_id
             JOIN v_matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
-            WHERE ps.season=? AND ps.stat_key='pts_std'
+            WHERE ps.season=?
               AND p.position_primary = ?
               AND EXISTS (
                   SELECT 1 FROM json_each(ml.starters)
                   WHERE json_each.value = ps.player_id
               )
-            GROUP BY ps.player_id, ps.week, ml.roster_id
             ORDER BY pts DESC LIMIT 1
         """, (LEAGUE_ID, SEASON, pos))
         if row:
@@ -1143,16 +1147,15 @@ def compute_stats(conn, team_map: dict, standings: list[dict]) -> dict:
     # Top 10 single-week player performances overall
     top_perfs_rows = q(conn, """
         SELECT ps.player_id, p.full_name, p.team_abbr, p.position_primary,
-               ps.week, SUM(ps.stat_value) AS pts, ml.roster_id
-        FROM player_stats ps
+               ps.week, ps.pts AS pts, ml.roster_id
+        FROM v_league_player_week ps
         JOIN players p ON p.player_id = ps.player_id
         JOIN v_matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
-        WHERE ps.season=? AND ps.stat_key='pts_std'
+        WHERE ps.season=?
           AND EXISTS (
               SELECT 1 FROM json_each(ml.starters)
               WHERE json_each.value = ps.player_id
           )
-        GROUP BY ps.player_id, ps.week, ml.roster_id
         ORDER BY pts DESC
         LIMIT 10
     """, (LEAGUE_ID, SEASON))
@@ -1263,11 +1266,11 @@ def compute_weekly_awards(conn, week: int, team_map: dict, standings: list[dict]
     def best_at(pos):
         row = q1(conn, """
             SELECT ps.player_id, p.full_name, p.team_abbr, p.position_primary,
-                   ps.stat_value AS pts, ml.roster_id
-            FROM player_stats ps
+                   ps.pts AS pts, ml.roster_id
+            FROM v_league_player_week ps
             JOIN players p ON p.player_id = ps.player_id
             JOIN v_matchup_legs ml ON ml.league_id=? AND ml.season=ps.season AND ml.week=ps.week
-            WHERE ps.season=? AND ps.week=? AND ps.stat_key='pts_std'
+            WHERE ps.season=? AND ps.week=?
               AND p.position_primary = ?
               AND EXISTS (
                   SELECT 1 FROM json_each(ml.starters)
@@ -1316,6 +1319,49 @@ def get_epl_fixtures(conn, week: int) -> list[dict]:
 # (÷38) because raw season totals run to ±700 and mean nothing at a glance.
 ALPHA_CAP = 1.0
 ALPHA_GWS = 38
+
+
+def install_league_scoring(conn) -> None:
+    """Register a per-week league-points view, scored season by season.
+
+    `pts_std` in player_stats is Sleeper's STANDARD scoring, not this league's.
+    The two differ for most players — 236 of the 282 with GW1 2026/27 stats —
+    and summing pts_std over a lineup does not reconcile to the team total in
+    matchup_legs, while summing under the league's own settings does exactly.
+    Anything presenting a player's DPL points has to use these weights.
+
+    Weights change season to season (2026/27 moved 24 keys, 2025/26 five), so
+    the multiplier table is keyed by season and each season's rows are scored
+    under the rules that were actually in force.
+
+    Creates TEMP objects on this connection only — schema.sql is untouched.
+    """
+    conn.executescript("""
+        DROP VIEW  IF EXISTS temp.v_league_player_week;
+        DROP TABLE IF EXISTS temp.league_scoring_mult;
+        CREATE TEMP TABLE league_scoring_mult (
+            season TEXT NOT NULL, stat_key TEXT NOT NULL, mult REAL NOT NULL,
+            PRIMARY KEY (season, stat_key)
+        );
+    """)
+    rows = []
+    for r in q(conn, "SELECT season, league_id FROM league"):
+        for key, mult in (get_league_scoring(conn, r["league_id"]) or {}).items():
+            if key.startswith("pos_") and mult:
+                rows.append((r["season"], key, float(mult)))
+    conn.executemany(
+        "INSERT OR REPLACE INTO temp.league_scoring_mult VALUES (?,?,?)", rows)
+    conn.executescript("""
+        CREATE TEMP VIEW v_league_player_week AS
+        SELECT ps.player_id, ps.season, ps.week,
+               SUM(ps.stat_value * m.mult) AS pts
+        FROM player_stats ps
+        JOIN temp.league_scoring_mult m
+          ON m.season = ps.season AND m.stat_key = ps.stat_key
+        WHERE ps.stat_value IS NOT NULL
+        GROUP BY ps.player_id, ps.season, ps.week;
+    """)
+    conn.commit()
 
 
 def _season_league_points(conn, season: str, league_id: str) -> dict:
@@ -1918,7 +1964,8 @@ def compute_weekly_placements(conn, team_map: dict, total_weeks: int = 38) -> di
 
 # Preferred ordering for stat keys in the pivot table (left-to-right).
 # Any keys not in this list get sorted alphabetically and appended afterward.
-# `pts_std` is always rendered last as the "Total" column.
+# The "Total" column is rendered last and comes from v_league_player_week
+# (league scoring), not from the pts_std stat, which is excluded from the pivot.
 STAT_KEY_ORDER = [
     "gp",     # games played (flag)
     "gs",     # games started
@@ -1985,6 +2032,14 @@ def get_player_detail(conn, player_id: str) -> dict | None:
     # Build: { week: { stat_key: value, ... } }
     # Skip pos_* keys — Sleeper exposes a position-prefixed copy of every stat
     # (e.g. pos_m_g == g) that would otherwise double-count in the pivot.
+    # The Total column is the player's DPL points — league scoring, not the
+    # pts_std column, which is Sleeper's standard scoring and differs for most
+    # players.
+    league_pts = {r["week"]: r["pts"] for r in q(conn, """
+        SELECT week, pts FROM v_league_player_week
+        WHERE player_id = ? AND season = ?
+    """, (player_id, SEASON))}
+
     per_week: dict[int, dict[str, float]] = {}
     seen_keys: set[str] = set()
     for r in rows:
@@ -2018,7 +2073,7 @@ def get_player_detail(conn, player_id: str) -> dict | None:
             cells.append(v)
             if v is not None:
                 col_totals[k] += v
-        pts = per_week[w].get("pts_std")
+        pts = league_pts.get(w)
         pts_total += (pts or 0)
         pivot_rows.append({
             "week":  w,
