@@ -757,20 +757,40 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
     return res, weeks_played, len(weeks)
 
 
-def build_history(conn, proj, n_sims: int, seed: int):
-    """Rebuild the whole title-probability series, one run per completed week.
+def build_history(conn, proj, n_sims: int, seed: int, rebuild: bool = False):
+    """Extend the title-probability series with any week it does not yet hold.
 
     Week 0 is the pre-season projection; week N conditions on results through
-    N. Every point is generated from TODAY's rosters — Sleeper does not keep
-    historical roster snapshots — so this is not a record of what the model
-    said at the time. That is deliberate: holding the squads fixed means the
-    week-to-week move is the effect of RESULTS alone, which is what a change
-    column should show. Regenerate it after each gameweek; it is cheap, since
-    conditioning on more weeks leaves fewer to simulate.
+    N. Snapshots already in the file are kept exactly as they were written —
+    they were published, and the change column has to measure this week's move
+    against the number managers actually saw last week, not against a figure
+    revised afterwards.
+
+    That does mean a point carries the rosters and price anchor of the week it
+    was taken, so a move is not purely the effect of results. Recomputing the
+    whole series instead (--rebuild-history) buys that purity at the cost of
+    silently editing published history; the trade is not worth it in-season.
+    Use it only when the series is corrupt or the model itself has changed.
     """
     _, _, weeks, weeks_played = load_schedule(conn)
+    out = HERE / "power_rankings_history.json"
+
+    existing = {}
+    if out.exists() and not rebuild:
+        try:
+            for snap in json.loads(out.read_text()).get("snapshots", []):
+                existing[snap["week"]] = snap
+        except (json.JSONDecodeError, OSError):
+            existing = {}
+
     snaps = []
     for wk in range(0, weeks_played + 1):
+        if wk in existing:
+            snaps.append(existing[wk])
+            top = max(existing[wk]["title_pct"].items(), key=lambda kv: kv[1])
+            print(f"  week {wk:>2}: kept as published, leader roster {top[0]} "
+                  f"{100*top[1]:.1f}%")
+            continue
         res, _, _ = simulate(conn, proj, n_sims, seed, as_of=wk)
         snaps.append({
             "week": wk,
@@ -780,13 +800,15 @@ def build_history(conn, proj, n_sims: int, seed: int):
         top = max(res, key=lambda r: r["title_pct"])
         print(f"  week {wk:>2}: {len(res)} managers, leader {top['manager']} "
               f"{100*top['title_pct']:.1f}%")
-    out = HERE / "power_rankings_history.json"
+
+    fresh = sum(1 for snap in snaps if snap["week"] not in existing)
     out.write_text(json.dumps({
         "season": SEASON, "sims": n_sims,
         "weeks_total": len(weeks), "weeks_played": weeks_played,
         "snapshots": snaps,
     }, indent=2) + "\n")
-    print(f"wrote {out.name}: {len(snaps)} snapshots (week 0 = pre-season)")
+    print(f"wrote {out.name}: {len(snaps)} snapshots "
+          f"({fresh} new, {len(snaps)-fresh} kept; week 0 = pre-season)")
 
 
 def main():
@@ -800,8 +822,11 @@ def main():
     ap.add_argument("--as-of", type=int, default=None, metavar="WEEK",
                     help="replay the season as it stood after WEEK (0 = pre-season)")
     ap.add_argument("--history", action="store_true",
-                    help="rebuild power_rankings_history.json: one run per completed "
-                         "week, pre-season through the latest result")
+                    help="extend power_rankings_history.json with any week it does "
+                         "not yet hold; snapshots already written are kept as published")
+    ap.add_argument("--rebuild-history", action="store_true",
+                    help="with --history, recompute every week from scratch, "
+                         "overwriting snapshots that were already published")
     a = ap.parse_args()
 
     conn = sqlite3.connect(DB_PATH)
@@ -819,7 +844,7 @@ def main():
         return
 
     if a.history:
-        build_history(conn, proj, a.sims, a.seed)
+        build_history(conn, proj, a.sims, a.seed, a.rebuild_history)
         return
 
     res, weeks_played, n_weeks = simulate(conn, proj, a.sims, a.seed, a.as_of)
