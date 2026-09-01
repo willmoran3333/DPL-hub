@@ -9,31 +9,35 @@
 # the pts_std column — the two differ for most players and pts_std does not
 # reconcile to the team totals in matchup_legs.
 
-gw: 2
+gw: 3
 
 matches:
-  - home_roster_id: 7
-    away_roster_id: 3
-    headline: "Both of them lost to the bench"
+  - home_roster_id: 4
+    away_roster_id: 5
+    headline: "Two unbeatens, and only one way out"
     body: >
-      rmeernst and Flabiano9 left more in reserve than anyone else in the
-      league — 34.80 and 34.75, a twentieth of a point apart, and better than
-      twenty times what skoeiboy wasted. For rmeernst it cost the game
-      outright: 91.95 is the fifth-best total of the round and it lost
-      95.05–91.95 to benditlikebergvall, with Ben White's 19.45 the ninth-best
-      individual return of the week and still not enough. Flabiano9's trouble
-      was the eleven itself. His 64.35 was the second-lowest score in the
-      league, nobody beat Tarik Muharemovic's 11.20, and Youri Tielemans
-      returned 0.00 before being shipped to skoeiboy for Sandro Tonali.
+      benditlikebergvall and brendog2814 are the only teams still to lose, and
+      they are separated by three points of scoring: 195.35 against 198.35.
+      The difference is who they have played. brendog2814 has faced the two
+      lowest totals of the season and conceded 93.00, the least in the league
+      by 32 points; benditlikebergvall has already given up 157.20 and won
+      both anyway. Erling Haaland and Kevin Schade are both home in GW3, City
+      hosting Coventry and Brentford hosting Sunderland, while James Tarkowski
+      gets Everton at home to United after his 21.00 in GW2. brendog2814's
+      spread is the thinner one — Dominic Calvert-Lewin and Morgan Rogers both
+      travel, to Brighton and to Arsenal. One of these records ends here.
 
-  - home_roster_id: 6
-    away_roster_id: 10
-    headline: "Best loser meets the champion"
+  - home_roster_id: 2
+    away_roster_id: 3
+    headline: "The trade meets itself"
     body: >
-      bjennings28 scored 99.90 in GW1, the second-highest total in the league,
-      and lost by 37.75 because he ran into skoeiboy's week. Jack Hinshelwood
-      went for 27.35 and James Trafford added 15.00 from goal. erozier begins
-      the defence of his title on far less: 79.40 past Flabiano9's 64.35, with
-      Josko Gvardiol and Bukayo Saka worth 35.25 of it between them. The table
-      says one of these two is 1-0 and the other 0-1. The scoreboard says the
-      ninth-best total of the round is the one that won.
+      Three weeks ago Flabiano9 sent Youri Tielemans and 50 FAAB to skoeiboy
+      for Sandro Tonali. In GW2 Tielemans returned 16.35 and Tonali 5.00, and
+      now the two squads meet with both men on the pitch. Everything else about
+      this pairing has run backwards as well: skoeiboy opened with 137.65, the
+      biggest week of the season, then fell to 63.50; Flabiano9 opened with
+      64.35, the second-worst, then put up 98.45. Both are 1–1. Rayan Cherki
+      and Antoine Semenyo give Flabiano9 two City starters at home to Coventry,
+      the softest fixture on the board, while skoeiboy leans on Cole Palmer at
+      Arsenal and Anthony Elanga at home to Bournemouth. The 50 FAAB is gone
+      either way. Only the eleven is still arguable.

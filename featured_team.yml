@@ -5,28 +5,37 @@
 # Set show: false to hide the featured-manager block on the home page.
 show: true
 
-roster_id: 2
-gw: 1
-headline: "The Week of Sam"
-subheadline: "skoeiboy opens with the second-biggest week of his DPL career — built on two players he picked up after the draft"
+roster_id: 3
+gw: 2
+headline: "The Bench Beats Him Again"
+subheadline: "Flabiano9 has left 109.95 points in reserve across two weeks — nearly a full extra team — and has still climbed back to 1–1"
 body: |
-  skoeiboy put 137.65 on the board in GW1 and won by 37.75 over bjennings28,
-  who scored 99.90 and still lost. Four of the twelve highest-scoring
-  starters in the league were his — Cole Palmer 30.05, Maxim De Cuyper 24.00,
-  Emersonn 22.80, Martin Ødegaard 19.00 — with Keane Lewis-Potter 17.60 just
-  outside in 13th.
+  In GW1 his bench outscored his starting eleven. That is not a figure of
+  speech: 64.35 from the players he picked, 67.10 from the ones he did not,
+  the second-lowest score in the league sitting underneath the largest pile
+  of unused points anyone has managed this season. He then sent Youri
+  Tielemans and 50 FAAB to skoeiboy for Sandro Tonali, and watched Tielemans
+  return 16.35 in GW2 while Tonali gave him 5.00.
 
-  The biggest surprise of all? De Cuyper and Emersonn. Together they returned
-  46.80, all from the waiver wire. The rest of it was clean rather than lucky:
-  1.55 points left on the bench, the lowest figure in the league, with every
-  start that mattered getting the nod.
+  Then he won anyway. 98.45 was the fifth-best total of GW2 and it beat
+  rmeernst 98.45–84.50, carried by Rayan Cherki's 29.20 — the second-highest
+  individual return of the round behind only Bruno Fernandes' 49.40. The two
+  defenders he bought at seven FAAB apiece both started and both paid:
+  Kristoffer Ajer 10.05, Vitaly Janelt 7.50. Tarik Muharemovic, the man who
+  led his GW1 eleven with 11.20, went for 12.75 without being noticed.
+
+  And the bench still cost him 42.85, second-worst in the round, with Lewis
+  Hall's 18.75 the single largest omission of the week. Twelve teams, two
+  gameweeks, 109.95 points left in reserve — no one else has wasted half of
+  that. He is 1–1 with 162.80 for. The eleven he actually owns is better than
+  the eleven he keeps naming.
 
 highlight_stats:
-  - label: "GW1 Score"
-    value: "137.65"
-  - label: "Margin"
-    value: "+37.75"
-  - label: "Left on Bench"
-    value: "1.55"
-  - label: "Waiver Hit"
-    value: "De Cuyper ($7)"
+  - label: "GW2 Score"
+    value: "98.45"
+  - label: "Bench Left, GW2"
+    value: "42.85"
+  - label: "Bench Left, 2 GWs"
+    value: "109.95"
+  - label: "Cherki"
+    value: "29.20"
