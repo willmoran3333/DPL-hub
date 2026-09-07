@@ -28,9 +28,15 @@
   .spark-line polyline { fill: none; stroke-width: 1.5; stroke-linecap: round;
                          stroke-linejoin: round; }
   .spark-line .dot { stroke: none; }
-  .spark--up   polyline, .spark--up   .dot { stroke: #1a7f4b; fill: #1a7f4b; }
-  .spark--down polyline, .spark--down .dot { stroke: #b3261e; fill: #b3261e; }
-  .spark--flat polyline, .spark--flat .dot { stroke: var(--c-ink-light); fill: var(--c-ink-light); }
+  /* Colour the stroke and the dot separately. Grouping them let `fill` land on
+     the polyline too, which beat `fill: none` above on source order and closed
+     the line into a solid blob. */
+  .spark--up   polyline { stroke: #1a7f4b; }
+  .spark--up   .dot     { fill:   #1a7f4b; }
+  .spark--down polyline { stroke: #b3261e; }
+  .spark--down .dot     { fill:   #b3261e; }
+  .spark--flat polyline { stroke: var(--c-ink-light); }
+  .spark--flat .dot     { fill:   var(--c-ink-light); }
 </style>
 
 </head>
