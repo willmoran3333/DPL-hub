@@ -267,7 +267,7 @@
       {% if m.worst_pick %}
       <div class="mgr-note">
         Worst ever: <strong>{{ m.worst_pick.full_name }}</strong> — pick {{ m.worst_pick.pick_no }},
-        {{ m.worst_pick.season_label }}, {{ "%.0f"|format(m.worst_pick.resid) }} under.
+        {{ m.worst_pick.season_label }}, {{ "%.0f"|format(m.worst_pick.resid|abs) }} under.
       </div>
       {% endif %}
       {% for s in m.seasons %}

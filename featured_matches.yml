@@ -15,7 +15,7 @@ gw: 4
 matches:
   - home_roster_id: 5
     away_roster_id: 8
-    headline: "One record is earned, the other is a gift"
+    headline: "The unbeaten and the fortunate"
     body: >
       Both of these teams are near the top and only one of them belongs there.
       Score every side against the whole league each week rather than against
@@ -29,7 +29,7 @@ matches:
 
   - home_roster_id: 7
     away_roster_id: 10
-    headline: "Nought from three, and not remotely that bad"
+    headline: "All the points, none of the wins"
     body: >
       rmeernst has scored more than half the league and won nothing at all.
       Against the field each week he is a coin flip; in the table he is level
