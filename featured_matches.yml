@@ -9,35 +9,36 @@
 # the pts_std column — the two differ for most players and pts_std does not
 # reconcile to the team totals in matchup_legs.
 
-gw: 3
+gw: 4
 
 matches:
-  - home_roster_id: 4
-    away_roster_id: 5
-    headline: "Two unbeatens, and only one way out"
+  - home_roster_id: 5
+    away_roster_id: 8
+    headline: "One record is earned, the other is a gift"
     body: >
-      benditlikebergvall and brendog2814 are the only teams still to lose, and
-      they are separated by three points of scoring: 195.35 against 198.35.
-      The difference is who they have played. brendog2814 has faced the two
-      lowest totals of the season and conceded 93.00, the least in the league
-      by 32 points; benditlikebergvall has already given up 157.20 and won
-      both anyway. Erling Haaland and Kevin Schade are both home in GW3, City
-      hosting Coventry and Brentford hosting Sunderland, while James Tarkowski
-      gets Everton at home to United after his 21.00 in GW2. brendog2814's
-      spread is the thinner one — Dominic Calvert-Lewin and Morgan Rogers both
-      travel, to Brighton and to Arsenal. One of these records ends here.
+      brendog2814 is 3-0 and cstoney20 is 2-1, and on the field they are not
+      close. Score every team against all eleven others each week and
+      brendog2814 is 25-8; cstoney20 is 10-23, beaten by two thirds of the
+      league on the weeks he has won. He has scored 210.40, eleventh of twelve,
+      and sits a game off the top. GW3 was the pattern in miniature: 78.95 was
+      the eighth-best total of the round and it beat rmeernst by 1.95.
+      Gianluigi Donnarumma's 17.25 from goal was the best thing in his eleven.
+      GW4 gives him Donnarumma and Marc Guéhi at Old Trafford and Pedro Porro
+      at home to Everton; brendog2814 has three Bournemouth players hosting
+      Brentford and both of his Hull defenders away at Chelsea. Somebody's
+      luck runs out here.
 
-  - home_roster_id: 2
-    away_roster_id: 3
-    headline: "The trade meets itself"
+  - home_roster_id: 7
+    away_roster_id: 10
+    headline: "Nought from three, and not remotely that bad"
     body: >
-      Three weeks ago Flabiano9 sent Youri Tielemans and 50 FAAB to skoeiboy
-      for Sandro Tonali. In GW2 Tielemans returned 16.35 and Tonali 5.00, and
-      now the two squads meet with both men on the pitch. Everything else about
-      this pairing has run backwards as well: skoeiboy opened with 137.65, the
-      biggest week of the season, then fell to 63.50; Flabiano9 opened with
-      64.35, the second-worst, then put up 98.45. Both are 1–1. Rayan Cherki
-      and Antoine Semenyo give Flabiano9 two City starters at home to Coventry,
-      the softest fixture on the board, while skoeiboy leans on Cole Palmer at
-      Arsenal and Anthony Elanga at home to Bournemouth. The 50 FAAB is gone
-      either way. Only the eleven is still arguable.
+      rmeernst has the seventh-best scoring total in the league and no wins at
+      all. On an all-play basis he is 16-17, a coin-flip team; in the standings
+      he is the only one on nought points alongside Noahvillasana17, who is
+      7-26 and belongs there. GW3 was the cruellest of the three. He had the
+      single best starter of the round in Tyrick Mitchell's 24.20 and the
+      fifth-best in Marcus Tavernier's 21.10, and he lost 78.95-77.00 with
+      Tyrique George's 21.55 sitting on his bench — 30.80 unused in a game
+      decided by under two points. erozier arrives 1-2 and defending a title
+      on 10-23, which is its own kind of warning. First to three wins moves
+      into the top half; the loser is properly adrift.
