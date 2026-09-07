@@ -5,6 +5,7 @@
 # from that week's real pairings (the build script verifies them against
 # matchup_legs and flags any that don't line up). Rewrite the copy weekly.
 #
+# Keep the copy light on names and figures — a player or two a side, no more.
 # Player figures here are scored under the league's own scoring_settings, not
 # the pts_std column — the two differ for most players and pts_std does not
 # reconcile to the team totals in matchup_legs.
@@ -16,29 +17,26 @@ matches:
     away_roster_id: 8
     headline: "One record is earned, the other is a gift"
     body: >
-      brendog2814 is 3-0 and cstoney20 is 2-1, and on the field they are not
-      close. Score every team against all eleven others each week and
-      brendog2814 is 25-8; cstoney20 is 10-23, beaten by two thirds of the
-      league on the weeks he has won. He has scored 210.40, eleventh of twelve,
-      and sits a game off the top. GW3 was the pattern in miniature: 78.95 was
-      the eighth-best total of the round and it beat rmeernst by 1.95.
-      Gianluigi Donnarumma's 17.25 from goal was the best thing in his eleven.
-      GW4 gives him Donnarumma and Marc Guéhi at Old Trafford and Pedro Porro
-      at home to Everton; brendog2814 has three Bournemouth players hosting
-      Brentford and both of his Hull defenders away at Chelsea. Somebody's
-      luck runs out here.
+      Both of these teams are near the top and only one of them belongs there.
+      Score every side against the whole league each week rather than against
+      the one opponent the schedule handed them, and brendog2814 comes out
+      25-8 — the second-best team in the competition on merit. cstoney20 comes
+      out 10-23. He has the eleventh-best scoring total of twelve and a winning
+      record, which is a trick you can only pull for so long. His wins have
+      been narrow and his opponents have been obliging; last week he got
+      through by under two points. The unbeaten run meets the charmed one, and
+      the schedule stops doing anyone any favours here.
 
   - home_roster_id: 7
     away_roster_id: 10
     headline: "Nought from three, and not remotely that bad"
     body: >
-      rmeernst has the seventh-best scoring total in the league and no wins at
-      all. On an all-play basis he is 16-17, a coin-flip team; in the standings
-      he is the only one on nought points alongside Noahvillasana17, who is
-      7-26 and belongs there. GW3 was the cruellest of the three. He had the
-      single best starter of the round in Tyrick Mitchell's 24.20 and the
-      fifth-best in Marcus Tavernier's 21.10, and he lost 78.95-77.00 with
-      Tyrique George's 21.55 sitting on his bench — 30.80 unused in a game
-      decided by under two points. erozier arrives 1-2 and defending a title
-      on 10-23, which is its own kind of warning. First to three wins moves
-      into the top half; the loser is properly adrift.
+      rmeernst has scored more than half the league and won nothing at all.
+      Against the field each week he is a coin flip; in the table he is level
+      with a team that has genuinely been outplayed every time out. Last week
+      was the unkindest of the three — he had the single best individual return
+      of the round in Tyrick Mitchell and still lost by under two points, with
+      more than enough left on his bench to have covered it twice over. erozier
+      arrives defending a title on one win from three and a record of his own
+      that flatters him. Whoever loses this is properly adrift, and only one of
+      them will be able to blame the fixtures.
