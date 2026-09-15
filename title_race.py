@@ -36,9 +36,14 @@ it produces nonsense -- unshrunk, the 2025/26 replay had the eventual LAST
 placed manager at 86% after two gameweeks. So every player's level is pulled
 fully to his positional mean to start with, held there through SHRINK_HOLD, and
 released linearly after that until the projection is trusted in full by the last
-week. Banked results are never shrunk, which is why this costs nothing at the
-sharp end: in the replay the eventual champion still crossed 50% at GW16 and hit
-100% by GW36, while nobody exceeded 37% before GW10.
+week. Banked results are never shrunk, so results still drive the table while the
+projection is being held down.
+
+The hold is at GW15. A shorter hold of 10 was measured as slightly sharper -- in
+the 2025/26 replay the eventual champion crossed 50% at GW16 rather than GW18 --
+but 15 keeps the field closer for longer, which is the behaviour asked for. The
+curve turns somewhere past 15: holding to 20 starts suppressing a signal the
+results have already earned.
 
 Lineups are best ball -- the highest-scoring legal XI of the week. That is a
 choice about what the number means (how good is this roster, not how well is it
@@ -53,7 +58,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import simulate as S
 
-SHRINK_HOLD = 10      # weeks the full shrink is held before it starts decaying
+SHRINK_HOLD = 15      # weeks the full shrink is held before it starts decaying
 PRIOR_FPL_W = 4.0     # gameweeks of prior-season FPL average carried early
 BAND_EDGES  = [0, 5, 20, 40, 60, 80, 95, 100]     # the seven bands, in percentiles
 

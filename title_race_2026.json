@@ -3,7 +3,7 @@
  "sims": 400,
  "weeks_done": 4,
  "total_weeks": 38,
- "shrink_hold": 10,
+ "shrink_hold": 15,
  "managers": [
   {
    "manager": "willmoran",
