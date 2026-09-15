@@ -1,0 +1,85 @@
+{# Shared season line-chart styles. Used by the table page (placement)
+   and the rankings page (title probability). Markup contract: a
+   .season-chart-wrap containing an svg.season-chart of .line-group
+   elements, plus a sibling .chart-legend of buttons. #}
+<style>
+  .season-chart-wrap {
+    border-bottom: 1px solid var(--c-border-mid);
+    padding: 12px 0 24px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;     /* smooth momentum scroll on iOS */
+    touch-action: pan-x pan-y;
+  }
+  .season-chart {
+    display: block;
+    width: 100%;
+    min-width: 720px;
+    height: auto;
+  }
+  .season-chart .grid { stroke: var(--c-border); stroke-width: 1; }
+  .season-chart .axis-label { font-size: 11px; font-weight: 600; fill: var(--c-ink-light); font-family: var(--font-body); }
+  .season-chart .line {
+    fill: none;
+    stroke-width: 2;
+    transition: stroke-width 0.12s, opacity 0.12s;
+  }
+  .season-chart .line-group { cursor: pointer; -webkit-tap-highlight-color: rgba(61,20,82,0.15); }
+  /* iOS needs explicit pointer-events on invisible strokes for taps to register */
+  .season-chart .line-hit { pointer-events: stroke; }
+  .season-chart .line     { pointer-events: stroke; }
+  .season-chart .line-group:hover .line { stroke-width: 3.5; }
+  .season-chart .line-group:hover .line-label { font-weight: 800; }
+  .season-chart .line-dot { transition: r 0.12s; }
+  .season-chart .line-group:hover .line-dot { r: 5; }
+  .season-chart .line-label { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
+  .season-chart .hover-fade { opacity: 1; transition: opacity 0.12s; }
+  /* Hover (mouse): pointer enters chart → dim everyone, lift the hovered group */
+  .season-chart:hover .hover-fade { opacity: 0.15; }
+  .season-chart:hover .line-group:hover .hover-fade { opacity: 1; }
+  /* Selected (tap-locked): explicit highlight overrides hover state */
+  .season-chart.has-selection .hover-fade { opacity: 0.15; }
+  .season-chart.has-selection .line-group.is-selected .hover-fade { opacity: 1; }
+  .season-chart.has-selection .line-group.is-selected .line { stroke-width: 3.5; }
+  .season-chart.has-selection .line-group.is-selected .line-dot { r: 5; }
+  .season-chart.has-selection .line-group.is-selected .line-label { font-weight: 800; }
+
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px; font-size: 0.8125rem; }
+  .chart-legend__item {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 10px;
+    background: transparent; border: 1px solid transparent;
+    font-family: inherit; font-size: inherit; color: var(--c-ink);
+    cursor: pointer; transition: background 0.1s, border-color 0.1s;
+  }
+  .chart-legend__item:hover { background: var(--c-bg-soft); border-color: var(--c-border); }
+  .chart-legend__item.is-selected {
+    background: var(--c-primary); color: #F2EDE3; border-color: var(--c-primary);
+  }
+  .chart-legend__swatch { width: 16px; height: 3px; display: inline-block; }
+
+  /* Mobile: tighter padding, hint that the chart scrolls, kill hover-dim */
+  @media (max-width: 720px) {
+    .season-chart-wrap {
+      padding: 14px 12px;
+      position: relative;
+    }
+    .season-chart-wrap::after {
+      content: '← swipe →';
+      display: block;
+      text-align: center;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--c-ink-light);
+      margin-top: 6px;
+    }
+    .chart-legend { font-size: 0.75rem; gap: 8px 14px; }
+  }
+  /* Touch devices: don't dim other lines on hover (touch has no hover) */
+  @media (hover: none) {
+    .season-chart:hover .hover-fade { opacity: 1 !important; }
+  }
+</style>

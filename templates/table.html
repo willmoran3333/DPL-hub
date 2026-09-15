@@ -2,87 +2,7 @@
 {% block title %}Table{% endblock %}
 
 {% block extra_head %}
-<style>
-  .placement-chart-wrap {
-    border-bottom: 1px solid var(--c-border-mid);
-    padding: 12px 0 24px;
-    margin-bottom: 32px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;     /* smooth momentum scroll on iOS */
-    touch-action: pan-x pan-y;
-  }
-  .placement-chart {
-    display: block;
-    width: 100%;
-    min-width: 720px;
-    height: auto;
-  }
-  .placement-chart .grid { stroke: var(--c-border); stroke-width: 1; }
-  .placement-chart .axis-label { font-size: 11px; font-weight: 600; fill: var(--c-ink-light); font-family: var(--font-body); }
-  .placement-chart .line {
-    fill: none;
-    stroke-width: 2;
-    transition: stroke-width 0.12s, opacity 0.12s;
-  }
-  .placement-chart .line-group { cursor: pointer; -webkit-tap-highlight-color: rgba(61,20,82,0.15); }
-  /* iOS needs explicit pointer-events on invisible strokes for taps to register */
-  .placement-chart .line-hit { pointer-events: stroke; }
-  .placement-chart .line     { pointer-events: stroke; }
-  .placement-chart .line-group:hover .line { stroke-width: 3.5; }
-  .placement-chart .line-group:hover .line-label { font-weight: 800; }
-  .placement-chart .line-dot { transition: r 0.12s; }
-  .placement-chart .line-group:hover .line-dot { r: 5; }
-  .placement-chart .line-label { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
-  .placement-chart .hover-fade { opacity: 1; transition: opacity 0.12s; }
-  /* Hover (mouse): pointer enters chart → dim everyone, lift the hovered group */
-  .placement-chart:hover .hover-fade { opacity: 0.15; }
-  .placement-chart:hover .line-group:hover .hover-fade { opacity: 1; }
-  /* Selected (tap-locked): explicit highlight overrides hover state */
-  .placement-chart.has-selection .hover-fade { opacity: 0.15; }
-  .placement-chart.has-selection .line-group.is-selected .hover-fade { opacity: 1; }
-  .placement-chart.has-selection .line-group.is-selected .line { stroke-width: 3.5; }
-  .placement-chart.has-selection .line-group.is-selected .line-dot { r: 5; }
-  .placement-chart.has-selection .line-group.is-selected .line-label { font-weight: 800; }
-
-  .chart-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px; font-size: 0.8125rem; }
-  .chart-legend__item {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 10px;
-    background: transparent; border: 1px solid transparent;
-    font-family: inherit; font-size: inherit; color: var(--c-ink);
-    cursor: pointer; transition: background 0.1s, border-color 0.1s;
-  }
-  .chart-legend__item:hover { background: var(--c-bg-soft); border-color: var(--c-border); }
-  .chart-legend__item.is-selected {
-    background: var(--c-primary); color: #F2EDE3; border-color: var(--c-primary);
-  }
-  .chart-legend__swatch { width: 16px; height: 3px; display: inline-block; }
-
-  /* Mobile: tighter padding, hint that the chart scrolls, kill hover-dim */
-  @media (max-width: 720px) {
-    .placement-chart-wrap {
-      padding: 14px 12px;
-      position: relative;
-    }
-    .placement-chart-wrap::after {
-      content: '← swipe →';
-      display: block;
-      text-align: center;
-      font-size: 0.625rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--c-ink-light);
-      margin-top: 6px;
-    }
-    .chart-legend { font-size: 0.75rem; gap: 8px 14px; }
-  }
-  /* Touch devices: don't dim other lines on hover (touch has no hover) */
-  @media (hover: none) {
-    .placement-chart:hover .hover-fade { opacity: 1 !important; }
-  }
-</style>
+{% include "_partials/_chart_css.html" %}
 {% endblock %}
 
 {% block body %}
@@ -106,8 +26,8 @@
   {% set palette = ['#3D1452','#B8860B','#2F7547','#9C2A3D','#1F4068','#C28A2A','#6B3D1A','#7A2828','#2A6FB2','#5A2D70','#8B4513','#2D5A2D'] %}
 
   <div class="section-label">Table Placement Over the Season</div>
-  <div class="placement-chart-wrap">
-    <svg class="placement-chart" viewBox="0 0 {{ width }} {{ height }}" preserveAspectRatio="xMidYMid meet" aria-label="Weekly table placement for all 12 managers">
+  <div class="season-chart-wrap">
+    <svg class="season-chart" viewBox="0 0 {{ width }} {{ height }}" preserveAspectRatio="xMidYMid meet" aria-label="Weekly table placement for all 12 managers">
       {# Y gridlines — one per position 1..12 #}
       {% for p in range(1, 13) %}
       {% set y = pad_t + (p - 1) * step_y %}
@@ -211,58 +131,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-(function() {
-  const chart  = document.querySelector('.placement-chart');
-  if (!chart) return;
-  const groups = chart.querySelectorAll('.line-group');
-  const legend = document.querySelectorAll('.chart-legend__item');
-
-  // Apply dim/highlight via inline style so iOS Safari can't ignore us.
-  function applyOpacity(rosterId) {
-    groups.forEach(g => {
-      const isSel = rosterId !== null && g.dataset.roster === String(rosterId);
-      const op = (rosterId === null) ? '' : (isSel ? '1' : '0.15');
-      g.querySelectorAll('.hover-fade').forEach(el => el.style.opacity = op);
-      // Also bump stroke width on the visible line when selected
-      const line = g.querySelector('.line');
-      if (line) line.setAttribute('stroke-width', isSel ? '3.5' : '2');
-      g.classList.toggle('is-selected', isSel);
-    });
-  }
-
-  function setSelection(rosterId) {
-    if (rosterId === null) {
-      chart.classList.remove('has-selection');
-    } else {
-      chart.classList.add('has-selection');
-    }
-    legend.forEach(b => b.classList.toggle('is-selected', rosterId !== null && b.dataset.roster === String(rosterId)));
-    applyOpacity(rosterId);
-  }
-
-  function toggle(rosterId) {
-    const alreadyOn = Array.from(groups).some(g =>
-      g.dataset.roster === String(rosterId) && g.classList.contains('is-selected'));
-    setSelection(alreadyOn ? null : rosterId);
-  }
-
-  groups.forEach(g => {
-    g.addEventListener('click', e => { e.stopPropagation(); toggle(g.dataset.roster); });
-  });
-  legend.forEach(b => {
-    b.addEventListener('click', e => { e.stopPropagation(); toggle(b.dataset.roster); });
-  });
-
-  // Tap empty space inside the wrap to clear
-  const wrap = document.querySelector('.placement-chart-wrap');
-  if (wrap) {
-    wrap.addEventListener('click', e => {
-      if (e.target === wrap || e.target.tagName === 'svg' || e.target.tagName === 'SVG') {
-        setSelection(null);
-      }
-    });
-  }
-})();
-</script>
+{% include "_partials/_chart_js.html" %}
 {% endblock %}

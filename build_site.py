@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import shutil
 import sqlite3
@@ -170,6 +171,10 @@ def load_power_rankings(team_map: dict, standings: list[dict]) -> dict:
 # Sparkline geometry, in the viewBox the template draws into.
 SPARK_W, SPARK_H, SPARK_PAD = 88.0, 24.0, 3.0
 SPARK_WEEKS = 5
+CHART_W, CHART_H = 960.0, 320.0
+CHART_LABEL_GAP = 11.0          # min vertical spacing between end-of-line labels
+CHART_PALETTE = ['#3D1452', '#B8860B', '#2F7547', '#9C2A3D', '#1F4068', '#C28A2A',
+                 '#6B3D1A', '#7A2828', '#2A6FB2', '#5A2D70', '#8B4513', '#2D5A2D']
 
 
 def attach_title_history(data: dict) -> None:
@@ -215,6 +220,74 @@ def attach_title_history(data: dict) -> None:
     peak = max((v for s in snaps for v in s["title_pct"].values()), default=0.0)
     if peak <= 0:
         return
+
+    # Full series for the season-long line chart, mirroring the table page's
+    # placement chart. Sparklines show the last few weeks; this shows all of
+    # them, so it reads the whole title race rather than the recent move.
+    #
+    # Geometry is resolved here rather than in Jinja because the end-of-line
+    # labels need de-colliding: early in a season most managers sit in a band
+    # a few points wide and their names land on top of each other. The
+    # placement chart never has this problem — its twelve rows are evenly
+    # spaced by construction.
+    pad_l, pad_r, pad_t, pad_b = 40.0, 16.0, 16.0, 36.0
+    plot_w, plot_h = CHART_W - pad_l - pad_r, CHART_H - pad_t - pad_b
+    total_weeks = hist.get("weeks_total", 38)
+    step_x = plot_w / total_weeks
+    top = max(20.0, math.ceil(peak * 100 / 10) * 10)
+
+    def _xy(week, pct):
+        return (pad_l + week * step_x,
+                pad_t + plot_h - (pct * 100 / top) * plot_h)
+
+    lines = []
+    for i, m in enumerate(data.get("managers", [])):
+        key = str(m["roster_id"])
+        pts = [(s["week"], s["title_pct"][key]) for s in snaps if key in s["title_pct"]]
+        if not pts:
+            continue
+        xy = [_xy(w, v) for w, v in pts]
+        lx, ly = xy[-1]
+        lines.append({
+            "roster_id": m["roster_id"],
+            "manager": m["manager"],
+            "color": CHART_PALETTE[i % len(CHART_PALETTE)],
+            "points": " ".join(f"{x:.1f},{y:.1f}" for x, y in xy),
+            "dot_x": round(lx, 1), "dot_y": round(ly, 1),
+            "label_y": ly,
+        })
+
+    # Push overlapping labels apart and keep the stack inside the plot. Four
+    # passes, because a single global shift drags the leader's label off the
+    # top of the chart -- exactly the label that matters most. Down, clamp the
+    # bottom, up, clamp the top, then re-assert downward.
+    bottom = pad_t + plot_h
+    lines.sort(key=lambda d: d["label_y"])
+
+    def _spread_down(start=1):
+        for i in range(start, len(lines)):
+            lines[i]["label_y"] = max(lines[i]["label_y"],
+                                      lines[i - 1]["label_y"] + CHART_LABEL_GAP)
+
+    _spread_down()
+    if lines:
+        lines[-1]["label_y"] = min(lines[-1]["label_y"], bottom)
+        for i in range(len(lines) - 2, -1, -1):
+            lines[i]["label_y"] = min(lines[i]["label_y"],
+                                      lines[i + 1]["label_y"] - CHART_LABEL_GAP)
+        lines[0]["label_y"] = max(lines[0]["label_y"], pad_t)
+        _spread_down()
+    for d in lines:
+        d["label_y"] = round(d["label_y"], 1)
+
+    data["title_chart"] = {
+        "width": CHART_W, "height": CHART_H,
+        "pad_l": pad_l, "pad_t": pad_t, "plot_w": plot_w, "plot_h": plot_h,
+        "step_x": step_x, "top": int(top),
+        "total_weeks": total_weeks,
+        "max_played": snaps[-1]["week"],
+        "lines": sorted(lines, key=lambda d: d["dot_y"]),
+    }
 
     for m in data.get("managers", []):
         key = str(m["roster_id"])

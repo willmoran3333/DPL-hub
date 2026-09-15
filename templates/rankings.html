@@ -27,6 +27,7 @@
   .spark--flat polyline { stroke: var(--c-ink-light); }
   .spark--flat .dot     { fill:   var(--c-ink-light); }
 </style>
+{% include "_partials/_chart_css.html" %}
 {% endblock %}
 
 {% block body %}
@@ -48,7 +49,48 @@
     {% endif %}
   </header>
 
+
+  {# ── Title probability line chart ── #}
+  {% if rk.title_chart and rk.title_chart.max_played > 0 %}
+  {% set tc = rk.title_chart %}
+  <div class="section-label">Title Chance Over the Season</div>
+  <div class="season-chart-wrap">
+    <svg class="season-chart" viewBox="0 0 {{ tc.width }} {{ tc.height }}" preserveAspectRatio="xMidYMid meet"
+         aria-label="Title probability by gameweek for all 12 managers">
+      {% for pct in range(0, tc.top + 1, 10) %}
+      {% set y = tc.pad_t + tc.plot_h - (pct / tc.top) * tc.plot_h %}
+      <line class="grid" x1="{{ tc.pad_l }}" y1="{{ y }}" x2="{{ tc.pad_l + tc.plot_w }}" y2="{{ y }}"/>
+      <text class="axis-label" x="{{ tc.pad_l - 8 }}" y="{{ y + 3 }}" text-anchor="end">{{ pct }}%</text>
+      {% endfor %}
+      {% for w in range(0, tc.total_weeks + 1) %}
+      {% if w == 0 or w % 5 == 0 or w == tc.total_weeks %}
+      <text class="axis-label" x="{{ tc.pad_l + w * tc.step_x }}" y="{{ tc.height - 8 }}"
+            text-anchor="middle">{{ 'Pre' if w == 0 else 'GW' ~ w }}</text>
+      {% endif %}
+      {% endfor %}
+
+      {% for d in tc.lines %}
+      <g class="line-group" data-roster="{{ d.roster_id }}">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="{{ d.points }}"/>
+        <polyline class="line hover-fade" stroke="{{ d.color }}" points="{{ d.points }}"/>
+        <circle class="line-dot hover-fade" cx="{{ d.dot_x }}" cy="{{ d.dot_y }}" r="3" fill="{{ d.color }}"/>
+        <text class="line-label hover-fade" x="{{ d.dot_x + 6 }}" y="{{ d.label_y + 3 }}" fill="{{ d.color }}">{{ d.manager }}</text>
+      </g>
+      {% endfor %}
+    </svg>
+    <div class="chart-legend">
+      {% for d in tc.lines %}
+      <button class="chart-legend__item" type="button" data-roster="{{ d.roster_id }}">
+        <span class="chart-legend__swatch" style="background:{{ d.color }}"></span>
+        <span>{{ d.manager }}</span>
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
   <div class="section-label">Title Probability</div>
+
   <div class="standings-table-wrap mb-8">
     <table class="standings-table">
       <thead>
@@ -108,4 +150,8 @@
   </div>
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+{% include "_partials/_chart_js.html" %}
 {% endblock %}

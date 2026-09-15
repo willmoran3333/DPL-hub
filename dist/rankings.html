@@ -39,6 +39,88 @@
   .spark--flat .dot     { fill:   var(--c-ink-light); }
 </style>
 
+<style>
+  .season-chart-wrap {
+    border-bottom: 1px solid var(--c-border-mid);
+    padding: 12px 0 24px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;     /* smooth momentum scroll on iOS */
+    touch-action: pan-x pan-y;
+  }
+  .season-chart {
+    display: block;
+    width: 100%;
+    min-width: 720px;
+    height: auto;
+  }
+  .season-chart .grid { stroke: var(--c-border); stroke-width: 1; }
+  .season-chart .axis-label { font-size: 11px; font-weight: 600; fill: var(--c-ink-light); font-family: var(--font-body); }
+  .season-chart .line {
+    fill: none;
+    stroke-width: 2;
+    transition: stroke-width 0.12s, opacity 0.12s;
+  }
+  .season-chart .line-group { cursor: pointer; -webkit-tap-highlight-color: rgba(61,20,82,0.15); }
+  /* iOS needs explicit pointer-events on invisible strokes for taps to register */
+  .season-chart .line-hit { pointer-events: stroke; }
+  .season-chart .line     { pointer-events: stroke; }
+  .season-chart .line-group:hover .line { stroke-width: 3.5; }
+  .season-chart .line-group:hover .line-label { font-weight: 800; }
+  .season-chart .line-dot { transition: r 0.12s; }
+  .season-chart .line-group:hover .line-dot { r: 5; }
+  .season-chart .line-label { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
+  .season-chart .hover-fade { opacity: 1; transition: opacity 0.12s; }
+  /* Hover (mouse): pointer enters chart → dim everyone, lift the hovered group */
+  .season-chart:hover .hover-fade { opacity: 0.15; }
+  .season-chart:hover .line-group:hover .hover-fade { opacity: 1; }
+  /* Selected (tap-locked): explicit highlight overrides hover state */
+  .season-chart.has-selection .hover-fade { opacity: 0.15; }
+  .season-chart.has-selection .line-group.is-selected .hover-fade { opacity: 1; }
+  .season-chart.has-selection .line-group.is-selected .line { stroke-width: 3.5; }
+  .season-chart.has-selection .line-group.is-selected .line-dot { r: 5; }
+  .season-chart.has-selection .line-group.is-selected .line-label { font-weight: 800; }
+
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px; font-size: 0.8125rem; }
+  .chart-legend__item {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 10px;
+    background: transparent; border: 1px solid transparent;
+    font-family: inherit; font-size: inherit; color: var(--c-ink);
+    cursor: pointer; transition: background 0.1s, border-color 0.1s;
+  }
+  .chart-legend__item:hover { background: var(--c-bg-soft); border-color: var(--c-border); }
+  .chart-legend__item.is-selected {
+    background: var(--c-primary); color: #F2EDE3; border-color: var(--c-primary);
+  }
+  .chart-legend__swatch { width: 16px; height: 3px; display: inline-block; }
+
+  /* Mobile: tighter padding, hint that the chart scrolls, kill hover-dim */
+  @media (max-width: 720px) {
+    .season-chart-wrap {
+      padding: 14px 12px;
+      position: relative;
+    }
+    .season-chart-wrap::after {
+      content: '← swipe →';
+      display: block;
+      text-align: center;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--c-ink-light);
+      margin-top: 6px;
+    }
+    .chart-legend { font-size: 0.75rem; gap: 8px 14px; }
+  }
+  /* Touch devices: don't dim other lines on hover (touch has no hover) */
+  @media (hover: none) {
+    .season-chart:hover .hover-fade { opacity: 1 !important; }
+  }
+</style>
+
 </head>
 <body>
 
@@ -87,7 +169,300 @@
     
   </header>
 
+
+  
+  
+  
+  <div class="section-label">Title Chance Over the Season</div>
+  <div class="season-chart-wrap">
+    <svg class="season-chart" viewBox="0 0 960.0 320.0" preserveAspectRatio="xMidYMid meet"
+         aria-label="Title probability by gameweek for all 12 managers">
+      
+      
+      <line class="grid" x1="40.0" y1="284.0" x2="944.0" y2="284.0"/>
+      <text class="axis-label" x="32.0" y="287.0" text-anchor="end">0%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="230.4" x2="944.0" y2="230.4"/>
+      <text class="axis-label" x="32.0" y="233.4" text-anchor="end">10%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="176.8" x2="944.0" y2="176.8"/>
+      <text class="axis-label" x="32.0" y="179.8" text-anchor="end">20%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="123.20000000000002" x2="944.0" y2="123.20000000000002"/>
+      <text class="axis-label" x="32.0" y="126.20000000000002" text-anchor="end">30%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="69.6" x2="944.0" y2="69.6"/>
+      <text class="axis-label" x="32.0" y="72.6" text-anchor="end">40%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="16.0" x2="944.0" y2="16.0"/>
+      <text class="axis-label" x="32.0" y="19.0" text-anchor="end">50%</text>
+      
+      
+      
+      <text class="axis-label" x="40.0" y="312.0"
+            text-anchor="middle">Pre</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="158.94736842105263" y="312.0"
+            text-anchor="middle">GW5</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="277.89473684210526" y="312.0"
+            text-anchor="middle">GW10</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="396.8421052631579" y="312.0"
+            text-anchor="middle">GW15</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="515.7894736842105" y="312.0"
+            text-anchor="middle">GW20</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="634.7368421052632" y="312.0"
+            text-anchor="middle">GW25</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="753.6842105263158" y="312.0"
+            text-anchor="middle">GW30</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="872.6315789473684" y="312.0"
+            text-anchor="middle">GW35</text>
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="944.0" y="312.0"
+            text-anchor="middle">GW38</text>
+      
+      
+
+      
+      <g class="line-group" data-roster="5">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,193.0 63.8,181.5 87.6,203.2 111.4,142.5 135.2,40.5"/>
+        <polyline class="line hover-fade" stroke="#3D1452" points="40.0,193.0 63.8,181.5 87.6,203.2 111.4,142.5 135.2,40.5"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="40.5" r="3" fill="#3D1452"/>
+        <text class="line-label hover-fade" x="141.2" y="43.5" fill="#3D1452">brendog2814</text>
+      </g>
+      
+      <g class="line-group" data-roster="4">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,253.4 63.8,241.5 87.6,197.4 111.4,208.7 135.2,189.8"/>
+        <polyline class="line hover-fade" stroke="#B8860B" points="40.0,253.4 63.8,241.5 87.6,197.4 111.4,208.7 135.2,189.8"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="189.8" r="3" fill="#B8860B"/>
+        <text class="line-label hover-fade" x="141.2" y="177.0" fill="#B8860B">benditlikebergvall</text>
+      </g>
+      
+      <g class="line-group" data-roster="11">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,268.2 63.8,267.5 87.6,233.1 111.4,215.3 135.2,222.0"/>
+        <polyline class="line hover-fade" stroke="#2F7547" points="40.0,268.2 63.8,267.5 87.6,233.1 111.4,215.3 135.2,222.0"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="222.0" r="3" fill="#2F7547"/>
+        <text class="line-label hover-fade" x="141.2" y="188.0" fill="#2F7547">mdropkin</text>
+      </g>
+      
+      <g class="line-group" data-roster="7">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,224.9 63.8,229.4 87.6,224.7 111.4,223.2 135.2,246.4"/>
+        <polyline class="line hover-fade" stroke="#9C2A3D" points="40.0,224.9 63.8,229.4 87.6,224.7 111.4,223.2 135.2,246.4"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="246.4" r="3" fill="#9C2A3D"/>
+        <text class="line-label hover-fade" x="141.2" y="199.0" fill="#9C2A3D">rmeernst</text>
+      </g>
+      
+      <g class="line-group" data-roster="1">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,220.9 63.8,246.3 87.6,259.3 111.4,247.6 135.2,248.0"/>
+        <polyline class="line hover-fade" stroke="#1F4068" points="40.0,220.9 63.8,246.3 87.6,259.3 111.4,247.6 135.2,248.0"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="248.0" r="3" fill="#1F4068"/>
+        <text class="line-label hover-fade" x="141.2" y="210.0" fill="#1F4068">willmoran</text>
+      </g>
+      
+      <g class="line-group" data-roster="6">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,191.7 63.8,194.1 87.6,183.3 111.4,205.4 135.2,253.0"/>
+        <polyline class="line hover-fade" stroke="#C28A2A" points="40.0,191.7 63.8,194.1 87.6,183.3 111.4,205.4 135.2,253.0"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="253.0" r="3" fill="#C28A2A"/>
+        <text class="line-label hover-fade" x="141.2" y="221.0" fill="#C28A2A">bjennings28</text>
+      </g>
+      
+      <g class="line-group" data-roster="2">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,251.0 63.8,198.7 87.6,204.8 111.4,264.9 135.2,264.7"/>
+        <polyline class="line hover-fade" stroke="#6B3D1A" points="40.0,251.0 63.8,198.7 87.6,204.8 111.4,264.9 135.2,264.7"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="264.7" r="3" fill="#6B3D1A"/>
+        <text class="line-label hover-fade" x="141.2" y="232.0" fill="#6B3D1A">skoeiboy</text>
+      </g>
+      
+      <g class="line-group" data-roster="3">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,276.1 63.8,281.3 87.6,273.0 111.4,265.0 135.2,279.3"/>
+        <polyline class="line hover-fade" stroke="#7A2828" points="40.0,276.1 63.8,281.3 87.6,273.0 111.4,265.0 135.2,279.3"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="279.3" r="3" fill="#7A2828"/>
+        <text class="line-label hover-fade" x="141.2" y="243.0" fill="#7A2828">Flabiano9</text>
+      </g>
+      
+      <g class="line-group" data-roster="8">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,245.0 63.8,245.5 87.6,266.7 111.4,265.8 135.2,280.6"/>
+        <polyline class="line hover-fade" stroke="#2A6FB2" points="40.0,245.0 63.8,245.5 87.6,266.7 111.4,265.8 135.2,280.6"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="280.6" r="3" fill="#2A6FB2"/>
+        <text class="line-label hover-fade" x="141.2" y="254.0" fill="#2A6FB2">cstoney20</text>
+      </g>
+      
+      <g class="line-group" data-roster="10">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,260.4 63.8,261.1 87.6,269.6 111.4,278.2 135.2,281.9"/>
+        <polyline class="line hover-fade" stroke="#5A2D70" points="40.0,260.4 63.8,261.1 87.6,269.6 111.4,278.2 135.2,281.9"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="281.9" r="3" fill="#5A2D70"/>
+        <text class="line-label hover-fade" x="141.2" y="265.0" fill="#5A2D70">erozier</text>
+      </g>
+      
+      <g class="line-group" data-roster="12">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,231.6 63.8,246.6 87.6,273.6 111.4,274.5 135.2,282.4"/>
+        <polyline class="line hover-fade" stroke="#8B4513" points="40.0,231.6 63.8,246.6 87.6,273.6 111.4,274.5 135.2,282.4"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="282.4" r="3" fill="#8B4513"/>
+        <text class="line-label hover-fade" x="141.2" y="276.0" fill="#8B4513">Noahvillasana17</text>
+      </g>
+      
+      <g class="line-group" data-roster="9">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,255.6 63.8,278.5 87.6,283.3 111.4,281.0 135.2,283.4"/>
+        <polyline class="line hover-fade" stroke="#2D5A2D" points="40.0,255.6 63.8,278.5 87.6,283.3 111.4,281.0 135.2,283.4"/>
+        <circle class="line-dot hover-fade" cx="135.2" cy="283.4" r="3" fill="#2D5A2D"/>
+        <text class="line-label hover-fade" x="141.2" y="287.0" fill="#2D5A2D">JordiCarb</text>
+      </g>
+      
+    </svg>
+    <div class="chart-legend">
+      
+      <button class="chart-legend__item" type="button" data-roster="5">
+        <span class="chart-legend__swatch" style="background:#3D1452"></span>
+        <span>brendog2814</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="4">
+        <span class="chart-legend__swatch" style="background:#B8860B"></span>
+        <span>benditlikebergvall</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="11">
+        <span class="chart-legend__swatch" style="background:#2F7547"></span>
+        <span>mdropkin</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="7">
+        <span class="chart-legend__swatch" style="background:#9C2A3D"></span>
+        <span>rmeernst</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="1">
+        <span class="chart-legend__swatch" style="background:#1F4068"></span>
+        <span>willmoran</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="6">
+        <span class="chart-legend__swatch" style="background:#C28A2A"></span>
+        <span>bjennings28</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="2">
+        <span class="chart-legend__swatch" style="background:#6B3D1A"></span>
+        <span>skoeiboy</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="3">
+        <span class="chart-legend__swatch" style="background:#7A2828"></span>
+        <span>Flabiano9</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="8">
+        <span class="chart-legend__swatch" style="background:#2A6FB2"></span>
+        <span>cstoney20</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="10">
+        <span class="chart-legend__swatch" style="background:#5A2D70"></span>
+        <span>erozier</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="12">
+        <span class="chart-legend__swatch" style="background:#8B4513"></span>
+        <span>Noahvillasana17</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="9">
+        <span class="chart-legend__swatch" style="background:#2D5A2D"></span>
+        <span>JordiCarb</span>
+      </button>
+      
+    </div>
+  </div>
+  
+
   <div class="section-label">Title Probability</div>
+
   <div class="standings-table-wrap mb-8">
     <table class="standings-table">
       <thead>
@@ -518,6 +893,55 @@
 </script>
 
 <script src="static/js/sortable.js"></script>
+
+
+<script>
+(function() {
+  document.querySelectorAll('.season-chart').forEach(function(chart) {
+    const groups = chart.querySelectorAll('.line-group');
+    const wrap   = chart.closest('.season-chart-wrap');
+    const legend = wrap ? wrap.querySelectorAll('.chart-legend__item') : [];
+
+    // Apply dim/highlight via inline style so iOS Safari can't ignore us.
+    function applyOpacity(rosterId) {
+      groups.forEach(g => {
+        const isSel = rosterId !== null && g.dataset.roster === String(rosterId);
+        const op = (rosterId === null) ? '' : (isSel ? '1' : '0.15');
+        g.querySelectorAll('.hover-fade').forEach(el => el.style.opacity = op);
+        const line = g.querySelector('.line');
+        if (line) line.setAttribute('stroke-width', isSel ? '3.5' : '2');
+        g.classList.toggle('is-selected', isSel);
+      });
+    }
+
+    function setSelection(rosterId) {
+      chart.classList.toggle('has-selection', rosterId !== null);
+      legend.forEach(b => b.classList.toggle('is-selected',
+        rosterId !== null && b.dataset.roster === String(rosterId)));
+      applyOpacity(rosterId);
+    }
+
+    function toggle(rosterId) {
+      const alreadyOn = Array.from(groups).some(g =>
+        g.dataset.roster === String(rosterId) && g.classList.contains('is-selected'));
+      setSelection(alreadyOn ? null : rosterId);
+    }
+
+    groups.forEach(g => {
+      g.addEventListener('click', e => { e.stopPropagation(); toggle(g.dataset.roster); });
+    });
+    legend.forEach(b => {
+      b.addEventListener('click', e => { e.stopPropagation(); toggle(b.dataset.roster); });
+    });
+
+    if (wrap) {
+      wrap.addEventListener('click', e => {
+        if (e.target === wrap || e.target.tagName.toLowerCase() === 'svg') setSelection(null);
+      });
+    }
+  });
+})();
+</script>
 
 
 <footer class="site-footer">

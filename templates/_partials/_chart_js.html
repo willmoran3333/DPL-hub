@@ -1,0 +1,50 @@
+{# Shared season line-chart interaction: hover to isolate, click or tap to
+   lock a selection, click empty space to clear. Handles any number of
+   .season-chart blocks on one page. #}
+<script>
+(function() {
+  document.querySelectorAll('.season-chart').forEach(function(chart) {
+    const groups = chart.querySelectorAll('.line-group');
+    const wrap   = chart.closest('.season-chart-wrap');
+    const legend = wrap ? wrap.querySelectorAll('.chart-legend__item') : [];
+
+    // Apply dim/highlight via inline style so iOS Safari can't ignore us.
+    function applyOpacity(rosterId) {
+      groups.forEach(g => {
+        const isSel = rosterId !== null && g.dataset.roster === String(rosterId);
+        const op = (rosterId === null) ? '' : (isSel ? '1' : '0.15');
+        g.querySelectorAll('.hover-fade').forEach(el => el.style.opacity = op);
+        const line = g.querySelector('.line');
+        if (line) line.setAttribute('stroke-width', isSel ? '3.5' : '2');
+        g.classList.toggle('is-selected', isSel);
+      });
+    }
+
+    function setSelection(rosterId) {
+      chart.classList.toggle('has-selection', rosterId !== null);
+      legend.forEach(b => b.classList.toggle('is-selected',
+        rosterId !== null && b.dataset.roster === String(rosterId)));
+      applyOpacity(rosterId);
+    }
+
+    function toggle(rosterId) {
+      const alreadyOn = Array.from(groups).some(g =>
+        g.dataset.roster === String(rosterId) && g.classList.contains('is-selected'));
+      setSelection(alreadyOn ? null : rosterId);
+    }
+
+    groups.forEach(g => {
+      g.addEventListener('click', e => { e.stopPropagation(); toggle(g.dataset.roster); });
+    });
+    legend.forEach(b => {
+      b.addEventListener('click', e => { e.stopPropagation(); toggle(b.dataset.roster); });
+    });
+
+    if (wrap) {
+      wrap.addEventListener('click', e => {
+        if (e.target === wrap || e.target.tagName.toLowerCase() === 'svg') setSelection(null);
+      });
+    }
+  });
+})();
+</script>

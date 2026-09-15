@@ -14,8 +14,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/main.css">
   
+
 <style>
-  .placement-chart-wrap {
+  .season-chart-wrap {
     border-bottom: 1px solid var(--c-border-mid);
     padding: 12px 0 24px;
     margin-bottom: 32px;
@@ -24,38 +25,38 @@
     -webkit-overflow-scrolling: touch;     /* smooth momentum scroll on iOS */
     touch-action: pan-x pan-y;
   }
-  .placement-chart {
+  .season-chart {
     display: block;
     width: 100%;
     min-width: 720px;
     height: auto;
   }
-  .placement-chart .grid { stroke: var(--c-border); stroke-width: 1; }
-  .placement-chart .axis-label { font-size: 11px; font-weight: 600; fill: var(--c-ink-light); font-family: var(--font-body); }
-  .placement-chart .line {
+  .season-chart .grid { stroke: var(--c-border); stroke-width: 1; }
+  .season-chart .axis-label { font-size: 11px; font-weight: 600; fill: var(--c-ink-light); font-family: var(--font-body); }
+  .season-chart .line {
     fill: none;
     stroke-width: 2;
     transition: stroke-width 0.12s, opacity 0.12s;
   }
-  .placement-chart .line-group { cursor: pointer; -webkit-tap-highlight-color: rgba(61,20,82,0.15); }
+  .season-chart .line-group { cursor: pointer; -webkit-tap-highlight-color: rgba(61,20,82,0.15); }
   /* iOS needs explicit pointer-events on invisible strokes for taps to register */
-  .placement-chart .line-hit { pointer-events: stroke; }
-  .placement-chart .line     { pointer-events: stroke; }
-  .placement-chart .line-group:hover .line { stroke-width: 3.5; }
-  .placement-chart .line-group:hover .line-label { font-weight: 800; }
-  .placement-chart .line-dot { transition: r 0.12s; }
-  .placement-chart .line-group:hover .line-dot { r: 5; }
-  .placement-chart .line-label { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
-  .placement-chart .hover-fade { opacity: 1; transition: opacity 0.12s; }
+  .season-chart .line-hit { pointer-events: stroke; }
+  .season-chart .line     { pointer-events: stroke; }
+  .season-chart .line-group:hover .line { stroke-width: 3.5; }
+  .season-chart .line-group:hover .line-label { font-weight: 800; }
+  .season-chart .line-dot { transition: r 0.12s; }
+  .season-chart .line-group:hover .line-dot { r: 5; }
+  .season-chart .line-label { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
+  .season-chart .hover-fade { opacity: 1; transition: opacity 0.12s; }
   /* Hover (mouse): pointer enters chart → dim everyone, lift the hovered group */
-  .placement-chart:hover .hover-fade { opacity: 0.15; }
-  .placement-chart:hover .line-group:hover .hover-fade { opacity: 1; }
+  .season-chart:hover .hover-fade { opacity: 0.15; }
+  .season-chart:hover .line-group:hover .hover-fade { opacity: 1; }
   /* Selected (tap-locked): explicit highlight overrides hover state */
-  .placement-chart.has-selection .hover-fade { opacity: 0.15; }
-  .placement-chart.has-selection .line-group.is-selected .hover-fade { opacity: 1; }
-  .placement-chart.has-selection .line-group.is-selected .line { stroke-width: 3.5; }
-  .placement-chart.has-selection .line-group.is-selected .line-dot { r: 5; }
-  .placement-chart.has-selection .line-group.is-selected .line-label { font-weight: 800; }
+  .season-chart.has-selection .hover-fade { opacity: 0.15; }
+  .season-chart.has-selection .line-group.is-selected .hover-fade { opacity: 1; }
+  .season-chart.has-selection .line-group.is-selected .line { stroke-width: 3.5; }
+  .season-chart.has-selection .line-group.is-selected .line-dot { r: 5; }
+  .season-chart.has-selection .line-group.is-selected .line-label { font-weight: 800; }
 
   .chart-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px; font-size: 0.8125rem; }
   .chart-legend__item {
@@ -73,11 +74,11 @@
 
   /* Mobile: tighter padding, hint that the chart scrolls, kill hover-dim */
   @media (max-width: 720px) {
-    .placement-chart-wrap {
+    .season-chart-wrap {
       padding: 14px 12px;
       position: relative;
     }
-    .placement-chart-wrap::after {
+    .season-chart-wrap::after {
       content: '← swipe →';
       display: block;
       text-align: center;
@@ -92,7 +93,7 @@
   }
   /* Touch devices: don't dim other lines on hover (touch has no hover) */
   @media (hover: none) {
-    .placement-chart:hover .hover-fade { opacity: 1 !important; }
+    .season-chart:hover .hover-fade { opacity: 1 !important; }
   }
 </style>
 
@@ -146,8 +147,8 @@
   
 
   <div class="section-label">Table Placement Over the Season</div>
-  <div class="placement-chart-wrap">
-    <svg class="placement-chart" viewBox="0 0 960 320" preserveAspectRatio="xMidYMid meet" aria-label="Weekly table placement for all 12 managers">
+  <div class="season-chart-wrap">
+    <svg class="season-chart" viewBox="0 0 960 320" preserveAspectRatio="xMidYMid meet" aria-label="Weekly table placement for all 12 managers">
       
       
       
@@ -1130,58 +1131,52 @@
 
 <script src="static/js/sortable.js"></script>
 
+
 <script>
 (function() {
-  const chart  = document.querySelector('.placement-chart');
-  if (!chart) return;
-  const groups = chart.querySelectorAll('.line-group');
-  const legend = document.querySelectorAll('.chart-legend__item');
+  document.querySelectorAll('.season-chart').forEach(function(chart) {
+    const groups = chart.querySelectorAll('.line-group');
+    const wrap   = chart.closest('.season-chart-wrap');
+    const legend = wrap ? wrap.querySelectorAll('.chart-legend__item') : [];
 
-  // Apply dim/highlight via inline style so iOS Safari can't ignore us.
-  function applyOpacity(rosterId) {
-    groups.forEach(g => {
-      const isSel = rosterId !== null && g.dataset.roster === String(rosterId);
-      const op = (rosterId === null) ? '' : (isSel ? '1' : '0.15');
-      g.querySelectorAll('.hover-fade').forEach(el => el.style.opacity = op);
-      // Also bump stroke width on the visible line when selected
-      const line = g.querySelector('.line');
-      if (line) line.setAttribute('stroke-width', isSel ? '3.5' : '2');
-      g.classList.toggle('is-selected', isSel);
-    });
-  }
-
-  function setSelection(rosterId) {
-    if (rosterId === null) {
-      chart.classList.remove('has-selection');
-    } else {
-      chart.classList.add('has-selection');
+    // Apply dim/highlight via inline style so iOS Safari can't ignore us.
+    function applyOpacity(rosterId) {
+      groups.forEach(g => {
+        const isSel = rosterId !== null && g.dataset.roster === String(rosterId);
+        const op = (rosterId === null) ? '' : (isSel ? '1' : '0.15');
+        g.querySelectorAll('.hover-fade').forEach(el => el.style.opacity = op);
+        const line = g.querySelector('.line');
+        if (line) line.setAttribute('stroke-width', isSel ? '3.5' : '2');
+        g.classList.toggle('is-selected', isSel);
+      });
     }
-    legend.forEach(b => b.classList.toggle('is-selected', rosterId !== null && b.dataset.roster === String(rosterId)));
-    applyOpacity(rosterId);
-  }
 
-  function toggle(rosterId) {
-    const alreadyOn = Array.from(groups).some(g =>
-      g.dataset.roster === String(rosterId) && g.classList.contains('is-selected'));
-    setSelection(alreadyOn ? null : rosterId);
-  }
+    function setSelection(rosterId) {
+      chart.classList.toggle('has-selection', rosterId !== null);
+      legend.forEach(b => b.classList.toggle('is-selected',
+        rosterId !== null && b.dataset.roster === String(rosterId)));
+      applyOpacity(rosterId);
+    }
 
-  groups.forEach(g => {
-    g.addEventListener('click', e => { e.stopPropagation(); toggle(g.dataset.roster); });
-  });
-  legend.forEach(b => {
-    b.addEventListener('click', e => { e.stopPropagation(); toggle(b.dataset.roster); });
-  });
+    function toggle(rosterId) {
+      const alreadyOn = Array.from(groups).some(g =>
+        g.dataset.roster === String(rosterId) && g.classList.contains('is-selected'));
+      setSelection(alreadyOn ? null : rosterId);
+    }
 
-  // Tap empty space inside the wrap to clear
-  const wrap = document.querySelector('.placement-chart-wrap');
-  if (wrap) {
-    wrap.addEventListener('click', e => {
-      if (e.target === wrap || e.target.tagName === 'svg' || e.target.tagName === 'SVG') {
-        setSelection(null);
-      }
+    groups.forEach(g => {
+      g.addEventListener('click', e => { e.stopPropagation(); toggle(g.dataset.roster); });
     });
-  }
+    legend.forEach(b => {
+      b.addEventListener('click', e => { e.stopPropagation(); toggle(b.dataset.roster); });
+    });
+
+    if (wrap) {
+      wrap.addEventListener('click', e => {
+        if (e.target === wrap || e.target.tagName.toLowerCase() === 'svg') setSelection(null);
+      });
+    }
+  });
 })();
 </script>
 
