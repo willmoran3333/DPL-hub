@@ -7,6 +7,10 @@
 <style>
   .prob-bar { display: block; height: 6px; background: var(--c-border); margin-top: 5px; }
   .prob-bar > span { display: block; height: 100%; background: var(--c-gold-deep); }
+  /* Title chance gets its own bar in the primary ink so it reads at a glance
+     and is not mistaken for the strength bar beside it. */
+  .prob-bar--title > span { background: var(--c-primary); }
+  .col-pts--title { font-size: 1.0625rem; }
   .tier-head td { padding-top: 18px !important; font-size: 0.6875rem; font-weight: 700;
                   letter-spacing: 0.14em; text-transform: uppercase;
                   color: var(--c-gold-deep); border-bottom: 1px solid var(--c-ink) !important; }
@@ -75,8 +79,12 @@
             <span class="prob-bar"><span style="width: {{ (100 * m.strength / rk.max_strength)|round(1) }}%"></span></span>
             {% endif %}
           </td>
-          <td class="col-pts" data-val="{{ m.title_pct }}">
+          {% set max_title = rk.managers | map(attribute='title_pct') | max %}
+          <td class="col-pts col-pts--title" data-val="{{ m.title_pct }}">
             {{ "%.1f"|format(100 * m.title_pct) }}%
+            {% if max_title %}
+            <span class="prob-bar prob-bar--title"><span style="width: {{ (100 * m.title_pct / max_title)|round(1) }}%"></span></span>
+            {% endif %}
           </td>
           {# Week-on-week move, in points of probability. #}
           {% set d = m.title_delta %}

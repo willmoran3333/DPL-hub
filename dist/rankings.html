@@ -17,6 +17,10 @@
 <style>
   .prob-bar { display: block; height: 6px; background: var(--c-border); margin-top: 5px; }
   .prob-bar > span { display: block; height: 100%; background: var(--c-gold-deep); }
+  /* Title chance gets its own bar in the primary ink so it reads at a glance
+     and is not mistaken for the strength bar beside it. */
+  .prob-bar--title > span { background: var(--c-primary); }
+  .col-pts--title { font-size: 1.0625rem; }
   .tier-head td { padding-top: 18px !important; font-size: 0.6875rem; font-weight: 700;
                   letter-spacing: 0.14em; text-transform: uppercase;
                   color: var(--c-gold-deep); border-bottom: 1px solid var(--c-ink) !important; }
@@ -194,8 +198,12 @@
             <span class="prob-bar"><span style="width: 100.0%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.389">
+          
+          <td class="col-pts col-pts--title" data-val="0.389">
             38.9%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 100.0%"></span></span>
+            
           </td>
           
           
@@ -232,8 +240,12 @@
             <span class="prob-bar"><span style="width: 99.3%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.0865">
+          
+          <td class="col-pts col-pts--title" data-val="0.0865">
             8.6%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 22.2%"></span></span>
+            
           </td>
           
           
@@ -270,8 +282,12 @@
             <span class="prob-bar"><span style="width: 98.7%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.037">
+          
+          <td class="col-pts col-pts--title" data-val="0.037">
             3.7%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 9.5%"></span></span>
+            
           </td>
           
           
@@ -308,8 +324,12 @@
             <span class="prob-bar"><span style="width: 97.8%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.0795">
+          
+          <td class="col-pts col-pts--title" data-val="0.0795">
             8.0%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 20.4%"></span></span>
+            
           </td>
           
           
@@ -346,8 +366,12 @@
             <span class="prob-bar"><span style="width: 97.0%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.0285">
+          
+          <td class="col-pts col-pts--title" data-val="0.0285">
             2.9%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 7.3%"></span></span>
+            
           </td>
           
           
@@ -384,8 +408,12 @@
             <span class="prob-bar"><span style="width: 97.0%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.112">
+          
+          <td class="col-pts col-pts--title" data-val="0.112">
             11.2%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 28.8%"></span></span>
+            
           </td>
           
           
@@ -422,8 +450,12 @@
             <span class="prob-bar"><span style="width: 94.5%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.041">
+          
+          <td class="col-pts col-pts--title" data-val="0.041">
             4.1%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 10.5%"></span></span>
+            
           </td>
           
           
@@ -460,8 +492,12 @@
             <span class="prob-bar"><span style="width: 94.3%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.0365">
+          
+          <td class="col-pts col-pts--title" data-val="0.0365">
             3.6%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 9.4%"></span></span>
+            
           </td>
           
           
@@ -498,8 +534,12 @@
             <span class="prob-bar"><span style="width: 93.8%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.017">
+          
+          <td class="col-pts col-pts--title" data-val="0.017">
             1.7%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 4.4%"></span></span>
+            
           </td>
           
           
@@ -536,8 +576,12 @@
             <span class="prob-bar"><span style="width: 92.9%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.087">
+          
+          <td class="col-pts col-pts--title" data-val="0.087">
             8.7%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 22.4%"></span></span>
+            
           </td>
           
           
@@ -574,8 +618,12 @@
             <span class="prob-bar"><span style="width: 92.7%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.056">
+          
+          <td class="col-pts col-pts--title" data-val="0.056">
             5.6%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 14.4%"></span></span>
+            
           </td>
           
           
@@ -612,8 +660,12 @@
             <span class="prob-bar"><span style="width: 91.1%"></span></span>
             
           </td>
-          <td class="col-pts" data-val="0.03">
+          
+          <td class="col-pts col-pts--title" data-val="0.03">
             3.0%
+            
+            <span class="prob-bar prob-bar--title"><span style="width: 7.7%"></span></span>
+            
           </td>
           
           
