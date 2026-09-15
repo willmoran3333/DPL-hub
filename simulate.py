@@ -27,7 +27,7 @@ Modelling, in short:
 """
 from __future__ import annotations
 
-import argparse, json, re, sqlite3, sys, unicodedata
+import argparse, json, re, sqlite3, sys, time, unicodedata
 from collections import defaultdict
 from pathlib import Path
 
@@ -36,6 +36,7 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 DB_PATH = HERE / "dpl.db"
 FPL_CACHE = HERE / "data" / "fpl_bootstrap.json"
+FPL_MAX_AGE_DAYS = 2.0     # availability goes stale in days, not weeks
 FPL_URL = "https://fantasy.premierleague.com/api/bootstrap-static/"
 
 LEAGUE_ID = "1385458928208343040"
@@ -189,10 +190,28 @@ def toks(s: str) -> frozenset:
     return frozenset(t for t in re.split(r"[^a-z]+", s.lower()) if t)
 
 
-def load_fpl(refresh: bool = False) -> dict:
-    """FPL bootstrap, cached on disk. --refresh-fpl re-pulls it."""
-    if FPL_CACHE.exists() and not refresh:
-        return json.loads(FPL_CACHE.read_text())
+def load_fpl(refresh: bool = False, max_age_days: float = FPL_MAX_AGE_DAYS) -> dict:
+    """FPL bootstrap, cached on disk, re-pulled once the cache goes stale.
+
+    The cache carries availability -- status, chance_of_playing -- and that is
+    the half of it with a shelf life of days, not weeks. A stale cache does not
+    fail loudly; it quietly reports suspended and injured players as fit, and
+    the model then rates them as three-quarter-time starters. That is what a
+    fortnight-old cache was doing to Foden and Awoniyi, both suspended into
+    October and both still carrying p(play) near 0.76.
+
+    So age the cache rather than trusting whoever remembered --refresh-fpl. A
+    failed re-pull falls back to what is on disk, with a warning: stale data
+    beats no data, as long as it says so.
+    """
+    fresh_enough = False
+    if FPL_CACHE.exists():
+        age = (time.time() - FPL_CACHE.stat().st_mtime) / 86400.0
+        fresh_enough = age <= max_age_days
+        if not refresh and fresh_enough:
+            return json.loads(FPL_CACHE.read_text())
+        if not refresh:
+            print(f"  FPL cache is {age:.1f} days old (limit {max_age_days}) — re-pulling")
     import ssl
     from urllib.request import Request, urlopen
     try:                                  # same cert handling as ingest.py
@@ -201,8 +220,14 @@ def load_fpl(refresh: bool = False) -> dict:
     except ImportError:
         ctx = ssl.create_default_context()
     req = Request(FPL_URL, headers={"User-Agent": "Mozilla/5.0"})
-    with urlopen(req, timeout=30, context=ctx) as r:
-        data = json.loads(r.read().decode())
+    try:
+        with urlopen(req, timeout=30, context=ctx) as r:
+            data = json.loads(r.read().decode())
+    except Exception as exc:
+        if FPL_CACHE.exists():
+            print(f"  ! FPL re-pull failed ({exc}); falling back to the cache on disk")
+            return json.loads(FPL_CACHE.read_text())
+        raise
     FPL_CACHE.parent.mkdir(parents=True, exist_ok=True)
     FPL_CACHE.write_text(json.dumps(data))
     return data
