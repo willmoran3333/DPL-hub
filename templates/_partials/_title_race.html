@@ -6,13 +6,15 @@
   <div class="season-chart-wrap">
     <svg class="season-chart" viewBox="0 0 {{ rc.width }} {{ rc.height }}"
          preserveAspectRatio="xMidYMid meet" aria-label="Title probability by gameweek">
-      {% for pct in range(0, 101, 20) %}
-      {% set y = rc.pad_t + rc.plot_h - (pct / 100) * rc.plot_h %}
+      {% set steps = ((rc.y_max / rc.y_step) | round(0, 'floor') | int) %}
+      {% for k in range(0, steps + 1) %}
+      {% set pct = (k * rc.y_step * 100) | round(0) | int %}
+      {% set y = rc.pad_t + rc.plot_h - (k * rc.y_step / rc.y_max) * rc.plot_h %}
       <line class="grid" x1="{{ rc.pad_l }}" y1="{{ y }}" x2="{{ rc.pad_l + rc.plot_w }}" y2="{{ y }}"/>
       <text class="axis-label" x="{{ rc.pad_l - 8 }}" y="{{ y + 3 }}" text-anchor="end">{{ pct }}%</text>
       {% endfor %}
       {% for w in range(0, rc.last + 1) %}
-      {% if w == 0 or w % 5 == 0 or w == rc.last %}
+      {% if w == 0 or w % rc.x_every == 0 or w == rc.last %}
       <text class="axis-label" x="{{ rc.pad_l + w * rc.step_x }}" y="{{ rc.height - 8 }}"
             text-anchor="middle">{{ 'Pre' if w == 0 else 'GW' ~ w }}</text>
       {% endif %}

@@ -148,10 +148,19 @@ def _race_geometry(race: dict) -> dict | None:
         return None
     pad_l, pad_r, pad_t, pad_b = 40.0, 152.0, 16.0, 34.0
     plot_w, plot_h = CHART_W - pad_l - pad_r, CHART_H - pad_t - pad_b
-    step_x = plot_w / max(race.get("total_weeks") or weeks[-1], 1)
+    total = race.get("total_weeks") or weeks[-1]
+    # Fit the axes to the data. Five points on a 38-week axis, nobody above
+    # 40% on a 100% axis, and the whole race sits in the bottom-left corner.
+    # In-progress: run the x-axis a couple of weeks past the last point (min
+    # eight so GW1 is not a single stretched segment) and lift the y-axis to
+    # the next round figure above the leader. Finished: 38 weeks and 100%.
+    x_max = total if weeks[-1] >= total else min(total, max(weeks[-1] + 2, 8))
+    peak = max(v for w in weeks for v in race["series"][str(w)])
+    y_max = min(1.0, next((t for t in (0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0) if t >= peak * 1.12), 1.0))
+    step_x = plot_w / max(x_max, 1)
     lines = []
     for i, m in enumerate(race["managers"]):
-        pts = [(pad_l + w * step_x, pad_t + plot_h - race["series"][str(w)][i] * plot_h)
+        pts = [(pad_l + w * step_x, pad_t + plot_h - (race["series"][str(w)][i] / y_max) * plot_h)
                for w in weeks]
         lines.append({"manager": m["manager"], "team": m["team"], "wins": m["wins"],
                       "roster_id": m["roster_id"], "color": CHART_PALETTE[i % len(CHART_PALETTE)],
@@ -173,7 +182,9 @@ def _race_geometry(race: dict) -> dict | None:
         d["label_y"] = round(d["label_y"], 1)
     return {"width": CHART_W, "height": CHART_H, "pad_l": pad_l, "pad_t": pad_t,
             "plot_w": plot_w, "plot_h": plot_h, "step_x": step_x,
-            "weeks": weeks, "last": race.get("total_weeks") or weeks[-1],
+            "weeks": weeks, "last": x_max, "x_max": x_max, "y_max": y_max,
+            "y_step": 0.1 if y_max <= 0.5 else 0.2,
+            "x_every": 1 if x_max <= 12 else 5,
             "weeks_done": race.get("weeks_done", weeks[-1]),
             "sims": race["sims"], "hold": race.get("shrink_hold", 10),
             "lines": sorted(lines, key=lambda d: d["dot_y"])}
