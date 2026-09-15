@@ -17,8 +17,7 @@
   </header>
 
   {% if current_race %}
-  {{ title_race(current_race, SEASON_LABEL ~ " \u00b7 Title Race So Far",
-     "Live through GW" ~ current_race.weeks_done ~ ". The projection is held at the league average through GW" ~ current_race.hold ~ ", then released as results accumulate \u2014 so the early weeks stay deliberately flat. Hover or tap a line to isolate it.") }}
+  {{ title_race(current_race, SEASON_LABEL ~ " · Season Power Rankings", "") }}
   {% endif %}
 
   {% for hist in histories %}
@@ -28,8 +27,7 @@
   {% if hist.notes %}<p class="page-header__subtitle">{{ hist.notes }}</p>{% endif %}
 
   {% if hist.race %}
-  {{ title_race(hist.race, hist.label ~ " \u00b7 Title Race",
-     "Title chance after every gameweek, from " ~ "{:,}".format(hist.race.sims) ~ " simulated seasons per week. Held at the league average through GW" ~ hist.race.hold ~ ", then trusted progressively more as results accumulate.") }}
+  {{ title_race(hist.race, "Season Power Rankings", "") }}
   {% endif %}
 
   <div class="awards-grid">
