@@ -138,7 +138,7 @@ def band_pools(meta, pts, mins):
 
 
 def run_week(w0, *, base_raw, pos, rid, rosters, ridx, rpos, posmask, pools, ntier,
-             dpl_wk, team_real, fixtures, n_sims, rng, total_weeks):
+             dpl_wk, team_real, fixtures, n_sims, rng, total_weeks, want_week_mean=False):
     """Title probability as it stood at the end of gameweek w0."""
     P = len(base_raw)
     base = base_raw.copy()
@@ -161,6 +161,7 @@ def run_week(w0, *, base_raw, pos, rid, rosters, ridx, rpos, posmask, pools, nti
 
     cum = np.tile(dpl_wk[1:w0 + 1].sum(axis=0), (n_sims, 1)).astype(float)
     ngw = max(float(w0), 1.0)
+    wk_means = []
     for wk in range(w0 + 1, total_weeks + 1):
         tier = np.zeros((n_sims, P), dtype=int)
         for q, ix in posmask.items():
@@ -197,17 +198,38 @@ def run_week(w0, *, base_raw, pos, rid, rosters, ridx, rpos, posmask, pools, nti
                 tot = take("GK", 1) + take("F", 1 + eF) + take("M", 3 + eM) + take("D", 3 + eD)
                 best = tot if best is None else np.maximum(best, tot)
             team[:, ridx[r]] = best
+        if want_week_mean:
+            wk_means.append(float(team.mean()))
         for a, b in fixtures.get(wk, []):
             aw = team[:, a] > team[:, b]
             wins[:, a] += aw; wins[:, b] += ~aw
             pf[:, a] += team[:, a]; pf[:, b] += team[:, b]
 
     key = wins + pf * 1e-6
-    return np.bincount(np.argmax(key, axis=1), minlength=R) / n_sims
+    rank = (-key).argsort(axis=1).argsort(axis=1)
+    return {
+        "week_mean": (sum(wk_means) / len(wk_means)) if wk_means else None,
+        "title":  np.bincount(np.argmax(key, axis=1), minlength=R) / n_sims,
+        "top3":   (rank < 3).mean(axis=0),
+        "wooden": (rank == R - 1).mean(axis=0),
+        "wins":   wins.mean(axis=0),
+        "pf":     pf.mean(axis=0),
+    }
 
 
-def build(conn, season, n_sims, seed=7):
-    prior = str(int(season) - 1)
+def build(conn, season, n_sims, seed=7, reference=None):
+    """reference = the season the bands and the conversion ratio are measured on.
+
+    Normally the season before, so nothing looks ahead. The first season in the
+    database has nothing before it, so it borrows the season after instead --
+    in-sample in the strict sense, but the alternative is no chart at all, and
+    what is being borrowed is the SHAPE of a weekly score (how often a decile
+    blanks, how often it booms) rather than anything about who was good.
+    """
+    prior = reference or str(int(season) - 1)
+    if not conn.execute("SELECT 1 FROM player_stats WHERE season=? LIMIT 1", (prior,)).fetchone():
+        prior = str(int(season) + 1)
+        print(f"  no {int(season)-1} data — taking bands and ratios from {prior} instead")
     scoring = json.loads(conn.execute(
         "SELECT scoring_settings FROM league WHERE league_id=?", (S.LEAGUE_ID,)).fetchone()[0])
     meta = {r[0]: (r[1], r[2]) for r in
@@ -293,17 +315,40 @@ def build(conn, season, n_sims, seed=7):
            WHERE r.league_id=?""", (league_id,)):
         if r in ridx: names[ridx[r]] = {"manager": dn, "team": tn or dn, "roster_id": r}
 
+    # Calibrate the level. fplavg is FPL points per gameweek including blanks,
+    # which is a much smaller number than a DPL score; converted it lands near
+    # 4 a player where the league actually scores about 85 a team. Scale once,
+    # against the league's own observed mean, so E[PF] means something.
+    obs = conn.execute(
+        """SELECT AVG(COALESCE(custom_points, points)) FROM matchup_legs
+           WHERE season=? AND points IS NOT NULL""", (season,)).fetchone()[0]
     rng = np.random.default_rng(seed)
-    series = {}
+    kcal = 1.0
+    if obs:
+        n0 = float(weeks_done)
+        fa = (fpl_wk[1:weeks_done + 1].sum(axis=0) + PRIOR_FPL_W * prior_fpl) / (n0 + PRIOR_FPL_W)
+        probe = run_week(weeks_done, base_raw=np.maximum(fa * ratio, 0.05), pos=pos, rid=rid,
+                         rosters=rosters, ridx=ridx, rpos=rpos, posmask=posmask, pools=pools,
+                         ntier=ntier, dpl_wk=dpl_wk, team_real=team_real, fixtures=fixtures,
+                         n_sims=200, rng=np.random.default_rng(seed), total_weeks=total_weeks,
+                         want_week_mean=True)
+        if probe.get("week_mean"):
+            kcal = float(obs) / probe["week_mean"]
+            print(f"  level calibration: model {probe['week_mean']:.1f}/wk vs league {obs:.1f} -> x{kcal:.3f}")
+
+    series, ewins, last = {}, {}, None
     for w0 in range(0, weeks_done + 1):
         n = float(w0)
         fplavg = (fpl_wk[1:w0 + 1].sum(axis=0) + PRIOR_FPL_W * prior_fpl) / (n + PRIOR_FPL_W)
-        base_raw = np.maximum(fplavg * ratio, 0.05)
-        t = run_week(w0, base_raw=base_raw, pos=pos, rid=rid, rosters=rosters, ridx=ridx,
+        base_raw = np.maximum(fplavg * ratio, 0.05) * kcal
+        res = run_week(w0, base_raw=base_raw, pos=pos, rid=rid, rosters=rosters, ridx=ridx,
                      rpos=rpos, posmask=posmask, pools=pools, ntier=ntier, dpl_wk=dpl_wk,
                      team_real=team_real, fixtures=fixtures, n_sims=n_sims, rng=rng,
                      total_weeks=total_weeks)
+        t = res["title"]
         series[w0] = [round(float(x), 4) for x in t]
+        ewins[w0] = [round(float(x), 2) for x in res["wins"]]
+        last = res
         print(f"  GW{w0:>2}: leader {names[int(np.argmax(t))]['manager']} {100*max(t):.0f}%", flush=True)
 
     wins = np.zeros(R)
@@ -313,8 +358,16 @@ def build(conn, season, n_sims, seed=7):
             else:                                   wins[b] += 1
     return {"season": season, "sims": n_sims, "weeks_done": weeks_done,
             "total_weeks": total_weeks, "shrink_hold": SHRINK_HOLD,
-            "managers": [{**names[i], "wins": int(wins[i])} for i in range(R)],
-            "series": {str(k): v for k, v in series.items()}}
+            "managers": [{**names[i], "wins": int(wins[i]),
+                          "title_pct": round(float(last["title"][i]), 5),
+                          "top3_pct": round(float(last["top3"][i]), 5),
+                          "last_pct": round(float(last["wooden"][i]), 5),
+                          "exp_wins": round(float(last["wins"][i]), 3),
+                          "exp_pf": round(float(last["pf"][i]), 1),
+                          "banked_wins": int(wins[i]),
+                          "banked_losses": int(weeks_done - wins[i])} for i in range(R)],
+            "series": {str(k): v for k, v in series.items()},
+            "exp_wins_series": {str(k): v for k, v in ewins.items()}}
 
 
 def main():
@@ -322,14 +375,46 @@ def main():
     ap.add_argument("--season", default=S.SEASON)
     ap.add_argument("--sims", type=int, default=400)
     ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--reference", default=None,
+                    help="season to measure bands and the FPL->DPL ratio on (default: season-1)")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--write", action="store_true",
+                    help="also write power_rankings.json + history, which drive the Rankings page")
     a = ap.parse_args()
     conn = sqlite3.connect(S.DB_PATH)
     print(f"Title race — season {a.season}, {a.sims} sims per gameweek")
-    data = build(conn, a.season, a.sims, a.seed)
+    data = build(conn, a.season, a.sims, a.seed, a.reference)
     out = Path(a.out) if a.out else HERE / f"title_race_{a.season}.json"
     out.write_text(json.dumps(data, indent=1) + "\n")
     print(f"wrote {out.name}: {data['weeks_done']+1} points x {len(data['managers'])} managers")
+
+    if a.write and a.season == S.SEASON:
+        # This model now drives the Rankings page, so it writes the two files
+        # the site build reads. Same schema simulate.py used, so the table,
+        # the change column and the sparklines all keep working untouched.
+        ranks = {"season": a.season, "sims": a.sims, "weeks_total": data["total_weeks"],
+                 "weeks_played": data["weeks_done"], "weeks_simulated":
+                     data["total_weeks"] - data["weeks_done"],
+                 "params": {"shrink_hold": SHRINK_HOLD, "prior_fpl_weeks": PRIOR_FPL_W,
+                            "bands": len(BAND_EDGES) - 1, "lineups": "best ball"},
+                 "managers": [{k: m[k] for k in
+                               ("roster_id", "manager", "title_pct", "exp_wins", "exp_pf",
+                                "top3_pct", "last_pct", "banked_wins", "banked_losses")}
+                              for m in data["managers"]]}
+        for m in ranks["managers"]:
+            m["banked_ties"] = 0
+            m["banked_pf"] = 0.0
+        (HERE / "power_rankings.json").write_text(json.dumps(ranks, indent=2) + "\n")
+        hist = {"season": a.season, "sims": a.sims, "weeks_total": data["total_weeks"],
+                "weeks_played": data["weeks_done"],
+                "snapshots": [{"week": int(w),
+                               "title_pct": {str(m["roster_id"]): data["series"][w][i]
+                                             for i, m in enumerate(data["managers"])},
+                               "exp_wins": {str(m["roster_id"]): data["exp_wins_series"][w][i]
+                                            for i, m in enumerate(data["managers"])}}
+                              for w in sorted(data["series"], key=int)]}
+        (HERE / "power_rankings_history.json").write_text(json.dumps(hist, indent=2) + "\n")
+        print("wrote power_rankings.json and power_rankings_history.json (Rankings page)")
 
 
 if __name__ == "__main__":
