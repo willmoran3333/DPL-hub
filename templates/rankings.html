@@ -39,7 +39,9 @@
     </div>
     <h1 class="page-header__title">Power Rankings</h1>
     <p class="page-header__subtitle">
-      Ranked by how often each manager finishes with the best head-to-head record.
+      Ranked by roster strength — the expected points a squad produces each week from its players
+      alone, no schedule and no record. Title is how often that squad, from where it stands now,
+      finishes with the best head-to-head record.
     </p>
     {% if rk.managers and rk.managers[0].spark_series %}
     <p class="page-header__subtitle">
@@ -59,6 +61,7 @@
         <tr>
           <th class="col-pos">#</th>
           <th class="col-team">Manager</th>
+          <th>Strength</th>
           <th>Title</th>
           <th>Chg</th>
           <th class="col-hide-sm">Trend</th>
@@ -78,9 +81,14 @@
               {% if m.team_name %}<div class="team-cell__owner">{{ m.team_name }}</div>{% endif %}
             </a>
           </td>
+          <td class="col-pts" data-val="{{ m.strength or 0 }}">
+            {% if m.strength is not none %}{{ "%.1f"|format(m.strength) }}{% else %}&mdash;{% endif %}
+            {% if m.strength is not none and rk.max_strength %}
+            <span class="prob-bar"><span style="width: {{ (100 * m.strength / rk.max_strength)|round(1) }}%"></span></span>
+            {% endif %}
+          </td>
           <td class="col-pts" data-val="{{ m.title_pct }}">
             {{ "%.1f"|format(100 * m.title_pct) }}%
-            <span class="prob-bar"><span style="width: {{ (100 * m.title_pct / rk.managers[0].title_pct)|round(1) }}%"></span></span>
           </td>
           {# Week-on-week move, in points of probability. #}
           {% set d = m.title_delta %}

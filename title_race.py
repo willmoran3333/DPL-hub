@@ -29,21 +29,31 @@ How a player's weekly score is built
 * The decile is RE-RANKED EVERY WEEK, so a player climbing into a higher tier
   gets that tier's shape from then on.
 
-The shrink ramp
----------------
-Early in a season the projection has nothing behind it, and taken at face value
-it produces nonsense -- unshrunk, the 2025/26 replay had the eventual LAST
-placed manager at 86% after two gameweeks. So every player's level is pulled
-fully to his positional mean to start with, held there through SHRINK_HOLD, and
-released linearly after that until the projection is trusted in full by the last
-week. Banked results are never shrunk, so results still drive the table while the
-projection is being held down.
+Roster strength, and the dampener
+---------------------------------
+The primary ranking is ROSTER STRENGTH: the expected best-ball points per week
+from the player levels above. No schedule, no banked record -- just how good the
+eighteen players are. Title probability is carried alongside it.
 
-The hold is at GW15. A shorter hold of 10 was measured as slightly sharper -- in
-the 2025/26 replay the eventual champion crossed 50% at GW16 rather than GW18 --
-but 15 keeps the field closer for longer, which is the behaviour asked for. The
-curve turns somewhere past 15: holding to 20 starts suppressing a signal the
-results have already earned.
+Early in a season that projection has nothing behind it, and taken at face
+value it produces nonsense -- undamped, the 2025/26 replay had the eventual
+LAST placed manager at 86% after two gameweeks. An earlier fix shrank every
+player to his positional mean, which cured the overconfidence by deleting the
+player signal entirely, so that all that remained was the record. That is the
+wrong cure: the number is meant to be about the players.
+
+So the dampener works at the ROSTER level instead. Each player keeps his own
+projected level -- it still decides lineups and deciles -- but the spread of
+roster strengths around the league mean is compressed to DAMP_KEEP of itself
+through DAMP_UNTIL, then released linearly to full by the last week. Banked
+results are never damped.
+
+Strength is measured REALISED, by a short probe simulation, not as the sum of
+expected players. Under best ball those differ: a roster with a few high
+variance stars realises more of its upside than a flat one, and dampening the
+expected number left a 16 point realised spread behind a 7 point expected one.
+Scaling a roster's players by c scales its realised best ball by exactly c, so
+one probe and one multiplier lands the realised strength where it should be.
 
 Lineups are best ball -- the highest-scoring legal XI of the week. That is a
 choice about what the number means (how good is this roster, not how well is it
@@ -58,7 +68,10 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import simulate as S
 
-SHRINK_HOLD = 15      # weeks the full shrink is held before it starts decaying
+DAMP_KEEP  = 0.25     # share of the between-roster spread kept while the dampener is on
+DAMP_UNTIL = 20       # dampener holds at DAMP_KEEP through this week, then releases to 1 by GW38
+PROBE_SIMS, PROBE_WEEKS = 300, 10   # how realised roster strength is measured before dampening
+SHRINK_HOLD = DAMP_UNTIL   # kept for the JSON/blurb; the mechanism is the dampener below
 PRIOR_FPL_W = 4.0     # gameweeks of prior-season FPL average carried early
 BAND_EDGES  = [0, 5, 20, 40, 60, 80, 95, 100]     # the seven bands, in percentiles
 
@@ -142,19 +155,40 @@ def band_pools(meta, pts, mins):
     return pools, ntier
 
 
+def damp_keep(w0: int, total_weeks: int) -> float:
+    """Share of the between-roster spread kept at week w0."""
+    if w0 <= DAMP_UNTIL:
+        return DAMP_KEEP
+    return DAMP_KEEP + (1.0 - DAMP_KEEP) * (w0 - DAMP_UNTIL) / max(total_weeks - DAMP_UNTIL, 1)
+
+
+def roster_strength(base, rosters, rpos):
+    """Expected best-ball points per week per roster, from player levels alone."""
+    out = {}
+    for r in rosters:
+        cs = {}
+        for q in ("GK", "D", "M", "F"):
+            ix = rpos[(r, q)]
+            v = np.sort(base[ix])[::-1] if ix.size else np.zeros(0)
+            cs[q] = np.concatenate([[0.0], np.cumsum(v)])
+        take = lambda q, n: cs[q][min(n, len(cs[q]) - 1)]
+        best = 0.0
+        for eF, eM, eD in S.FLEX_COMBOS:
+            best = max(best, take("GK", 1) + take("F", 1 + eF) + take("M", 3 + eM) + take("D", 3 + eD))
+        out[r] = best
+    return out
+
+
 def run_week(w0, *, base_raw, pos, rid, rosters, ridx, rpos, posmask, pools, ntier,
-             dpl_wk, team_real, fixtures, n_sims, rng, total_weeks, want_week_mean=False):
+             dpl_wk, team_real, fixtures, n_sims, rng, total_weeks, want_week_mean=False,
+             probe_weeks=None):
+    """probe_weeks: simulate only that many weeks from w0 and return per-roster
+    mean realised team score. Used to measure what best ball actually makes of
+    a roster, which is NOT the sum of its expected players -- a roster with a
+    few high-variance stars realises more of its upside than a flat one."""
     """Title probability as it stood at the end of gameweek w0."""
     P = len(base_raw)
-    base = base_raw.copy()
-    # full shrink held through SHRINK_HOLD, then released linearly
-    extra = 1.0 if w0 <= SHRINK_HOLD else max(0.0, (total_weeks - w0) / (total_weeks - SHRINK_HOLD))
-    keep = 1.0 - extra
-    for q in ("F", "M", "D", "GK"):
-        ix = posmask[q]
-        if ix.size:
-            mu = base[ix].mean()
-            base[ix] = mu + (base[ix] - mu) * keep
+    base = base_raw            # already dampened at roster level by the caller
 
     R = len(rosters)
     wins = np.zeros((n_sims, R)); pf = np.zeros((n_sims, R))
@@ -167,7 +201,9 @@ def run_week(w0, *, base_raw, pos, rid, rosters, ridx, rpos, posmask, pools, nti
     cum = np.tile(dpl_wk[1:w0 + 1].sum(axis=0), (n_sims, 1)).astype(float)
     ngw = max(float(w0), 1.0)
     wk_means = []
-    for wk in range(w0 + 1, total_weeks + 1):
+    roster_acc = np.zeros(R); roster_n = 0
+    last_wk = min(total_weeks, w0 + probe_weeks) if probe_weeks else total_weeks
+    for wk in range(w0 + 1, last_wk + 1):
         tier = np.zeros((n_sims, P), dtype=int)
         for q, ix in posmask.items():
             if not ix.size: continue
@@ -205,11 +241,16 @@ def run_week(w0, *, base_raw, pos, rid, rosters, ridx, rpos, posmask, pools, nti
             team[:, ridx[r]] = best
         if want_week_mean:
             wk_means.append(float(team.mean()))
+        if probe_weeks:
+            roster_acc += team.mean(axis=0); roster_n += 1
+            continue
         for a, b in fixtures.get(wk, []):
             aw = team[:, a] > team[:, b]
             wins[:, a] += aw; wins[:, b] += ~aw
             pf[:, a] += team[:, a]; pf[:, b] += team[:, b]
 
+    if probe_weeks:
+        return {"roster_means": roster_acc / max(roster_n, 1)}
     key = wins + pf * 1e-6
     rank = (-key).argsort(axis=1).argsort(axis=1)
     return {
@@ -342,14 +383,32 @@ def build(conn, season, n_sims, seed=7, reference=None):
             print(f"  level calibration: model {probe['week_mean']:.1f}/wk vs league {obs:.1f} -> x{kcal:.3f}")
 
     series, ewins, last = {}, {}, None
+    strength_series, strength_raw_series = {}, {}
     for w0 in range(0, weeks_done + 1):
         n = float(w0)
         fplavg = (fpl_wk[1:w0 + 1].sum(axis=0) + PRIOR_FPL_W * prior_fpl) / (n + PRIOR_FPL_W)
         base_raw = np.maximum(fplavg * ratio, 0.05) * kcal
-        res = run_week(w0, base_raw=base_raw, pos=pos, rid=rid, rosters=rosters, ridx=ridx,
-                     rpos=rpos, posmask=posmask, pools=pools, ntier=ntier, dpl_wk=dpl_wk,
-                     team_real=team_real, fixtures=fixtures, n_sims=n_sims, rng=rng,
-                     total_weeks=total_weeks)
+        # Dampen at the roster level: compress each roster's strength toward
+        # the league mean, then scale that roster's players by the same factor
+        # so lineups and deciles still see the real players.
+        common = dict(pos=pos, rid=rid, rosters=rosters, ridx=ridx, rpos=rpos, posmask=posmask,
+                      pools=pools, ntier=ntier, dpl_wk=dpl_wk, team_real=team_real,
+                      fixtures=fixtures, total_weeks=total_weeks)
+        probe = run_week(w0, base_raw=base_raw, n_sims=PROBE_SIMS, rng=np.random.default_rng(seed + 1000 + w0),
+                         probe_weeks=PROBE_WEEKS, **common)
+        raw = {r: float(probe["roster_means"][ridx[r]]) for r in rosters}
+        if not any(raw.values()) and strength_raw_series:
+            # season over, nothing left to probe: carry the last measured value
+            prev = strength_raw_series[max(strength_raw_series)]
+            raw = {r: prev[i] for i, r in enumerate(rosters)}
+        mean_s = float(np.mean(list(raw.values())))
+        keep = damp_keep(w0, total_weeks)
+        damp = {r: mean_s + (raw[r] - mean_s) * keep for r in rosters}
+        pm = np.array([damp[rid[i]] / raw[rid[i]] if raw[rid[i]] > 0 else 1.0 for i in range(P)])
+        base_d = base_raw * pm
+        strength_raw_series[w0] = [round(raw[r], 2) for r in rosters]
+        strength_series[w0] = [round(damp[r], 2) for r in rosters]
+        res = run_week(w0, base_raw=base_d, n_sims=n_sims, rng=rng, **common)
         t = res["title"]
         series[w0] = [round(float(x), 4) for x in t]
         ewins[w0] = [round(float(x), 2) for x in res["wins"]]
@@ -364,6 +423,8 @@ def build(conn, season, n_sims, seed=7, reference=None):
     return {"season": season, "sims": n_sims, "weeks_done": weeks_done,
             "total_weeks": total_weeks, "shrink_hold": SHRINK_HOLD,
             "managers": [{**names[i], "wins": int(wins[i]),
+                          "strength": strength_series[weeks_done][i],
+                          "strength_raw": strength_raw_series[weeks_done][i],
                           "title_pct": round(float(last["title"][i]), 5),
                           "top3_pct": round(float(last["top3"][i]), 5),
                           "last_pct": round(float(last["wooden"][i]), 5),
@@ -372,7 +433,10 @@ def build(conn, season, n_sims, seed=7, reference=None):
                           "banked_wins": int(wins[i]),
                           "banked_losses": int(weeks_done - wins[i])} for i in range(R)],
             "series": {str(k): v for k, v in series.items()},
-            "exp_wins_series": {str(k): v for k, v in ewins.items()}}
+            "exp_wins_series": {str(k): v for k, v in ewins.items()},
+            "strength_series": {str(k): v for k, v in strength_series.items()},
+            "strength_raw_series": {str(k): v for k, v in strength_raw_series.items()},
+            "damp_keep": DAMP_KEEP, "damp_until": DAMP_UNTIL}
 
 
 def main():
@@ -400,10 +464,12 @@ def main():
         ranks = {"season": a.season, "sims": a.sims, "weeks_total": data["total_weeks"],
                  "weeks_played": data["weeks_done"], "weeks_simulated":
                      data["total_weeks"] - data["weeks_done"],
-                 "params": {"shrink_hold": SHRINK_HOLD, "prior_fpl_weeks": PRIOR_FPL_W,
+                 "params": {"damp_keep": DAMP_KEEP, "damp_until": DAMP_UNTIL,
+                            "prior_fpl_weeks": PRIOR_FPL_W,
                             "bands": len(BAND_EDGES) - 1, "lineups": "best ball"},
                  "managers": [{k: m[k] for k in
-                               ("roster_id", "manager", "title_pct", "exp_wins", "exp_pf",
+                               ("roster_id", "manager", "strength", "strength_raw",
+                                "title_pct", "exp_wins", "exp_pf",
                                 "top3_pct", "last_pct", "banked_wins", "banked_losses")}
                               for m in data["managers"]]}
         for m in ranks["managers"]:

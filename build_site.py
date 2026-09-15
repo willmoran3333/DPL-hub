@@ -217,7 +217,12 @@ def load_power_rankings(team_map: dict, standings: list[dict]) -> dict:
         m["actual_wins"] = t.get("wins")
         m["actual_pos"] = t.get("position")
     attach_title_history(data)
-    data["managers"].sort(key=lambda m: -m["title_pct"])
+    # Primary ranking is roster strength -- how good the eighteen players are,
+    # no schedule, no banked record. Title chance rides alongside it. Fall back
+    # to title chance for a file written before strength existed.
+    data["managers"].sort(key=lambda m: -(m.get("strength") if m.get("strength") is not None
+                                          else m["title_pct"]))
+    data["max_strength"] = max((m.get("strength") or 0) for m in data["managers"])
     for i, m in enumerate(data["managers"], start=1):
         m["rank"] = i
     return data
