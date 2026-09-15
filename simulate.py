@@ -27,7 +27,7 @@ Modelling, in short:
 """
 from __future__ import annotations
 
-import argparse, json, re, sqlite3, sys, time, unicodedata
+import argparse, datetime, json, re, sqlite3, sys, time, unicodedata
 from collections import defaultdict
 from pathlib import Path
 
@@ -233,6 +233,41 @@ def load_fpl(refresh: bool = False, max_age_days: float = FPL_MAX_AGE_DAYS) -> d
     return data
 
 
+_MONTHS = {m: i + 1 for i, m in enumerate(
+    ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"])}
+
+
+def return_week(news: str, gw_dates: dict[int, str]) -> int | None:
+    """First gameweek a flagged player is available again, from FPL's own news.
+
+    FPL writes the date in plain text -- "Hamstring injury - Expected back
+    11 Oct". Without reading it, an injury or suspension is a single multiplier
+    applied to every remaining week of the season, so a four-week ban retires
+    the player until May. Foden, suspended to 17 October, was carrying an
+    expected 0.25 points a week for all 34 remaining gameweeks.
+
+    Returns None when there is no date -- "Unknown return date" genuinely means
+    indefinite, and the flat penalty is the honest read for those.
+    """
+    # FPL uses exactly two phrasings: "Expected back 11 Oct" for injuries and
+    # "Suspended until 17 Oct" for bans. Matching only the first silently left
+    # every suspended player retired for the season.
+    m = re.search(r"(?:back|until)\s+(\d{1,2})\s+(\w{3})", news or "")
+    if not m or m.group(2) not in _MONTHS:
+        return None
+    mon = _MONTHS[m.group(2)]
+    # the season straddles new year: Aug-Dec is this calendar year, Jan-Jul next
+    year = int(SEASON) if mon >= 8 else int(SEASON) + 1
+    try:
+        back = datetime.date(year, mon, int(m.group(1)))
+    except ValueError:
+        return None
+    for wk in sorted(gw_dates):
+        if datetime.date.fromisoformat(gw_dates[wk]) >= back:
+            return wk
+    return None
+
+
 def build_projections(conn) -> list[dict]:
     """One row per rostered player: expected points per start, and availability."""
     fpl = load_fpl()
@@ -242,6 +277,7 @@ def build_projections(conn) -> list[dict]:
     for e in fpl["elements"]:
         full = f"{e['first_name']} {e['second_name']}"
         elements.append({
+            "news": e.get("news") or "",
             "tokens": toks(full) | toks(e["web_name"]),
             "pos": pos_of[e["element_type"]], "club": team_of[e["team"]],
             "cost": e["now_cost"] / 10.0, "minutes": e["minutes"],
@@ -249,6 +285,12 @@ def build_projections(conn) -> list[dict]:
             "chance": e.get("chance_of_playing_next_round"),
             "taken": False,
         })
+
+    gw_dates = {w: d for w, d in conn.execute(
+        "SELECT week, MIN(date) FROM fixtures WHERE season=? GROUP BY week", (SEASON,)) if d}
+    cur_wk = conn.execute("SELECT MAX(week) FROM matchup_legs WHERE season=? AND points IS NOT NULL",
+                          (SEASON,)).fetchone()[0] or 0
+    remaining = [w for w in sorted(gw_dates) if w > cur_wk]
 
     scoring = json.loads(conn.execute(
         "SELECT scoring_settings FROM league WHERE league_id=?", (LEAGUE_ID,)
@@ -423,6 +465,8 @@ def build_projections(conn) -> list[dict]:
             p_price = 0.55 + 0.35 * pct
             p_play = (1 - PRICE_AVAIL_WEIGHT) * p_play + PRICE_AVAIL_WEIGHT * p_price
 
+        p_play_fit = p_play          # what he is worth once he is back
+        back_wk = None
         if p["fpl"]:
             st = p["fpl"]["status"]
             if st in ("i", "s", "u"):            # injured / suspended / unavailable
@@ -432,11 +476,23 @@ def build_projections(conn) -> list[dict]:
             ch = p["fpl"]["chance"]
             if ch is not None:
                 p_play *= max(float(ch) / 100.0, 0.1)
+            if p_play < p_play_fit:
+                back_wk = return_week(p["fpl"].get("news", ""), gw_dates)
+
+        # Roster strength is a season-long quantity, so it takes a season-long
+        # availability: the gate while he is out, his own level once he is back.
+        if back_wk is not None and remaining:
+            weeks_out = sum(1 for w in remaining if w < back_wk)
+            frac_out = weeks_out / len(remaining)
+            p_play_season = frac_out * p_play + (1 - frac_out) * p_play_fit
+        else:
+            p_play_season = p_play
 
         out.append({**{k: p[k] for k in
                        ("roster_id","manager","player_id","name","pos","club")},
                     "cost": cost, "rate90": rate, "own_weight": round(w, 2),
-                    "p_play": p_play, "exp_week": rate * p_play,
+                    "p_play": p_play, "p_play_fit": p_play_fit, "back_wk": back_wk,
+                    "p_play_season": p_play_season, "exp_week": rate * p_play_season,
                     "has_proj": p["player_id"] in sleeper_proj,
                     "imputed": p.get("imputed", False),
                     "cv": POS_CV[pos]})
@@ -607,6 +663,8 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
                 "exp":   np.array([p["rate90"] for p in grp]),
                 "cv":    np.array([p["cv"] for p in grp]),
                 "pplay": np.array([p["p_play"] for p in grp]),
+                "pplay_fit": np.array([p["p_play_fit"] for p in grp]),
+                "back_wk": np.array([p["back_wk"] if p["back_wk"] else 0 for p in grp]),
                 "club":  np.array([club_ix[p["club"] or "?"] for p in grp]),
                 "n": len(grp),
             }
@@ -694,7 +752,10 @@ def simulate(conn, proj, n_sims: int, seed: int = 7, as_of: int | None = None):
                     realised[pos] = np.zeros((n_sims, 0))
                     expected[pos] = np.zeros((n_sims, 0))
                     continue
-                a = rng.random((n_sims, g["n"])) < g["pplay"]
+                # Availability is week-dependent now: the gate applies while a
+                # player is actually out, his own level from the week he is back.
+                eff = np.where(wk >= g["back_wk"], g["pplay_fit"], g["pplay"])
+                a = rng.random((n_sims, g["n"])) < eff[None, :]
                 mu = g["exp"][None, :] * shock[:, g["club"]] * revert[rid] * mine
                 k = 1.0 / g["cv"][None, :] ** 2
                 draw = rng.gamma(shape=np.broadcast_to(k, mu.shape),

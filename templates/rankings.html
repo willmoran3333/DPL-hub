@@ -1,4 +1,5 @@
 {% extends "_base.html" %}
+{% from "_partials/_title_race.html" import title_race %}
 {% block title %}Power Rankings{% endblock %}
 {% block description %}Title probability for every DPL manager, from {{ "{:,}".format(rk.sims) }} simulated seasons.{% endblock %}
 
@@ -149,6 +150,12 @@
     </table>
   </div>
 
+
+  {% if current_race %}
+  <div class="mb-8"></div>
+  {{ title_race(current_race, "Title Race, Week by Week",
+     "A second model, shown for contrast. Level comes from each player's FPL projection converted to DPL points by his own measured ratio; spread comes from the empirical decile bands rather than a gamma. The projection is held at the league average through GW" ~ current_race.hold ~ " and released as results accumulate, so the opening weeks stay deliberately flat. The table above is the primary model — where they disagree, prefer the table.") }}
+  {% endif %}
 </div>
 {% endblock %}
 

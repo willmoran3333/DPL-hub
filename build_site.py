@@ -2457,6 +2457,7 @@ def build(open_after: bool = False):
         render(env0, "rankings.html", DIST_DIR / "rankings.html",
                active_nav="rankings",
                rk=rankings,
+               current_race=load_title_race(SEASON),
                current_week=current_week,
                preseason=preseason,
                team_map=team_map)
