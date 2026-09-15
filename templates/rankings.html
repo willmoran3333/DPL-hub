@@ -38,18 +38,6 @@
       {{ SEASON_LABEL }} · {{ "{:,}".format(rk.sims) }} simulated seasons
     </div>
     <h1 class="page-header__title">Power Rankings</h1>
-    <p class="page-header__subtitle">
-      Ranked by roster strength — the expected points a squad produces each week from its players
-      alone, no schedule and no record. Title is how often that squad, from where it stands now,
-      finishes with the best head-to-head record.
-    </p>
-    {% if rk.managers and rk.managers[0].spark_series %}
-    <p class="page-header__subtitle">
-      Chg is the move in title chance since last week, in points. Trend is the
-      last {{ rk.managers[0].spark_series|length }} week{{ 's' if rk.managers[0].spark_series|length != 1 }},
-      week 0 being the pre-season projection, all rows drawn to one scale.
-    </p>
-    {% endif %}
   </header>
 
 
@@ -122,8 +110,7 @@
 
   {% if current_race %}
   <div class="mb-8"></div>
-  {{ title_race(current_race, "Title Chance Over the Season",
-     "Level comes from each player's FPL projection converted to DPL points by his own measured ratio; spread comes from the empirical decile bands measured off last season, applied by where a player currently sits in his position's deciles. The projection is held at the league average through GW" ~ current_race.hold ~ " and released as results accumulate, so the opening weeks stay deliberately flat. Hover or tap a line to isolate it.") }}
+  {{ title_race(current_race, "Title Chance Over the Season", "") }}
   {% endif %}
 </div>
 {% endblock %}
