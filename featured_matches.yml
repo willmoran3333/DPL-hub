@@ -10,33 +10,33 @@
 # the pts_std column — the two differ for most players and pts_std does not
 # reconcile to the team totals in matchup_legs.
 
-gw: 4
+gw: 5
 
 matches:
-  - home_roster_id: 5
-    away_roster_id: 8
-    headline: "The unbeaten and the fortunate"
+  - home_roster_id: 2
+    away_roster_id: 5
+    headline: "The unbeaten and the unpredictable"
     body: >
-      Both of these teams are near the top and only one of them belongs there.
-      Score every side against the whole league each week rather than against
-      the one opponent the schedule handed them, and brendog2814 comes out
-      25-8 — the second-best team in the competition on merit. cstoney20 comes
-      out 10-23. He has the eleventh-best scoring total of twelve and a winning
-      record, which is a trick you can only pull for so long. His wins have
-      been narrow and his opponents have been obliging; last week he got
-      through by under two points. The unbeaten run meets the charmed one, and
-      the schedule stops doing anyone any favours here.
+      brendog2814 is the only team yet to lose and the only one to have passed
+      140 in a week, and he arrives against the hardest side in the league to
+      forecast. skoeiboy has already posted both the highest total of the
+      season and one of the lowest, in consecutive rounds, and nothing in
+      between has settled the question of which is the real one. Four weeks is
+      not much to go on, but it is enough to say that one of these teams turns
+      up every week and the other decides on the day. The unbeaten run has not
+      met anything like this yet — every opponent so far has handed him a
+      quiet afternoon.
 
-  - home_roster_id: 7
-    away_roster_id: 10
-    headline: "All the points, none of the wins"
+  - home_roster_id: 10
+    away_roster_id: 11
+    headline: "The champion and the newcomer"
     body: >
-      rmeernst has scored more than half the league and won nothing at all.
-      Against the field each week he is a coin flip; in the table he is level
-      with a team that has genuinely been outplayed every time out. Last week
-      was the unkindest of the three — he had the single best individual return
-      of the round in Tyrick Mitchell and still lost by under two points, with
-      more than enough left on his bench to have covered it twice over. erozier
-      arrives defending a title on one win from three and a record of his own
-      that flatters him. Whoever loses this is properly adrift, and only one of
-      them will be able to blame the fixtures.
+      erozier won this league last season and has one win from four in this
+      one. mdropkin had never played a week of it before August and has three.
+      That is the whole fixture. The title defence has been undone less by bad
+      luck than by bad weeks — he has been beaten on points by most of the
+      field most rounds, and the record is an honest reflection for once.
+      Across from him is a manager whose worst afternoon would be a good one
+      for half the league. A win here puts the newcomer level with the leaders;
+      a loss drops the champion to the bottom of the table and makes the rest
+      of the autumn a salvage job.

@@ -5,38 +5,37 @@
 # Set show: false to hide the featured-manager block on the home page.
 show: true
 
-roster_id: 5
-gw: 3
-headline: "Three and Oh, on Hull City Defenders"
-subheadline: "brendog2814 is the last unbeaten team in the league, and the fourth-highest scorer in it"
+roster_id: 11
+gw: 5
+headline: "First season, and not one bad week yet"
+subheadline: "mdropkin is the only new manager in the league this year, and he is already third in it"
 body: |
-  The squad reads like a relegation six-pointer. Ryan Giles and Semi Ajayi of
-  Hull, James Hill and Alex Scott of Bournemouth, Anan Khalaili of Palace.
-  Dominik Szoboszlai's 18.00 was the only return in his GW3 eleven that would
-  have made the top eight starters of the round. He scored 88.30, which was
-  fourth-best on the day, and he is 3-0.
+  He took over a roster in August, having never played a week of this league,
+  and the read on him was that the newcomer would be the easy fixture. Four
+  gameweeks later he is 3-1 and holds the third-best title chance in the
+  competition.
 
-  What he does better than anyone is name the right eleven. His bench cost him
-  2.10 in GW3, the lowest figure in the league; benditlikebergvall, the man
-  across from him in the same fixture, left 43.30 in reserve including Josh
-  King's 18.15. That was the whole margin and more. Over three weeks nobody
-  has wasted less.
+  What stands out is not the ceiling but the absence of a floor. Everyone else
+  has had a week that got away from them — the league has produced totals in
+  the thirties and forties already this season. He has not been near that. His
+  worst week is better than the worst week of every manager but two, and his
+  scoring has climbed in each of the four rounds rather than bouncing around.
+  Last week's 122.85 was the second-highest of the round.
 
-  The asterisk is who he has played. He has conceded 158.25, the least in the
-  league by 56.65 — his three opponents have posted 35.65, 57.35 and 65.25,
-  and two of those are the worst totals anyone has recorded all season. But
-  the schedule is not the whole of it: on an all-play basis, where every team
-  is scored against all eleven others each week, he is 25-8. Only bjennings28
-  is better, at 32-1 — and bjennings28 is 2-1, because the one time he lost he
-  ran into the biggest week of the season. Two teams here are better than
-  their record. Only one of them is also winning.
+  The case against is the usual one at this stage: four weeks is four weeks,
+  and his biggest total came against the team that is still looking for its
+  first win. But the schedule-proof measure agrees with the record. Score
+  every team against the whole field each week instead of the one opponent
+  they drew, and he is third there too. Most first-year managers spend a
+  season learning which of their players actually start. He appears to have
+  skipped that part.
 
 highlight_stats:
   - label: "Record"
-    value: "3-0"
-  - label: "Points Against"
-    value: "158.25"
+    value: "3-1"
   - label: "All-Play"
-    value: "25-8"
-  - label: "GW3 Bench"
-    value: "2.10"
+    value: "30-14"
+  - label: "Worst Week"
+    value: "81.10"
+  - label: "Title Chance"
+    value: "11.6%"
