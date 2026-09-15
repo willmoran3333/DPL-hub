@@ -1,6 +1,48 @@
 {% extends "_base.html" %}
 {% block title %}History{% endblock %}
 
+{% block extra_head %}
+{% include "_partials/_chart_css.html" %}
+{% endblock %}
+
+{% macro title_race(rc, heading, blurb) -%}
+  <div class="section-label">{{ heading }}</div>
+  <p class="page-header__subtitle">{{ blurb }}</p>
+  <div class="season-chart-wrap">
+    <svg class="season-chart" viewBox="0 0 {{ rc.width }} {{ rc.height }}"
+         preserveAspectRatio="xMidYMid meet" aria-label="Title probability by gameweek">
+      {% for pct in range(0, 101, 20) %}
+      {% set y = rc.pad_t + rc.plot_h - (pct / 100) * rc.plot_h %}
+      <line class="grid" x1="{{ rc.pad_l }}" y1="{{ y }}" x2="{{ rc.pad_l + rc.plot_w }}" y2="{{ y }}"/>
+      <text class="axis-label" x="{{ rc.pad_l - 8 }}" y="{{ y + 3 }}" text-anchor="end">{{ pct }}%</text>
+      {% endfor %}
+      {% for w in range(0, rc.last + 1) %}
+      {% if w == 0 or w % 5 == 0 or w == rc.last %}
+      <text class="axis-label" x="{{ rc.pad_l + w * rc.step_x }}" y="{{ rc.height - 8 }}"
+            text-anchor="middle">{{ 'Pre' if w == 0 else 'GW' ~ w }}</text>
+      {% endif %}
+      {% endfor %}
+      {% for d in rc.lines %}
+      <g class="line-group" data-roster="{{ d.roster_id }}">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="{{ d.points }}"/>
+        <polyline class="line hover-fade" stroke="{{ d.color }}" points="{{ d.points }}"/>
+        <circle class="line-dot hover-fade" cx="{{ d.dot_x }}" cy="{{ d.dot_y }}" r="3" fill="{{ d.color }}"/>
+        <text class="line-label hover-fade" x="{{ d.dot_x + 6 }}" y="{{ d.label_y + 3 }}"
+              fill="{{ d.color }}">{{ d.manager }}</text>
+      </g>
+      {% endfor %}
+    </svg>
+    <div class="chart-legend">
+      {% for d in rc.lines %}
+      <button class="chart-legend__item" type="button" data-roster="{{ d.roster_id }}">
+        <span class="chart-legend__swatch" style="background:{{ d.color }}"></span>
+        <span>{{ d.manager }}{% if d.wins %} &middot; {{ d.wins }}W{% endif %}</span>
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+{%- endmacro %}
+
 {% block body %}
 <div class="page">
   <header class="page-header">
@@ -9,11 +51,21 @@
     <p class="page-header__subtitle">Final tables and honours from every completed DPL season.</p>
   </header>
 
+  {% if current_race %}
+  {{ title_race(current_race, SEASON_LABEL ~ " \u00b7 Title Race So Far",
+     "Live through GW" ~ current_race.weeks_done ~ ". The projection is held at the league average through GW" ~ current_race.hold ~ ", then released as results accumulate \u2014 so the early weeks stay deliberately flat. Hover or tap a line to isolate it.") }}
+  {% endif %}
+
   {% for hist in histories %}
   {% set a = hist.awards %}
   <div class="section-label">{{ hist.label }} · {{ hist.weeks_played }} gameweeks</div>
 
   {% if hist.notes %}<p class="page-header__subtitle">{{ hist.notes }}</p>{% endif %}
+
+  {% if hist.race %}
+  {{ title_race(hist.race, hist.label ~ " \u00b7 Title Race",
+     "Title chance after every gameweek, from " ~ "{:,}".format(hist.race.sims) ~ " simulated seasons per week. Held at the league average through GW" ~ hist.race.hold ~ ", then trusted progressively more as results accumulate.") }}
+  {% endif %}
 
   <div class="awards-grid">
     <div class="award-card">
@@ -78,4 +130,8 @@
   {% endfor %}
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+{% include "_partials/_chart_js.html" %}
 {% endblock %}

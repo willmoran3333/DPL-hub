@@ -14,6 +14,89 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/main.css">
   
+
+<style>
+  .season-chart-wrap {
+    border-bottom: 1px solid var(--c-border-mid);
+    padding: 12px 0 24px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;     /* smooth momentum scroll on iOS */
+    touch-action: pan-x pan-y;
+  }
+  .season-chart {
+    display: block;
+    width: 100%;
+    min-width: 720px;
+    height: auto;
+  }
+  .season-chart .grid { stroke: var(--c-border); stroke-width: 1; }
+  .season-chart .axis-label { font-size: 11px; font-weight: 600; fill: var(--c-ink-light); font-family: var(--font-body); }
+  .season-chart .line {
+    fill: none;
+    stroke-width: 2;
+    transition: stroke-width 0.12s, opacity 0.12s;
+  }
+  .season-chart .line-group { cursor: pointer; -webkit-tap-highlight-color: rgba(61,20,82,0.15); }
+  /* iOS needs explicit pointer-events on invisible strokes for taps to register */
+  .season-chart .line-hit { pointer-events: stroke; }
+  .season-chart .line     { pointer-events: stroke; }
+  .season-chart .line-group:hover .line { stroke-width: 3.5; }
+  .season-chart .line-group:hover .line-label { font-weight: 800; }
+  .season-chart .line-dot { transition: r 0.12s; }
+  .season-chart .line-group:hover .line-dot { r: 5; }
+  .season-chart .line-label { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
+  .season-chart .hover-fade { opacity: 1; transition: opacity 0.12s; }
+  /* Hover (mouse): pointer enters chart → dim everyone, lift the hovered group */
+  .season-chart:hover .hover-fade { opacity: 0.15; }
+  .season-chart:hover .line-group:hover .hover-fade { opacity: 1; }
+  /* Selected (tap-locked): explicit highlight overrides hover state */
+  .season-chart.has-selection .hover-fade { opacity: 0.15; }
+  .season-chart.has-selection .line-group.is-selected .hover-fade { opacity: 1; }
+  .season-chart.has-selection .line-group.is-selected .line { stroke-width: 3.5; }
+  .season-chart.has-selection .line-group.is-selected .line-dot { r: 5; }
+  .season-chart.has-selection .line-group.is-selected .line-label { font-weight: 800; }
+
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 16px; font-size: 0.8125rem; }
+  .chart-legend__item {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 10px;
+    background: transparent; border: 1px solid transparent;
+    font-family: inherit; font-size: inherit; color: var(--c-ink);
+    cursor: pointer; transition: background 0.1s, border-color 0.1s;
+  }
+  .chart-legend__item:hover { background: var(--c-bg-soft); border-color: var(--c-border); }
+  .chart-legend__item.is-selected {
+    background: var(--c-primary); color: #F2EDE3; border-color: var(--c-primary);
+  }
+  .chart-legend__swatch { width: 16px; height: 3px; display: inline-block; }
+
+  /* Mobile: tighter padding, hint that the chart scrolls, kill hover-dim */
+  @media (max-width: 720px) {
+    .season-chart-wrap {
+      padding: 14px 12px;
+      position: relative;
+    }
+    .season-chart-wrap::after {
+      content: '← swipe →';
+      display: block;
+      text-align: center;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--c-ink-light);
+      margin-top: 6px;
+    }
+    .chart-legend { font-size: 0.75rem; gap: 8px 14px; }
+  }
+  /* Touch devices: don't dim other lines on hover (touch has no hover) */
+  @media (hover: none) {
+    .season-chart:hover .hover-fade { opacity: 1 !important; }
+  }
+</style>
+
 </head>
 <body>
 
@@ -52,10 +135,612 @@
   </header>
 
   
+  <div class="section-label">2026/27 · Title Race So Far</div>
+  <p class="page-header__subtitle">Live through GW4. The projection is held at the league average through GW10, then released as results accumulate — so the early weeks stay deliberately flat. Hover or tap a line to isolate it.</p>
+  <div class="season-chart-wrap">
+    <svg class="season-chart" viewBox="0 0 960.0 320.0"
+         preserveAspectRatio="xMidYMid meet" aria-label="Title probability by gameweek">
+      
+      
+      <line class="grid" x1="40.0" y1="286.0" x2="808.0" y2="286.0"/>
+      <text class="axis-label" x="32.0" y="289.0" text-anchor="end">0%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="232.0" x2="808.0" y2="232.0"/>
+      <text class="axis-label" x="32.0" y="235.0" text-anchor="end">20%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="178.0" x2="808.0" y2="178.0"/>
+      <text class="axis-label" x="32.0" y="181.0" text-anchor="end">40%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="124.0" x2="808.0" y2="124.0"/>
+      <text class="axis-label" x="32.0" y="127.0" text-anchor="end">60%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="70.0" x2="808.0" y2="70.0"/>
+      <text class="axis-label" x="32.0" y="73.0" text-anchor="end">80%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="16.0" x2="808.0" y2="16.0"/>
+      <text class="axis-label" x="32.0" y="19.0" text-anchor="end">100%</text>
+      
+      
+      
+      <text class="axis-label" x="40.0" y="312.0"
+            text-anchor="middle">Pre</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="141.05263157894737" y="312.0"
+            text-anchor="middle">GW5</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="242.10526315789474" y="312.0"
+            text-anchor="middle">GW10</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="343.1578947368421" y="312.0"
+            text-anchor="middle">GW15</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="444.2105263157895" y="312.0"
+            text-anchor="middle">GW20</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="545.2631578947369" y="312.0"
+            text-anchor="middle">GW25</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="646.3157894736842" y="312.0"
+            text-anchor="middle">GW30</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="747.3684210526316" y="312.0"
+            text-anchor="middle">GW35</text>
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="808.0" y="312.0"
+            text-anchor="middle">GW38</text>
+      
+      
+      
+      <g class="line-group" data-roster="5">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,242.1 60.2,223.9 80.4,214.4 100.6,205.7 120.8,188.8"/>
+        <polyline class="line hover-fade" stroke="#1F4068" points="40.0,242.1 60.2,223.9 80.4,214.4 100.6,205.7 120.8,188.8"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="188.8" r="3" fill="#1F4068"/>
+        <text class="line-label hover-fade" x="126.8" y="168.0"
+              fill="#1F4068">brendog2814</text>
+      </g>
+      
+      <g class="line-group" data-roster="1">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,252.2 60.2,263.7 80.4,257.0 100.6,243.5 120.8,242.8"/>
+        <polyline class="line hover-fade" stroke="#3D1452" points="40.0,252.2 60.2,263.7 80.4,257.0 100.6,243.5 120.8,242.8"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="242.8" r="3" fill="#3D1452"/>
+        <text class="line-label hover-fade" x="126.8" y="179.0"
+              fill="#3D1452">willmoran</text>
+      </g>
+      
+      <g class="line-group" data-roster="6">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,254.3 60.2,259.0 80.4,253.6 100.6,251.6 120.8,248.2"/>
+        <polyline class="line hover-fade" stroke="#C28A2A" points="40.0,254.3 60.2,259.0 80.4,253.6 100.6,251.6 120.8,248.2"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="248.2" r="3" fill="#C28A2A"/>
+        <text class="line-label hover-fade" x="126.8" y="190.0"
+              fill="#C28A2A">bjennings28</text>
+      </g>
+      
+      <g class="line-group" data-roster="3">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,260.4 60.2,260.4 80.4,256.3 100.6,248.2 120.8,266.4"/>
+        <polyline class="line hover-fade" stroke="#2F7547" points="40.0,260.4 60.2,260.4 80.4,256.3 100.6,248.2 120.8,266.4"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="266.4" r="3" fill="#2F7547"/>
+        <text class="line-label hover-fade" x="126.8" y="201.0"
+              fill="#2F7547">Flabiano9</text>
+      </g>
+      
+      <g class="line-group" data-roster="4">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,267.1 60.2,266.4 80.4,270.5 100.6,271.8 120.8,269.1"/>
+        <polyline class="line hover-fade" stroke="#9C2A3D" points="40.0,267.1 60.2,266.4 80.4,270.5 100.6,271.8 120.8,269.1"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="269.1" r="3" fill="#9C2A3D"/>
+        <text class="line-label hover-fade" x="126.8" y="212.0"
+              fill="#9C2A3D">benditlikebergvall</text>
+      </g>
+      
+      <g class="line-group" data-roster="7">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,256.3 60.2,255.6 80.4,267.1 100.6,276.6 120.8,273.2"/>
+        <polyline class="line hover-fade" stroke="#6B3D1A" points="40.0,256.3 60.2,255.6 80.4,267.1 100.6,276.6 120.8,273.2"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="273.2" r="3" fill="#6B3D1A"/>
+        <text class="line-label hover-fade" x="126.8" y="223.0"
+              fill="#6B3D1A">rmeernst</text>
+      </g>
+      
+      <g class="line-group" data-roster="2">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,275.9 60.2,271.1 80.4,269.8 100.6,279.9 120.8,275.2"/>
+        <polyline class="line hover-fade" stroke="#B8860B" points="40.0,275.9 60.2,271.1 80.4,269.8 100.6,279.9 120.8,275.2"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="275.2" r="3" fill="#B8860B"/>
+        <text class="line-label hover-fade" x="126.8" y="234.0"
+              fill="#B8860B">skoeiboy</text>
+      </g>
+      
+      <g class="line-group" data-roster="8">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,281.9 60.2,277.2 80.4,279.9 100.6,277.2 120.8,275.9"/>
+        <polyline class="line hover-fade" stroke="#7A2828" points="40.0,281.9 60.2,277.2 80.4,279.9 100.6,277.2 120.8,275.9"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="275.9" r="3" fill="#7A2828"/>
+        <text class="line-label hover-fade" x="126.8" y="245.0"
+              fill="#7A2828">cstoney20</text>
+      </g>
+      
+      <g class="line-group" data-roster="11">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,274.5 60.2,271.1 80.4,273.2 100.6,277.2 120.8,276.6"/>
+        <polyline class="line hover-fade" stroke="#8B4513" points="40.0,274.5 60.2,271.1 80.4,273.2 100.6,277.2 120.8,276.6"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="276.6" r="3" fill="#8B4513"/>
+        <text class="line-label hover-fade" x="126.8" y="256.0"
+              fill="#8B4513">mdropkin</text>
+      </g>
+      
+      <g class="line-group" data-roster="10">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,267.1 60.2,266.4 80.4,262.4 100.6,272.5 120.8,279.9"/>
+        <polyline class="line hover-fade" stroke="#5A2D70" points="40.0,267.1 60.2,266.4 80.4,262.4 100.6,272.5 120.8,279.9"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="279.9" r="3" fill="#5A2D70"/>
+        <text class="line-label hover-fade" x="126.8" y="267.0"
+              fill="#5A2D70">erozier</text>
+      </g>
+      
+      <g class="line-group" data-roster="12">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,253.6 60.2,267.1 80.4,275.9 100.6,277.2 120.8,282.6"/>
+        <polyline class="line hover-fade" stroke="#2D5A2D" points="40.0,253.6 60.2,267.1 80.4,275.9 100.6,277.2 120.8,282.6"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="282.6" r="3" fill="#2D5A2D"/>
+        <text class="line-label hover-fade" x="126.8" y="278.0"
+              fill="#2D5A2D">Noahvillasana17</text>
+      </g>
+      
+      <g class="line-group" data-roster="9">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,276.6 60.2,279.9 80.4,281.9 100.6,280.6 120.8,283.3"/>
+        <polyline class="line hover-fade" stroke="#2A6FB2" points="40.0,276.6 60.2,279.9 80.4,281.9 100.6,280.6 120.8,283.3"/>
+        <circle class="line-dot hover-fade" cx="120.8" cy="283.3" r="3" fill="#2A6FB2"/>
+        <text class="line-label hover-fade" x="126.8" y="289.0"
+              fill="#2A6FB2">JordiCarb</text>
+      </g>
+      
+    </svg>
+    <div class="chart-legend">
+      
+      <button class="chart-legend__item" type="button" data-roster="5">
+        <span class="chart-legend__swatch" style="background:#1F4068"></span>
+        <span>brendog2814 &middot; 4W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="1">
+        <span class="chart-legend__swatch" style="background:#3D1452"></span>
+        <span>willmoran &middot; 3W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="6">
+        <span class="chart-legend__swatch" style="background:#C28A2A"></span>
+        <span>bjennings28 &middot; 2W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="3">
+        <span class="chart-legend__swatch" style="background:#2F7547"></span>
+        <span>Flabiano9 &middot; 2W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="4">
+        <span class="chart-legend__swatch" style="background:#9C2A3D"></span>
+        <span>benditlikebergvall &middot; 3W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="7">
+        <span class="chart-legend__swatch" style="background:#6B3D1A"></span>
+        <span>rmeernst &middot; 1W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="2">
+        <span class="chart-legend__swatch" style="background:#B8860B"></span>
+        <span>skoeiboy &middot; 2W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="8">
+        <span class="chart-legend__swatch" style="background:#7A2828"></span>
+        <span>cstoney20 &middot; 2W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="11">
+        <span class="chart-legend__swatch" style="background:#8B4513"></span>
+        <span>mdropkin &middot; 3W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="10">
+        <span class="chart-legend__swatch" style="background:#5A2D70"></span>
+        <span>erozier &middot; 1W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="12">
+        <span class="chart-legend__swatch" style="background:#2D5A2D"></span>
+        <span>Noahvillasana17</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="9">
+        <span class="chart-legend__swatch" style="background:#2A6FB2"></span>
+        <span>JordiCarb &middot; 1W</span>
+      </button>
+      
+    </div>
+  </div>
+  
+
+  
   
   <div class="section-label">2025/26 · 38 gameweeks</div>
 
   <p class="page-header__subtitle">erozier&#39;s Haalandcaust FC led the league in points from start to finish and took the title by three games.</p>
+
+  
+  <div class="section-label">2025/26 · Title Race</div>
+  <p class="page-header__subtitle">Title chance after every gameweek, from 400 simulated seasons per week. Held at the league average through GW10, then trusted progressively more as results accumulate.</p>
+  <div class="season-chart-wrap">
+    <svg class="season-chart" viewBox="0 0 960.0 320.0"
+         preserveAspectRatio="xMidYMid meet" aria-label="Title probability by gameweek">
+      
+      
+      <line class="grid" x1="40.0" y1="286.0" x2="808.0" y2="286.0"/>
+      <text class="axis-label" x="32.0" y="289.0" text-anchor="end">0%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="232.0" x2="808.0" y2="232.0"/>
+      <text class="axis-label" x="32.0" y="235.0" text-anchor="end">20%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="178.0" x2="808.0" y2="178.0"/>
+      <text class="axis-label" x="32.0" y="181.0" text-anchor="end">40%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="124.0" x2="808.0" y2="124.0"/>
+      <text class="axis-label" x="32.0" y="127.0" text-anchor="end">60%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="70.0" x2="808.0" y2="70.0"/>
+      <text class="axis-label" x="32.0" y="73.0" text-anchor="end">80%</text>
+      
+      
+      <line class="grid" x1="40.0" y1="16.0" x2="808.0" y2="16.0"/>
+      <text class="axis-label" x="32.0" y="19.0" text-anchor="end">100%</text>
+      
+      
+      
+      <text class="axis-label" x="40.0" y="312.0"
+            text-anchor="middle">Pre</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="141.05263157894737" y="312.0"
+            text-anchor="middle">GW5</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="242.10526315789474" y="312.0"
+            text-anchor="middle">GW10</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="343.1578947368421" y="312.0"
+            text-anchor="middle">GW15</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="444.2105263157895" y="312.0"
+            text-anchor="middle">GW20</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="545.2631578947369" y="312.0"
+            text-anchor="middle">GW25</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="646.3157894736842" y="312.0"
+            text-anchor="middle">GW30</text>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="747.3684210526316" y="312.0"
+            text-anchor="middle">GW35</text>
+      
+      
+      
+      
+      
+      
+      
+      <text class="axis-label" x="808.0" y="312.0"
+            text-anchor="middle">GW38</text>
+      
+      
+      
+      <g class="line-group" data-roster="10">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,271.1 60.2,271.1 80.4,277.9 100.6,267.8 120.8,273.9 141.1,271.8 161.3,272.5 181.5,271.8 201.7,259.0 221.9,252.2 242.1,250.2 262.3,225.2 282.5,231.3 302.7,211.8 322.9,190.2 343.2,176.0 363.4,152.3 383.6,119.3 403.8,128.7 424.0,144.2 444.2,106.4 464.4,105.8 484.6,121.3 504.8,88.9 525.1,84.2 545.3,53.1 565.5,85.5 585.7,122.0 605.9,173.9 626.1,113.2 646.3,132.1 666.5,101.7 686.7,72.7 706.9,74.7 727.2,43.7 747.4,22.8 767.6,16.0 787.8,16.0 808.0,16.0"/>
+        <polyline class="line hover-fade" stroke="#5A2D70" points="40.0,271.1 60.2,271.1 80.4,277.9 100.6,267.8 120.8,273.9 141.1,271.8 161.3,272.5 181.5,271.8 201.7,259.0 221.9,252.2 242.1,250.2 262.3,225.2 282.5,231.3 302.7,211.8 322.9,190.2 343.2,176.0 363.4,152.3 383.6,119.3 403.8,128.7 424.0,144.2 444.2,106.4 464.4,105.8 484.6,121.3 504.8,88.9 525.1,84.2 545.3,53.1 565.5,85.5 585.7,122.0 605.9,173.9 626.1,113.2 646.3,132.1 666.5,101.7 686.7,72.7 706.9,74.7 727.2,43.7 747.4,22.8 767.6,16.0 787.8,16.0 808.0,16.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="16.0" r="3" fill="#5A2D70"/>
+        <text class="line-label hover-fade" x="814.0" y="19.0"
+              fill="#5A2D70">erozier</text>
+      </g>
+      
+      <g class="line-group" data-roster="1">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,281.3 60.2,284.0 80.4,284.6 100.6,286.0 120.8,284.0 141.1,285.3 161.3,285.3 181.5,284.0 201.7,286.0 221.9,286.0 242.1,286.0 262.3,285.3 282.5,286.0 302.7,285.3 322.9,284.6 343.2,286.0 363.4,285.3 383.6,286.0 403.8,284.6 424.0,286.0 444.2,284.6 464.4,286.0 484.6,284.6 504.8,285.3 525.1,285.3 545.3,285.3 565.5,284.6 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#3D1452" points="40.0,281.3 60.2,284.0 80.4,284.6 100.6,286.0 120.8,284.0 141.1,285.3 161.3,285.3 181.5,284.0 201.7,286.0 221.9,286.0 242.1,286.0 262.3,285.3 282.5,286.0 302.7,285.3 322.9,284.6 343.2,286.0 363.4,285.3 383.6,286.0 403.8,284.6 424.0,286.0 444.2,284.6 464.4,286.0 484.6,284.6 504.8,285.3 525.1,285.3 545.3,285.3 565.5,284.6 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#3D1452"/>
+        <text class="line-label hover-fade" x="814.0" y="179.0"
+              fill="#3D1452">willmoran</text>
+      </g>
+      
+      <g class="line-group" data-roster="2">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,259.7 60.2,273.9 80.4,278.6 100.6,277.2 120.8,278.6 141.1,279.9 161.3,281.9 181.5,285.3 201.7,285.3 221.9,282.6 242.1,284.6 262.3,281.3 282.5,281.3 302.7,285.3 322.9,284.6 343.2,286.0 363.4,285.3 383.6,284.6 403.8,286.0 424.0,286.0 444.2,286.0 464.4,286.0 484.6,286.0 504.8,286.0 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#B8860B" points="40.0,259.7 60.2,273.9 80.4,278.6 100.6,277.2 120.8,278.6 141.1,279.9 161.3,281.9 181.5,285.3 201.7,285.3 221.9,282.6 242.1,284.6 262.3,281.3 282.5,281.3 302.7,285.3 322.9,284.6 343.2,286.0 363.4,285.3 383.6,284.6 403.8,286.0 424.0,286.0 444.2,286.0 464.4,286.0 484.6,286.0 504.8,286.0 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#B8860B"/>
+        <text class="line-label hover-fade" x="814.0" y="190.0"
+              fill="#B8860B">skoeiboy</text>
+      </g>
+      
+      <g class="line-group" data-roster="3">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,269.1 60.2,259.7 80.4,267.8 100.6,261.7 120.8,254.9 141.1,244.8 161.3,263.1 181.5,262.4 201.7,269.1 221.9,277.9 242.1,275.2 262.3,264.4 282.5,279.2 302.7,275.9 322.9,282.6 343.2,281.3 363.4,278.6 383.6,281.9 403.8,273.9 424.0,263.1 444.2,271.8 464.4,281.3 484.6,284.6 504.8,285.3 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#2F7547" points="40.0,269.1 60.2,259.7 80.4,267.8 100.6,261.7 120.8,254.9 141.1,244.8 161.3,263.1 181.5,262.4 201.7,269.1 221.9,277.9 242.1,275.2 262.3,264.4 282.5,279.2 302.7,275.9 322.9,282.6 343.2,281.3 363.4,278.6 383.6,281.9 403.8,273.9 424.0,263.1 444.2,271.8 464.4,281.3 484.6,284.6 504.8,285.3 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#2F7547"/>
+        <text class="line-label hover-fade" x="814.0" y="201.0"
+              fill="#2F7547">Flabiano9</text>
+      </g>
+      
+      <g class="line-group" data-roster="4">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,271.1 60.2,254.9 80.4,263.1 100.6,269.1 120.8,281.9 141.1,274.5 161.3,271.8 181.5,275.9 201.7,277.9 221.9,276.6 242.1,279.2 262.3,275.2 282.5,271.1 302.7,263.7 322.9,270.5 343.2,261.7 363.4,270.5 383.6,279.2 403.8,271.8 424.0,275.9 444.2,275.9 464.4,282.6 484.6,284.0 504.8,284.6 525.1,285.3 545.3,286.0 565.5,284.6 585.7,284.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#9C2A3D" points="40.0,271.1 60.2,254.9 80.4,263.1 100.6,269.1 120.8,281.9 141.1,274.5 161.3,271.8 181.5,275.9 201.7,277.9 221.9,276.6 242.1,279.2 262.3,275.2 282.5,271.1 302.7,263.7 322.9,270.5 343.2,261.7 363.4,270.5 383.6,279.2 403.8,271.8 424.0,275.9 444.2,275.9 464.4,282.6 484.6,284.0 504.8,284.6 525.1,285.3 545.3,286.0 565.5,284.6 585.7,284.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#9C2A3D"/>
+        <text class="line-label hover-fade" x="814.0" y="212.0"
+              fill="#9C2A3D">benditlikebergvall</text>
+      </g>
+      
+      <g class="line-group" data-roster="5">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,275.9 60.2,279.2 80.4,278.6 100.6,281.9 120.8,279.9 141.1,277.2 161.3,281.3 181.5,281.3 201.7,274.5 221.9,269.8 242.1,279.9 262.3,275.9 282.5,282.6 302.7,279.2 322.9,276.6 343.2,273.9 363.4,277.2 383.6,284.6 403.8,275.9 424.0,275.2 444.2,275.2 464.4,270.5 484.6,263.7 504.8,269.8 525.1,262.4 545.3,277.9 565.5,277.9 585.7,283.3 605.9,281.3 626.1,275.2 646.3,251.6 666.5,253.6 686.7,277.9 706.9,266.4 727.2,265.8 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#1F4068" points="40.0,275.9 60.2,279.2 80.4,278.6 100.6,281.9 120.8,279.9 141.1,277.2 161.3,281.3 181.5,281.3 201.7,274.5 221.9,269.8 242.1,279.9 262.3,275.9 282.5,282.6 302.7,279.2 322.9,276.6 343.2,273.9 363.4,277.2 383.6,284.6 403.8,275.9 424.0,275.2 444.2,275.2 464.4,270.5 484.6,263.7 504.8,269.8 525.1,262.4 545.3,277.9 565.5,277.9 585.7,283.3 605.9,281.3 626.1,275.2 646.3,251.6 666.5,253.6 686.7,277.9 706.9,266.4 727.2,265.8 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#1F4068"/>
+        <text class="line-label hover-fade" x="814.0" y="223.0"
+              fill="#1F4068">brendog2814</text>
+      </g>
+      
+      <g class="line-group" data-roster="6">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,269.1 60.2,270.5 80.4,259.0 100.6,265.1 120.8,269.1 141.1,259.0 161.3,267.1 181.5,270.5 201.7,273.9 221.9,269.1 242.1,268.4 262.3,277.2 282.5,278.6 302.7,284.0 322.9,284.0 343.2,283.3 363.4,284.0 383.6,285.3 403.8,286.0 424.0,285.3 444.2,286.0 464.4,286.0 484.6,285.3 504.8,284.0 525.1,284.6 545.3,286.0 565.5,286.0 585.7,281.3 605.9,284.0 626.1,284.6 646.3,284.0 666.5,281.3 686.7,285.3 706.9,284.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#C28A2A" points="40.0,269.1 60.2,270.5 80.4,259.0 100.6,265.1 120.8,269.1 141.1,259.0 161.3,267.1 181.5,270.5 201.7,273.9 221.9,269.1 242.1,268.4 262.3,277.2 282.5,278.6 302.7,284.0 322.9,284.0 343.2,283.3 363.4,284.0 383.6,285.3 403.8,286.0 424.0,285.3 444.2,286.0 464.4,286.0 484.6,285.3 504.8,284.0 525.1,284.6 545.3,286.0 565.5,286.0 585.7,281.3 605.9,284.0 626.1,284.6 646.3,284.0 666.5,281.3 686.7,285.3 706.9,284.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#C28A2A"/>
+        <text class="line-label hover-fade" x="814.0" y="234.0"
+              fill="#C28A2A">bjennings28</text>
+      </g>
+      
+      <g class="line-group" data-roster="7">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,235.4 60.2,218.5 80.4,243.5 100.6,248.9 120.8,230.7 141.1,246.2 161.3,231.3 181.5,248.2 201.7,249.6 221.9,266.4 242.1,275.2 262.3,277.2 282.5,275.2 302.7,271.1 322.9,279.2 343.2,280.6 363.4,281.3 383.6,284.0 403.8,277.2 424.0,283.3 444.2,285.3 464.4,286.0 484.6,283.3 504.8,286.0 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,285.3 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#6B3D1A" points="40.0,235.4 60.2,218.5 80.4,243.5 100.6,248.9 120.8,230.7 141.1,246.2 161.3,231.3 181.5,248.2 201.7,249.6 221.9,266.4 242.1,275.2 262.3,277.2 282.5,275.2 302.7,271.1 322.9,279.2 343.2,280.6 363.4,281.3 383.6,284.0 403.8,277.2 424.0,283.3 444.2,285.3 464.4,286.0 484.6,283.3 504.8,286.0 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,285.3 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#6B3D1A"/>
+        <text class="line-label hover-fade" x="814.0" y="245.0"
+              fill="#6B3D1A">rmeernst</text>
+      </g>
+      
+      <g class="line-group" data-roster="8">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,242.8 60.2,246.2 80.4,237.4 100.6,225.2 120.8,224.6 141.1,253.6 161.3,235.4 181.5,240.1 201.7,252.2 221.9,237.4 242.1,244.8 262.3,263.7 282.5,271.8 302.7,267.1 322.9,264.4 343.2,271.8 363.4,276.6 383.6,273.2 403.8,278.6 424.0,284.0 444.2,280.6 464.4,284.6 484.6,286.0 504.8,286.0 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#7A2828" points="40.0,242.8 60.2,246.2 80.4,237.4 100.6,225.2 120.8,224.6 141.1,253.6 161.3,235.4 181.5,240.1 201.7,252.2 221.9,237.4 242.1,244.8 262.3,263.7 282.5,271.8 302.7,267.1 322.9,264.4 343.2,271.8 363.4,276.6 383.6,273.2 403.8,278.6 424.0,284.0 444.2,280.6 464.4,284.6 484.6,286.0 504.8,286.0 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#7A2828"/>
+        <text class="line-label hover-fade" x="814.0" y="256.0"
+              fill="#7A2828">cstoney20</text>
+      </g>
+      
+      <g class="line-group" data-roster="9">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,273.9 60.2,275.9 80.4,265.8 100.6,265.8 120.8,269.1 141.1,275.9 161.3,268.4 181.5,260.4 201.7,259.7 221.9,261.7 242.1,263.1 262.3,272.5 282.5,271.8 302.7,277.9 322.9,269.8 343.2,276.6 363.4,279.9 383.6,281.3 403.8,281.9 424.0,280.6 444.2,281.9 464.4,283.3 484.6,284.0 504.8,284.6 525.1,285.3 545.3,283.3 565.5,281.9 585.7,280.6 605.9,277.9 626.1,276.6 646.3,271.8 666.5,279.9 686.7,279.2 706.9,283.3 727.2,284.0 747.4,279.2 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#2A6FB2" points="40.0,273.9 60.2,275.9 80.4,265.8 100.6,265.8 120.8,269.1 141.1,275.9 161.3,268.4 181.5,260.4 201.7,259.7 221.9,261.7 242.1,263.1 262.3,272.5 282.5,271.8 302.7,277.9 322.9,269.8 343.2,276.6 363.4,279.9 383.6,281.3 403.8,281.9 424.0,280.6 444.2,281.9 464.4,283.3 484.6,284.0 504.8,284.6 525.1,285.3 545.3,283.3 565.5,281.9 585.7,280.6 605.9,277.9 626.1,276.6 646.3,271.8 666.5,279.9 686.7,279.2 706.9,283.3 727.2,284.0 747.4,279.2 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#2A6FB2"/>
+        <text class="line-label hover-fade" x="814.0" y="267.0"
+              fill="#2A6FB2">JordiCarb</text>
+      </g>
+      
+      <g class="line-group" data-roster="11">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,242.1 60.2,260.4 80.4,250.9 100.6,247.5 120.8,240.1 141.1,225.9 161.3,227.9 181.5,206.4 201.7,195.6 221.9,208.4 242.1,189.5 262.3,200.3 282.5,174.6 302.7,188.1 322.9,218.5 343.2,235.4 363.4,246.2 383.6,272.5 403.8,274.5 424.0,279.2 444.2,282.6 464.4,284.6 484.6,284.0 504.8,285.3 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#8B4513" points="40.0,242.1 60.2,260.4 80.4,250.9 100.6,247.5 120.8,240.1 141.1,225.9 161.3,227.9 181.5,206.4 201.7,195.6 221.9,208.4 242.1,189.5 262.3,200.3 282.5,174.6 302.7,188.1 322.9,218.5 343.2,235.4 363.4,246.2 383.6,272.5 403.8,274.5 424.0,279.2 444.2,282.6 464.4,284.6 484.6,284.0 504.8,285.3 525.1,286.0 545.3,286.0 565.5,286.0 585.7,286.0 605.9,286.0 626.1,286.0 646.3,286.0 666.5,286.0 686.7,286.0 706.9,286.0 727.2,286.0 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#8B4513"/>
+        <text class="line-label hover-fade" x="814.0" y="278.0"
+              fill="#8B4513">jacklynch213</text>
+      </g>
+      
+      <g class="line-group" data-roster="12">
+        <polyline class="line-hit" stroke="transparent" stroke-width="22" fill="none" points="40.0,270.5 60.2,267.8 80.4,254.9 100.6,265.8 120.8,275.2 141.1,267.8 161.3,275.9 181.5,275.9 201.7,279.2 221.9,273.9 242.1,265.8 262.3,263.7 282.5,258.3 302.7,272.5 322.9,257.0 343.2,249.6 363.4,244.8 383.6,230.0 403.8,242.8 424.0,219.2 444.2,245.5 464.4,225.2 484.6,215.1 504.8,236.1 525.1,244.8 545.3,260.4 565.5,231.3 585.7,194.9 605.9,142.9 626.1,210.4 646.3,221.2 666.5,243.5 686.7,244.8 706.9,251.6 727.2,280.6 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <polyline class="line hover-fade" stroke="#2D5A2D" points="40.0,270.5 60.2,267.8 80.4,254.9 100.6,265.8 120.8,275.2 141.1,267.8 161.3,275.9 181.5,275.9 201.7,279.2 221.9,273.9 242.1,265.8 262.3,263.7 282.5,258.3 302.7,272.5 322.9,257.0 343.2,249.6 363.4,244.8 383.6,230.0 403.8,242.8 424.0,219.2 444.2,245.5 464.4,225.2 484.6,215.1 504.8,236.1 525.1,244.8 545.3,260.4 565.5,231.3 585.7,194.9 605.9,142.9 626.1,210.4 646.3,221.2 666.5,243.5 686.7,244.8 706.9,251.6 727.2,280.6 747.4,286.0 767.6,286.0 787.8,286.0 808.0,286.0"/>
+        <circle class="line-dot hover-fade" cx="808.0" cy="286.0" r="3" fill="#2D5A2D"/>
+        <text class="line-label hover-fade" x="814.0" y="289.0"
+              fill="#2D5A2D">Noahvillasana17</text>
+      </g>
+      
+    </svg>
+    <div class="chart-legend">
+      
+      <button class="chart-legend__item" type="button" data-roster="10">
+        <span class="chart-legend__swatch" style="background:#5A2D70"></span>
+        <span>erozier &middot; 25W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="1">
+        <span class="chart-legend__swatch" style="background:#3D1452"></span>
+        <span>willmoran &middot; 19W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="2">
+        <span class="chart-legend__swatch" style="background:#B8860B"></span>
+        <span>skoeiboy &middot; 17W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="3">
+        <span class="chart-legend__swatch" style="background:#2F7547"></span>
+        <span>Flabiano9 &middot; 17W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="4">
+        <span class="chart-legend__swatch" style="background:#9C2A3D"></span>
+        <span>benditlikebergvall &middot; 16W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="5">
+        <span class="chart-legend__swatch" style="background:#1F4068"></span>
+        <span>brendog2814 &middot; 20W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="6">
+        <span class="chart-legend__swatch" style="background:#C28A2A"></span>
+        <span>bjennings28 &middot; 21W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="7">
+        <span class="chart-legend__swatch" style="background:#6B3D1A"></span>
+        <span>rmeernst &middot; 17W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="8">
+        <span class="chart-legend__swatch" style="background:#7A2828"></span>
+        <span>cstoney20 &middot; 16W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="9">
+        <span class="chart-legend__swatch" style="background:#2A6FB2"></span>
+        <span>JordiCarb &middot; 23W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="11">
+        <span class="chart-legend__swatch" style="background:#8B4513"></span>
+        <span>jacklynch213 &middot; 15W</span>
+      </button>
+      
+      <button class="chart-legend__item" type="button" data-roster="12">
+        <span class="chart-legend__swatch" style="background:#2D5A2D"></span>
+        <span>Noahvillasana17 &middot; 22W</span>
+      </button>
+      
+    </div>
+  </div>
+  
 
   <div class="awards-grid">
     <div class="award-card">
@@ -287,6 +972,8 @@
   <div class="section-label">2024/25 · 38 gameweeks</div>
 
   <p class="page-header__subtitle">willmoran dominated wire-to-wire en route to the inaugural DPL title.</p>
+
+  
 
   <div class="awards-grid">
     <div class="award-card">
@@ -528,6 +1215,55 @@
 </script>
 
 <script src="static/js/sortable.js"></script>
+
+
+<script>
+(function() {
+  document.querySelectorAll('.season-chart').forEach(function(chart) {
+    const groups = chart.querySelectorAll('.line-group');
+    const wrap   = chart.closest('.season-chart-wrap');
+    const legend = wrap ? wrap.querySelectorAll('.chart-legend__item') : [];
+
+    // Apply dim/highlight via inline style so iOS Safari can't ignore us.
+    function applyOpacity(rosterId) {
+      groups.forEach(g => {
+        const isSel = rosterId !== null && g.dataset.roster === String(rosterId);
+        const op = (rosterId === null) ? '' : (isSel ? '1' : '0.15');
+        g.querySelectorAll('.hover-fade').forEach(el => el.style.opacity = op);
+        const line = g.querySelector('.line');
+        if (line) line.setAttribute('stroke-width', isSel ? '3.5' : '2');
+        g.classList.toggle('is-selected', isSel);
+      });
+    }
+
+    function setSelection(rosterId) {
+      chart.classList.toggle('has-selection', rosterId !== null);
+      legend.forEach(b => b.classList.toggle('is-selected',
+        rosterId !== null && b.dataset.roster === String(rosterId)));
+      applyOpacity(rosterId);
+    }
+
+    function toggle(rosterId) {
+      const alreadyOn = Array.from(groups).some(g =>
+        g.dataset.roster === String(rosterId) && g.classList.contains('is-selected'));
+      setSelection(alreadyOn ? null : rosterId);
+    }
+
+    groups.forEach(g => {
+      g.addEventListener('click', e => { e.stopPropagation(); toggle(g.dataset.roster); });
+    });
+    legend.forEach(b => {
+      b.addEventListener('click', e => { e.stopPropagation(); toggle(b.dataset.roster); });
+    });
+
+    if (wrap) {
+      wrap.addEventListener('click', e => {
+        if (e.target === wrap || e.target.tagName.toLowerCase() === 'svg') setSelection(null);
+      });
+    }
+  });
+})();
+</script>
 
 
 <footer class="site-footer">

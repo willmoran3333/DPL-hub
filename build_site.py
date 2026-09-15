@@ -141,6 +141,61 @@ def load_histories() -> list[dict]:
     return out
 
 
+def _race_geometry(race: dict) -> dict | None:
+    """Turn a title_race_*.json into ready-to-draw SVG geometry."""
+    weeks = sorted(int(k) for k in race["series"])
+    if len(weeks) < 2:
+        return None
+    pad_l, pad_r, pad_t, pad_b = 40.0, 152.0, 16.0, 34.0
+    plot_w, plot_h = CHART_W - pad_l - pad_r, CHART_H - pad_t - pad_b
+    step_x = plot_w / max(race.get("total_weeks") or weeks[-1], 1)
+    lines = []
+    for i, m in enumerate(race["managers"]):
+        pts = [(pad_l + w * step_x, pad_t + plot_h - race["series"][str(w)][i] * plot_h)
+               for w in weeks]
+        lines.append({"manager": m["manager"], "team": m["team"], "wins": m["wins"],
+                      "roster_id": m["roster_id"], "color": CHART_PALETTE[i % len(CHART_PALETTE)],
+                      "points": " ".join(f"{x:.1f},{y:.1f}" for x, y in pts),
+                      "dot_x": round(pts[-1][0], 1), "dot_y": round(pts[-1][1], 1),
+                      "label_y": pts[-1][1], "final": race["series"][str(weeks[-1])][i]})
+    lines.sort(key=lambda d: d["label_y"])
+    bottom = pad_t + plot_h
+    def spread_down(start=1):
+        for i in range(start, len(lines)):
+            lines[i]["label_y"] = max(lines[i]["label_y"], lines[i-1]["label_y"] + CHART_LABEL_GAP)
+    spread_down()
+    lines[-1]["label_y"] = min(lines[-1]["label_y"], bottom)
+    for i in range(len(lines) - 2, -1, -1):
+        lines[i]["label_y"] = min(lines[i]["label_y"], lines[i+1]["label_y"] - CHART_LABEL_GAP)
+    lines[0]["label_y"] = max(lines[0]["label_y"], pad_t)
+    spread_down()
+    for d in lines:
+        d["label_y"] = round(d["label_y"], 1)
+    return {"width": CHART_W, "height": CHART_H, "pad_l": pad_l, "pad_t": pad_t,
+            "plot_w": plot_w, "plot_h": plot_h, "step_x": step_x,
+            "weeks": weeks, "last": race.get("total_weeks") or weeks[-1],
+            "weeks_done": race.get("weeks_done", weeks[-1]),
+            "sims": race["sims"], "hold": race.get("shrink_hold", 10),
+            "lines": sorted(lines, key=lambda d: d["dot_y"])}
+
+
+def load_title_race(season: str) -> dict | None:
+    path = HERE / f"title_race_{season}.json"
+    if not path.exists():
+        return None
+    try:
+        with open(path) as f:
+            return _race_geometry(json.load(f))
+    except (json.JSONDecodeError, OSError, KeyError, IndexError):
+        return None
+
+
+def attach_title_race(histories: list[dict]) -> None:
+    """Hang the season-long title-race chart off each completed season."""
+    for h in histories:
+        h["race"] = load_title_race(h["season"])
+
+
 def load_history_2024() -> dict:
     if HISTORY_2024_PATH.exists():
         with open(HISTORY_2024_PATH) as f:
@@ -2412,8 +2467,10 @@ def build(open_after: bool = False):
            h2h=get_h2h_matrix(conn),
            team_map=team_map)
 
+    attach_title_race(histories)
     render(env0, "history.html", DIST_DIR / "history.html",
            active_nav="history",
+           current_race=load_title_race(SEASON),
            histories=histories,
            team_map=team_map)
 
