@@ -5,37 +5,31 @@
 # Set show: false to hide the featured-manager block on the home page.
 show: true
 
-roster_id: 11
-gw: 5
-headline: "First season, and not one bad week yet"
-subheadline: "mdropkin is the only new manager in the league this year, and he is already third in it"
+roster_id: 6
+gw: 6
+headline: "The Best Team in the League Is 2-3"
+subheadline: "bjennings28 has outscored nearly everyone, nearly every week, and has a losing record to show for it"
 body: |
-  He took over a roster in August, having never played a week of this league,
-  and the read on him was that the newcomer would be the easy fixture. Four
-  gameweeks later he is 3-1 and holds the third-best title chance in the
-  competition.
+  Put every team up against the whole league each week, rather than the one
+  opponent the schedule hands out, and bjennings28 comes out 40-15. Nobody
+  else is close. In the actual table he is seventh.
 
-  What stands out is not the ceiling but the absence of a floor. Everyone else
-  has had a week that got away from them — the league has produced totals in
-  the thirties and forties already this season. He has not been near that. His
-  worst week is better than the worst week of every manager but two, and his
-  scoring has climbed in each of the four rounds rather than bouncing around.
-  Last week's 122.85 was the second-highest of the round.
+  The explanation is not complicated. Twice in five weeks he has run into the
+  highest score anybody posted that round, and both times he was the one
+  standing across from it. That is the whole difference between his record
+  and the leaders'. He has scored like a contender in four weeks of five and
+  been handed a loss for three of them.
 
-  The case against is the usual one at this stage: four weeks is four weeks,
-  and his biggest total came against the team that is still looking for its
-  first win. But the schedule-proof measure agrees with the record. Score
-  every team against the whole field each week instead of the one opponent
-  they drew, and he is third there too. Most first-year managers spend a
-  season learning which of their players actually start. He appears to have
-  skipped that part.
+  The one honest blemish was last week, his first real off day, and it came
+  against a side having the game of its season. The schedule owes him, and
+  over thirty-three more weeks it tends to pay.
 
 highlight_stats:
   - label: "Record"
-    value: "3-1"
+    value: "2-3"
   - label: "All-Play"
-    value: "30-14"
-  - label: "Worst Week"
-    value: "81.10"
-  - label: "Title Chance"
-    value: "11.6%"
+    value: "40-15"
+  - label: "Points For"
+    value: "2nd"
+  - label: "Lost to Week's High"
+    value: "Twice"

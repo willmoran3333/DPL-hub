@@ -120,6 +120,59 @@ def ingest_fpl_prices(conn: sqlite3.Connection, season: str) -> int:
     return len(rows)
 
 
+FPL_API = "https://fantasy.premierleague.com/api"
+
+
+def ingest_fpl_live(conn: sqlite3.Connection, season: str) -> int:
+    """Per-gameweek FPL points for the CURRENT season, straight from the FPL API.
+
+    The archive that ingest_fpl_prices reads lags by weeks -- five gameweeks
+    into 2026/27 it carried one -- and title_race.py builds each player's level
+    from his FPL average to date. Without this, "to date" was silently last
+    season's average and nothing a player did this year moved his projection.
+
+    /event/{gw}/live/ returns every player's line for one gameweek in a single
+    call, so a whole season is at most 38 requests. Only finished gameweeks are
+    taken. Same table and key as the archive rows; these overwrite them.
+    """
+    try:
+        boot = fetch_json(f"{FPL_API}/bootstrap-static/")
+    except Exception as e:
+        print(f"    fpl live {season}: bootstrap unavailable ({e})")
+        return 0
+    if not boot:
+        print(f"    fpl live {season}: bootstrap unavailable")
+        return 0
+    pos = {1: "GK", 2: "DEF", 3: "MID", 4: "FWD"}
+    teams = {t["id"]: t["name"] for t in boot["teams"]}
+    info = {e["id"]: (f"{e['first_name']} {e['second_name']}".strip(),
+                      pos.get(e["element_type"]), teams.get(e["team"]), e.get("now_cost"))
+            for e in boot["elements"]}
+    done = [ev["id"] for ev in boot["events"] if ev.get("finished")]
+    ts, rows = now_iso(), []
+    for gw in done:
+        live = fetch_json(f"{FPL_API}/event/{gw}/live/")
+        for el in (live or {}).get("elements", []):
+            name, p, team, cost = info.get(el["id"], (None, None, None, None))
+            st = el.get("stats", {})
+            rows.append((season, gw, el["id"], name, p, team, cost,
+                         st.get("total_points"), st.get("minutes"), None, None, ts))
+    conn.executemany("""
+        INSERT INTO fpl_prices (season, gw, element, name, position, team,
+                                value, total_points, minutes, transfers_balance,
+                                selected, fetched_at)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+        ON CONFLICT(season, gw, element) DO UPDATE SET
+            name=excluded.name, position=excluded.position, team=excluded.team,
+            value=excluded.value, total_points=excluded.total_points,
+            minutes=excluded.minutes, fetched_at=excluded.fetched_at
+    """, rows)
+    conn.commit()
+    print(f"    fpl live {season}: {len(rows)} rows across {len(done)} finished gameweeks")
+    return len(rows)
+
+
+
 # --------------------------------------------------------------------
 # HTTP helpers
 # --------------------------------------------------------------------
@@ -711,6 +764,7 @@ def main():
         conn = open_db()
         for yr in sorted(FPL_ARCHIVE_DIRS):
             ingest_fpl_prices(conn, yr)
+        ingest_fpl_live(conn, SEASON)
         conn.close()
         return
 
@@ -773,6 +827,9 @@ def main():
             for w in weeks:
                 ingest_matchups(conn, w)
 
+        if not args.season:              # current season only; the archive covers the rest
+            print("[fpl] live gameweek points")
+            ingest_fpl_live(conn, SEASON)
         notes.append("ok")
     except Exception as e:
         notes.append(f"error: {e!r}")

@@ -263,7 +263,7 @@ def run_week(w0, *, base_raw, pos, rid, rosters, ridx, rpos, posmask, pools, nti
     }
 
 
-def build(conn, season, n_sims, seed=7, reference=None):
+def build(conn, season, n_sims, seed=7, reference=None, existing=None):
     """reference = the season the bands and the conversion ratio are measured on.
 
     Normally the season before, so nothing looks ahead. The first season in the
@@ -384,7 +384,20 @@ def build(conn, season, n_sims, seed=7, reference=None):
 
     series, ewins, last = {}, {}, None
     strength_series, strength_raw_series = {}, {}
+    # Append-only. A week already in the file was published, and the change
+    # column has to measure this week against the number managers actually
+    # saw -- so those weeks are carried over untouched and only the missing
+    # ones are simulated. --rebuild recomputes everything.
+    kept = existing or {}
     for w0 in range(0, weeks_done + 1):
+        k = str(w0)
+        if w0 < weeks_done and k in kept.get("series", {}) and len(kept["series"][k]) == R:
+            series[w0] = kept["series"][k]
+            ewins[w0] = kept.get("exp_wins_series", {}).get(k, [0.0] * R)
+            strength_series[w0] = kept.get("strength_series", {}).get(k, [0.0] * R)
+            strength_raw_series[w0] = kept.get("strength_raw_series", {}).get(k, [0.0] * R)
+            print(f"  GW{w0:>2}: kept as published", flush=True)
+            continue
         n = float(w0)
         fplavg = (fpl_wk[1:w0 + 1].sum(axis=0) + PRIOR_FPL_W * prior_fpl) / (n + PRIOR_FPL_W)
         base_raw = np.maximum(fplavg * ratio, 0.05) * kcal
@@ -447,13 +460,21 @@ def main():
     ap.add_argument("--reference", default=None,
                     help="season to measure bands and the FPL->DPL ratio on (default: season-1)")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--rebuild", action="store_true",
+                    help="recompute every week, overwriting ones already published")
     ap.add_argument("--write", action="store_true",
                     help="also write power_rankings.json + history, which drive the Rankings page")
     a = ap.parse_args()
     conn = sqlite3.connect(S.DB_PATH)
     print(f"Title race — season {a.season}, {a.sims} sims per gameweek")
-    data = build(conn, a.season, a.sims, a.seed, a.reference)
     out = Path(a.out) if a.out else HERE / f"title_race_{a.season}.json"
+    existing = None
+    if out.exists() and not a.rebuild:
+        try:
+            existing = json.loads(out.read_text())
+        except (json.JSONDecodeError, OSError):
+            existing = None
+    data = build(conn, a.season, a.sims, a.seed, a.reference, existing)
     out.write_text(json.dumps(data, indent=1) + "\n")
     print(f"wrote {out.name}: {data['weeks_done']+1} points x {len(data['managers'])} managers")
 
