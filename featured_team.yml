@@ -5,31 +5,33 @@
 # Set show: false to hide the featured-manager block on the home page.
 show: true
 
-roster_id: 6
-gw: 6
-headline: "The Best Team in the League Is 2-3"
-subheadline: "bjennings28 has outscored nearly everyone, nearly every week, and has a losing record to show for it"
+roster_id: 9
+gw: 7
+headline: "The Turnaround"
+subheadline: "JordiCarb opened the season with a score in the thirties and has just posted the best week of his year"
 body: |
-  Put every team up against the whole league each week, rather than the one
-  opponent the schedule hands out, and bjennings28 comes out 40-15. Nobody
-  else is close. In the actual table he is seventh.
+  Five weeks ago he was the cautionary tale: a first-week total in the
+  thirties, one of the three lowest anyone has posted, and a 1-3 start that
+  looked like the shape of the year. He has won three of the last four, and
+  the most recent was a 119-point week, comfortably his best and among the
+  handful of biggest scores the league has seen.
 
-  The explanation is not complicated. Twice in five weeks he has run into the
-  highest score anybody posted that round, and both times he was the one
-  standing across from it. That is the whole difference between his record
-  and the leaders'. He has scored like a contender in four weeks of five and
-  been handed a loss for three of them.
+  It is not a fluke of the fixture list. Against the whole field each week
+  he has gone from the bottom three to the middle of the pack, and his last
+  two scores would have won almost any matchup on the schedule. The team
+  that showed up in September and the team that showed up this week are not
+  obviously the same team.
 
-  The one honest blemish was last week, his first real off day, and it came
-  against a side having the game of its season. The schedule owes him, and
-  over thirty-three more weeks it tends to pay.
+  He is level on wins with five other managers and one behind the leaders,
+  and in a league this bunched a run like his moves a side half the table in
+  a month. Whether it holds is the question of the autumn.
 
 highlight_stats:
   - label: "Record"
-    value: "2-3"
-  - label: "All-Play"
-    value: "40-15"
-  - label: "Points For"
-    value: "2nd"
-  - label: "Lost to Week's High"
-    value: "Twice"
+    value: "3-3"
+  - label: "Last Four"
+    value: "3-1"
+  - label: "GW6 Score"
+    value: "119.70"
+  - label: "GW1 Score"
+    value: "35.65"

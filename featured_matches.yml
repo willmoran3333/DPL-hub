@@ -10,28 +10,29 @@
 # the pts_std column — the two differ for most players and pts_std does not
 # reconcile to the team totals in matchup_legs.
 
-gw: 6
+gw: 7
 
 matches:
-  - home_roster_id: 5
-    away_roster_id: 10
-    headline: "The first loss and the champion"
+  - home_roster_id: 1
+    away_roster_id: 7
+    headline: "Top of the table and the team it has not played"
     body: >
-      brendog2814 was unbeaten until last week, when he posted the lowest
-      score of his season and lost for the first time. He now shares the top
-      of the table instead of owning it. The team waiting for him is the
-      defending champion, who has spent five weeks looking nothing like one
-      and then won by sixty. One of them is coming off his worst week and the
-      other off his most convincing, and the table has them two wins apart. A second defeat here and the early lead is gone entirely.
+      willmoran leads the league on points and sits in a four-way share of
+      first. rmeernst is 3-3 and, against the whole field each week, has one
+      of the best records in it. These two were not due to meet until GW12 under
+      the old schedule; the fix brings them together now. The leader has not
+      had a bad week yet, which is rarer than it sounds six games in, and the
+      side across from him has spent the autumn scoring like a contender with
+      nothing in the win column to show for it. Something gives.
 
-  - home_roster_id: 4
-    away_roster_id: 11
-    headline: "The co-leader and the newcomer"
+  - home_roster_id: 5
+    away_roster_id: 6
+    headline: "The leader who has stopped scoring"
     body: >
-      benditlikebergvall has quietly drawn level at the top, with four wins
-      and none of the noise that came with the other 4-1 team. Across from him
-      is mdropkin, the league's one new manager, who went four weeks without
-      a bad score and then had the worst one anybody recorded last round. That
-      was either a blip or the start of the season catching up with him, and
-      this is the fixture that says which. A win keeps the newcomer in the
-      leading group; a loss leaves the co-leader clear of it.
+      brendog2814 started four from four and still shares the lead, but he
+      has lost two straight and both of them were the lowest scores of his
+      season, back to back. Across from him is bjennings28, who against the
+      whole field has the best record in the league and in the actual table
+      is 2-4, having twice run straight into the week's top score. One of
+      these teams is better than its record and one is worse, and this is the
+      week the table starts to notice.

@@ -148,7 +148,19 @@ def ingest_fpl_live(conn: sqlite3.Connection, season: str) -> int:
     info = {e["id"]: (f"{e['first_name']} {e['second_name']}".strip(),
                       pos.get(e["element_type"]), teams.get(e["team"]), e.get("now_cost"))
             for e in boot["elements"]}
+    # FPL flags an event "finished" only once bonus points are confirmed, a day
+    # or two after the last match. Sleeper settles sooner, so take any event
+    # whose fixtures have all at least provisionally finished; the next run
+    # overwrites those rows with the confirmed figures.
     done = [ev["id"] for ev in boot["events"] if ev.get("finished")]
+    for ev in boot["events"]:
+        if ev.get("finished") or ev["id"] in done:
+            continue
+        fx = fetch_json(f"{FPL_API}/fixtures/?event={ev['id']}") or []
+        if fx and all(f.get("finished") or f.get("finished_provisional") for f in fx):
+            done.append(ev["id"])
+        else:
+            break                       # events are chronological; stop at the first open one
     ts, rows = now_iso(), []
     for gw in done:
         live = fetch_json(f"{FPL_API}/event/{gw}/live/")
@@ -826,6 +838,16 @@ def main():
             print(f"[7/7] H2H matchups (weeks 1..{max_week})")
             for w in weeks:
                 ingest_matchups(conn, w)
+            # Future weeks too. The commissioner can edit any pairing at any
+            # time, and only refreshing played weeks left the rest of the
+            # schedule frozen at whatever it was on the first ingest -- the
+            # database had Sleeper's original GW7-38 long after the rivalry
+            # plan had replaced it, and a schedule audit run against that
+            # copy was confidently wrong about eighteen weeks.
+            if not args.season and not args.week:
+                print(f"      + refreshing pairings for weeks {max_week + 1}..38")
+                for w in range(max_week + 1, 39):
+                    ingest_matchups(conn, w)
 
         if not args.season:              # current season only; the archive covers the rest
             print("[fpl] live gameweek points")
