@@ -10,30 +10,36 @@
 # the pts_std column — the two differ for most players and pts_std does not
 # reconcile to the team totals in matchup_legs.
 
-gw: 7
+gw: 8
 
 matches:
-  - home_roster_id: 1
-    away_roster_id: 7
-    headline: "Top of the table and the team it has not played"
+  - home_roster_id: 2
+    away_roster_id: 4
+    headline: "The two highest scorers in the league"
     body: >
-      willmoran leads the league on points and sits in a four-way share of
-      first. rmeernst is 3-3 and, against the whole field each week, has one
-      of the best records in it. These two were not due to meet until GW12 under
-      the old schedule; the fix brings them together now. The leader has not
-      had a bad week yet, which is rarer than it sounds six games in, and the
-      side across from him has spent the autumn scoring like a contender with
-      nothing in the win column to show for it. Something gives.
+      Nobody has scored more than benditlikebergvall this season, and
+      skoeiboy is one of two managers within seven points of him. The table
+      does not say so: one is 5-2 and sharing the lead, the other is 4-3 and a win back.
+      They get there differently. The leader has finished in the top four in
+      five of seven weeks and has just posted the high score of the gameweek.
+      skoeiboy posted the biggest score of opening day and the second-biggest
+      of GW7, and in the five weeks between, four scores in the sixties and
+      seventies. One of them is a metronome; the other is a slot
+      machine that has been paying out lately. Haaland against Palmer is the
+      headline act, but the game will be decided by whichever side's
+      defenders turn up.
 
-  - home_roster_id: 5
-    away_roster_id: 6
-    headline: "Four-and-two meets two-and-four"
+  - home_roster_id: 1
+    away_roster_id: 5
+    headline: "Five-and-two meets five-and-two"
     body: >
-      Six weeks in, these two have the records the other one deserves.
-      brendog2814 won his first four and still shares the lead, but his last
-      two weeks were the two worst of his season and he lost them both.
-      bjennings28 is 2-4 and, measured against the whole league rather than
-      the one opponent he drew, has the best record in it; he has twice walked
-      straight into the biggest score of the week. The table says one of them
-      is a contender and the other is not. The scoring says the opposite.
-      Something has to give, and it may as well be here.
+      Two of the four managers sharing the lead, and a case study in how
+      little a record tells you. willmoran has not had a bad week yet: never
+      outside the top ten, top six in each of the last six, and one of the
+      three best scoring sides in the league, carried by Groß and a Brighton
+      defence that keeps producing. brendog2814 won his first four and has
+      lost two of the last three, though a half-point escape in GW7 kept
+      him level at the top. His opponents have scored less against him than
+      anyone else's, by a distance. Rogers has carried him; the rest of the
+      lineup has not been pulling its weight for a month. Same record, very
+      different seasons, and only one of them keeps a share of first.
