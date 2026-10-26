@@ -10,36 +10,33 @@
 # the pts_std column — the two differ for most players and pts_std does not
 # reconcile to the team totals in matchup_legs.
 
-gw: 8
+gw: 9
 
 matches:
-  - home_roster_id: 2
-    away_roster_id: 4
-    headline: "The two highest scorers in the league"
-    body: >
-      Nobody has scored more than benditlikebergvall this season, and
-      skoeiboy is one of two managers within seven points of him. The table
-      does not say so: one is 5-2 and sharing the lead, the other is 4-3 and a win back.
-      They get there differently. The leader has finished in the top four in
-      five of seven weeks and has just posted the high score of the gameweek.
-      skoeiboy posted the biggest score of opening day and the second-biggest
-      of GW7, and in the five weeks between, four scores in the sixties and
-      seventies. One of them is a metronome; the other is a slot
-      machine that has been paying out lately. Haaland against Palmer is the
-      headline act, but the game will be decided by whichever side's
-      defenders turn up.
-
-  - home_roster_id: 1
+  - home_roster_id: 3
     away_roster_id: 5
-    headline: "Five-and-two meets five-and-two"
+    headline: "The co-leader and the side that outscores him"
     body: >
-      Two of the four managers sharing the lead, and a case study in how
-      little a record tells you. willmoran has not had a bad week yet: never
-      outside the top ten, top six in each of the last six, and one of the
-      three best scoring sides in the league, carried by Groß and a Brighton
-      defence that keeps producing. brendog2814 won his first four and has
-      lost two of the last three, though a half-point escape in GW7 kept
-      him level at the top. His opponents have scored less against him than
-      anyone else's, by a distance. Rogers has carried him; the rest of the
-      lineup has not been pulling its weight for a month. Same record, very
-      different seasons, and only one of them keeps a share of first.
+      brendog2814 is 6-2 and sharing the lead, and he has been outscored by
+      seven of the ten managers below him. His opponents have averaged
+      the lowest score in the league by a distance; nobody else's schedule
+      has been close to as kind. Flabiano9 is 4-4 with more points than the
+      man across from him and has just posted the second-biggest score of
+      GW8, with Cherki doing most of the damage. Rogers has carried the
+      co-leader all season and will have to again. The model still gives
+      brendog2814 the second-best title chance in the league, on the
+      strength of the wins he has banked. This is the kind of week that
+      decides whether that is a position or a head start.
+
+  - home_roster_id: 4
+    away_roster_id: 10
+    headline: "The leader and the champion"
+    body: >
+      benditlikebergvall is top on wins, top on points and the model's clear
+      favourite at better than one in three. He won again this week with his
+      best defender of the gameweek sitting on the bench, which tells you
+      how much margin he is working with. erozier is the defending champion
+      and is 4-4, tenth on points, with a title chance the model rounds to
+      one percent. Evanilson and Barry have kept him afloat; not much else
+      has. A champion's season is usually decided by whether he can beat
+      the side everyone else is chasing, and he gets his chance now.

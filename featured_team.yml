@@ -5,36 +5,35 @@
 # Set show: false to hide the featured-manager block on the home page.
 show: true
 
-roster_id: 4
-gw: 8
-headline: "Top on Both Counts"
-subheadline: "benditlikebergvall has the best record in the league, the most points, and now the biggest week of his season"
+roster_id: 7
+gw: 9
+headline: "Four-and-Four, Second on Points"
+subheadline: "rmeernst has the second-best scoring side in the league and a record that says mid-table"
 body: |
-  Seven weeks in, most of the table is a story about who drew whom. His is
-  not. He shares the lead at 5-2 with three other managers, and unlike the
-  others he has the scoring to back it up: the most points in the league,
-  and against the whole field each week, the best record anyone has put
-  together.
+  Eight weeks in, only the leader has scored more than he has. The table
+  has him seventh, level on wins with four other managers, and the gap
+  between those two facts is the whole story of his autumn. Two of his four
+  losses came by less than a goal's worth of points. Swap either one and he
+  is sharing the lead; swap both and he is clear of it.
 
-  This week was the biggest of it. His 131 was the top score of the
-  gameweek and one of the four largest anyone has posted this season, built
-  the way his year has been built: Haaland doing what the second overall
-  pick is supposed to do, and Tarkowski, a third-round centre-back, quietly
-  among the most productive defenders in the league. There was almost
-  nothing left on his bench. It was a lineup, not a lottery ticket.
+  The scoring is not a fluke of one hot week. He has never had the biggest
+  score of a gameweek and never the smallest, and he has not finished
+  outside the top nine once. Tavernier, a midfielder nobody was fighting
+  over in August, has been his best player by a distance, and this week he
+  beat mdropkin by a point with his first two draft picks both sitting on
+  the bench.
 
-  His two losses were his two worst weeks, one of them the lowest score of
-  that gameweek. In the other five he has finished in the top four. The
-  model has noticed: it rates his roster the strongest in the league and
-  gives him better than a one-in-three chance of the title. In a table this
-  bunched, that is the clearest favourite anyone has been.
+  The model sees what the table does not. It rates his roster the second
+  strongest in the league, a whisker behind the leader, and gives him a
+  better title chance than half the managers above him in the table. He has
+  thirty weeks to make the record catch up with the points.
 
 highlight_stats:
   - label: "Record"
-    value: "5-2"
+    value: "4-4"
   - label: "Points For"
-    value: "657.95 (1st)"
-  - label: "All-Play"
-    value: "50-27 (1st)"
-  - label: "GW7 Score"
-    value: "131.05"
+    value: "722.90 (2nd)"
+  - label: "Losses by < 4 pts"
+    value: "2"
+  - label: "GW8 Score"
+    value: "104.30"
