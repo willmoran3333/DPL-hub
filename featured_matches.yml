@@ -15,7 +15,7 @@ gw: 10
 matches:
   - home_roster_id: 4
     away_roster_id: 6
-    headline: "The leader and the side with the most big weeks"
+    headline: "The leader and the wildcard"
     body: >
       bjennings28 has posted the biggest score of the gameweek three times
       this season. Nobody else has done it more than once, and he is 4-5.
@@ -30,7 +30,7 @@ matches:
 
   - home_roster_id: 2
     away_roster_id: 11
-    headline: "Two 5-4 sides that are better than that"
+    headline: "Better than 5-4"
     body: >
       Both of these managers are 5-4, and both have a record their scoring
       does not deserve. skoeiboy is third on points and won this week with
