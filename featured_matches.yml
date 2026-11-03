@@ -10,33 +10,35 @@
 # the pts_std column — the two differ for most players and pts_std does not
 # reconcile to the team totals in matchup_legs.
 
-gw: 9
+gw: 10
 
 matches:
-  - home_roster_id: 3
-    away_roster_id: 5
-    headline: "The co-leader and the side that outscores him"
-    body: >
-      brendog2814 is 6-2 and sharing the lead, and he has been outscored by
-      seven of the ten managers below him. His opponents have averaged
-      the lowest score in the league by a distance; nobody else's schedule
-      has been close to as kind. Flabiano9 is 4-4 with more points than the
-      man across from him and has just posted the second-biggest score of
-      GW8, with Cherki doing most of the damage. Rogers has carried the
-      co-leader all season and will have to again. The model still gives
-      brendog2814 the second-best title chance in the league, on the
-      strength of the wins he has banked. This is the kind of week that
-      decides whether that is a position or a head start.
-
   - home_roster_id: 4
-    away_roster_id: 10
-    headline: "The leader and the champion"
+    away_roster_id: 6
+    headline: "The leader and the side with the most big weeks"
     body: >
-      benditlikebergvall is top on wins, top on points and the model's clear
-      favourite at better than one in three. He won again this week with his
-      best defender of the gameweek sitting on the bench, which tells you
-      how much margin he is working with. erozier is the defending champion
-      and is 4-4, tenth on points, with a title chance the model rounds to
-      one percent. Evanilson and Barry have kept him afloat; not much else
-      has. A champion's season is usually decided by whether he can beat
-      the side everyone else is chasing, and he gets his chance now.
+      bjennings28 has posted the biggest score of the gameweek three times
+      this season. Nobody else has done it more than once, and he is 4-5.
+      The other six weeks explain it: three of them landed in the bottom
+      four, and he has faced the second-hardest run of opponents in the
+      league. Trafford and Bruno Fernandes have carried the good weeks.
+      benditlikebergvall is 7-2, top on points, and the model's favourite
+      at better than two in five. He won again this week with Haaland
+      contributing almost nothing and his defenders covering for him. These
+      two have met eight times across two seasons and the leader has won
+      five. The question is which version of bjennings28 turns up.
+
+  - home_roster_id: 2
+    away_roster_id: 11
+    headline: "Two 5-4 sides that are better than that"
+    body: >
+      Both of these managers are 5-4, and both have a record their scoring
+      does not deserve. skoeiboy is third on points and won this week with
+      Palmer, his best forward of the gameweek by a distance, sitting on the
+      bench. mdropkin has the second-best all-play record in the league and
+      is 5-4 because two of his nine weeks were his two worst, one of them
+      the lowest score anyone but the winless side has posted all season.
+      Rice and João Pedro have done most of his scoring. The model prefers
+      skoeiboy on title chance, roughly one in fifteen to one in twenty-five,
+      but there is not much between the rosters. A win here keeps one of
+      them within sight of the leaders, with the points to back it up.

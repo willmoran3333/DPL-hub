@@ -5,35 +5,38 @@
 # Set show: false to hide the featured-manager block on the home page.
 show: true
 
-roster_id: 7
-gw: 9
-headline: "Four-and-Four, Second on Points"
-subheadline: "rmeernst has the second-best scoring side in the league and a record that says mid-table"
+roster_id: 1
+gw: 10
+headline: "Second on Points, Ninth in the Model"
+subheadline: "willmoran has the second-best record and the second-most points in the league, and a roster the model does not believe in"
 body: |
-  Eight weeks in, only the leader has scored more than he has. The table
-  has him seventh, level on wins with four other managers, and the gap
-  between those two facts is the whole story of his autumn. Two of his four
-  losses came by less than a goal's worth of points. Swap either one and he
-  is sharing the lead; swap both and he is clear of it.
+  Nine weeks in, he is 6-3 and only the leader has outscored him. He has
+  done it without a signature week. This gameweek's 104.70 was the second
+  biggest score in the league and the first time all season he has finished
+  a week in the top three; six of his nine have landed between fourth and
+  sixth. Nobody has been that steady. Both of the sides above him have had
+  a week in the bottom four, and he has only had two.
 
-  The scoring is not a fluke of one hot week. He has never had the biggest
-  score of a gameweek and never the smallest, and he has not finished
-  outside the top nine once. Tavernier, a midfielder nobody was fighting
-  over in August, has been his best player by a distance, and this week he
-  beat mdropkin by a point with his first two draft picks both sitting on
-  the bench.
+  The roster that is doing it is not the one he drafted. Three of his first
+  four picks are nowhere near his six best scorers, and his best player by a
+  distance is Groß, taken in the sixth round. This week his three highest
+  starters were all waiver pickups, with Rudoni leading, while his first
+  round pick contributed four points. The side has been rebuilt on the fly
+  and it has not cost him a beat.
 
-  The model sees what the table does not. It rates his roster the second
-  strongest in the league, a whisker behind the leader, and gives him a
-  better title chance than half the managers above him in the table. He has
-  thirty weeks to make the record catch up with the points.
+  The model is unmoved. It rates his roster ninth of twelve on strength and
+  gives him a title chance a shade over one in thirty, behind five managers
+  below him in the table. The all-play record says otherwise: scored against
+  the whole field every week he is 58-40, third best in the league. One of
+  the two is going to be wrong about him, and the next few weeks will say
+  which.
 
 highlight_stats:
   - label: "Record"
-    value: "4-4"
+    value: "6-3"
   - label: "Points For"
-    value: "722.90 (2nd)"
-  - label: "Losses by < 4 pts"
-    value: "2"
-  - label: "GW8 Score"
-    value: "104.30"
+    value: "815.60 (2nd)"
+  - label: "All-Play"
+    value: "58-40 (3rd)"
+  - label: "GW9 Score"
+    value: "104.70"
